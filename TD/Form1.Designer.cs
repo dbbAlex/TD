@@ -1,6 +1,6 @@
 ﻿namespace TD
 {
-    partial class Form1
+    partial class fo_Main
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -28,9 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // fo_Main
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(380, 296);
+            this.Name = "fo_Main";
+            this.Text = "TD";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

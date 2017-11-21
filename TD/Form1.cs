@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace TD
 {
-    public partial class Form1 : Form
+    public partial class fo_Main : Form
     {
-        public Form1()
+        public fo_Main()
         {
             InitializeComponent();
         }
