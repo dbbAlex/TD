@@ -51,7 +51,8 @@ namespace TD_WPF
             gameMargin.Bottom = btnBottomMargin;
             btnGame.Margin = gameMargin;
             btnGame.FontFamily = new FontFamily("Bauhaus 93");
-            btnGame.CornerRadius = new CornerRadius(100);
+            btnGame.CornerRadius = new CornerRadius(10);
+            btnGame.Style = (Style)Application.Current.FindResource("RoundButton");
             panel.Children.Add(btnGame);
 
             CornerButton btnMap = new CornerButton();
@@ -65,6 +66,7 @@ namespace TD_WPF
             btnMap.Margin = mapMargin;
             btnMap.FontFamily = new FontFamily("Bauhaus 93");
             btnMap.CornerRadius = new CornerRadius(100);
+            btnMap.Style = (Style)Application.Current.FindResource("RoundButton");
             panel.Children.Add(btnMap);
 
             CornerButton btnScore = new CornerButton();
@@ -78,6 +80,7 @@ namespace TD_WPF
             btnScore.Margin = scoreMargin;
             btnScore.FontFamily = new FontFamily("Bauhaus 93");
             btnScore.CornerRadius = new CornerRadius(100);
+            btnScore.Style = (Style)Application.Current.FindResource("RoundButton");
             panel.Children.Add(btnScore);
 
             CornerButton btnSettings = new CornerButton();
@@ -91,6 +94,7 @@ namespace TD_WPF
             btnSettings.Margin = settingMargin;
             btnSettings.FontFamily = new FontFamily("Bauhaus 93");
             btnSettings.CornerRadius = new CornerRadius(100);
+            btnSettings.Style = (Style)Application.Current.FindResource("RoundButton");
             panel.Children.Add(btnSettings);
 
 

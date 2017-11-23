@@ -4,5 +4,29 @@
              xmlns:local="clr-namespace:TD_WPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <ControlTemplate x:Key="RoundButtonControl" TargetType="{x:Type local:CornerButton}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsDefaulted" Value="False">
+                    <Setter Property="Cursor" Value="Hand"></Setter>
+                    <!--<Setter Property="CornerRadius" TargetName="border" Value="{TemplateBinding CornerRadius}"/>-->
+                    <Setter Property="CornerRadius" TargetName="border" Value="10"/>
+                    <Setter Property="Background" Value="#FFB9E6F2"/>
+                </Trigger>
+
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFB9E6F2"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFCCEBF3"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style x:Key="RoundButton" TargetType="local:CornerButton">
+            <Setter Property="Template" Value="{DynamicResource RoundButtonControl}"/>
+        </Style>
     </Application.Resources>
 </Application>
