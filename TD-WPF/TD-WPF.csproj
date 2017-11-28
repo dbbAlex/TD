@@ -59,6 +59,7 @@
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Spielfeld.cs" />
     <Compile Include="Menu1.xaml.cs">
       <DependentUpon>Menu1.xaml</DependentUpon>
     </Compile>
