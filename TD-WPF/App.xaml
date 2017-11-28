@@ -11,8 +11,8 @@
             <ControlTemplate.Triggers>
                 <Trigger Property="IsDefaulted" Value="False">
                     <Setter Property="Cursor" Value="Hand"></Setter>
-                    <!--<Setter Property="CornerRadius" TargetName="border" Value="{TemplateBinding CornerRadius}"/>-->
-                    <Setter Property="CornerRadius" TargetName="border" Value="10"/>
+                    <Setter Property="CornerRadius" TargetName="border" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CornerRadius}"/>
+                    <!--<Setter Property="CornerRadius" TargetName="border" Value="10"/>-->
                     <Setter Property="Background" Value="#FFB9E6F2"/>
                 </Trigger>
 
