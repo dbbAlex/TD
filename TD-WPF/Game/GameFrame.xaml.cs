@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TD_WPF
 {
     /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
+    /// Interaktionslogik für GameFrame.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameFrame : UserControl
     {
-        public MainWindow()
+        public GameFrame()
         {
             InitializeComponent();
         }

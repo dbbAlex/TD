@@ -12,4 +12,5 @@
         Height="700"
         ResizeMode="NoResize"
         >
+    <local:Menu1/>
 </Window>

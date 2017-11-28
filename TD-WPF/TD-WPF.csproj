@@ -56,9 +56,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Game\GameFrame.xaml.cs">
+      <DependentUpon>GameFrame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menu1.xaml.cs">
       <DependentUpon>Menu1.xaml</DependentUpon>
     </Compile>
+    <Page Include="Game\GameFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
