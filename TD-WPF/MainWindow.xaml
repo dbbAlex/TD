@@ -9,7 +9,7 @@
         WindowState="Normal"
         Background="Black"
         Width="1024"
-        Height="768"
+        Height="700"
         ResizeMode="NoResize"
         >
 </Window>

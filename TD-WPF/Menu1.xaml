@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="TD_WPF.Menu1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TD_WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="1024" d:DesignWidth="700">
+    <UserControl.Background>
+        <ImageBrush ImageSource="/Grafik/grass.jpg"/>
+    </UserControl.Background>
+    <StackPanel Orientation="Vertical">
+        <Label Content="Tower Defense" FontFamily="Bauhaus 93" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="100" Margin="0, 10, 0, 10"/>
+        <local:CornerButton Content="Spiel starten" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="209,0,209,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0" RenderTransformOrigin="0.505,0.537"/>
+        <local:CornerButton Content="Level Editor" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
+        <local:CornerButton Content="Highscore" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
+        <local:CornerButton Content="Einstellungen" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
+    </StackPanel>
+        
+</UserControl>
