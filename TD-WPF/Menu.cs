@@ -33,8 +33,8 @@ namespace TD_WPF
             lbl.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             lbl.FontSize = 100;
             var lblMargin = lbl.Margin;
-            lblMargin.Bottom = 60;
-            lblMargin.Top = 100;
+            lblMargin.Bottom = 30;
+            lblMargin.Top = 50;
             lbl.Margin = lblMargin;
             panel.Children.Add(lbl);
 
