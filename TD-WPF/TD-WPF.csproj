@@ -59,7 +59,7 @@
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\Spielfeld.cs" />
+    <Compile Include="Game\Spielfeld.cs">
     
     </Compile>
     <Page Include="Game\GameFrame.xaml">
