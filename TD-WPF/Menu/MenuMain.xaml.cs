@@ -18,9 +18,9 @@ namespace TD_WPF
     /// <summary>
     /// Interaktionslogik für UserControl1.xaml
     /// </summary>
-    public partial class Menu1 : UserControl
+    public partial class MenuMain : UserControl
     {
-        public Menu1()
+        public MenuMain()
         {
             InitializeComponent();
         }

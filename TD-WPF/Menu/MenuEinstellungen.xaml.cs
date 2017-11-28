@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TD_WPF
 {
     /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
+    /// Interaktionslogik für Menu2.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MenuEinstellungen : UserControl
     {
-        public MainWindow()
+        public MenuEinstellungen()
         {
             InitializeComponent();
         }
