@@ -12,5 +12,5 @@
         Height="700"
         ResizeMode="NoResize"
         >
-    <local:MenuMain/>
+    <local:GameFrame/>
 </Window>
