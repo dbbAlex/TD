@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TD_WPF.Game;
 
 namespace TD_WPF
 {
@@ -20,9 +21,13 @@ namespace TD_WPF
     /// </summary>
     public partial class GameFrame : UserControl
     {
+        private Spielfeld feld;
         public GameFrame()
         {
             InitializeComponent();
+            feld = new Game.Spielfeld(this, 20,10);
         }
+
+        
     }
 }

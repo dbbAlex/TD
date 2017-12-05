@@ -11,7 +11,7 @@
     </UserControl.Background>
     <StackPanel Orientation="Vertical">
         <Label Content="Tower Defense" FontFamily="Bauhaus 93" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="100" Margin="0, 10, 0, 10"/>
-        <local:CornerButton x:Name="btnSpielStarten" Content="Spiel starten" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="209,0,209,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0" RenderTransformOrigin="0.505,0.537"/>
+        <local:CornerButton x:Name="btnSpielStarten" Content="Spiel starten" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="209,0,209,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
         <local:CornerButton x:Name="btnLevelEditor" Content="Level Editor" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
         <local:CornerButton x:Name="btnHighscore" Content="Highscore" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
         <local:CornerButton x:Name="btnEinstellungen" Content="Einstellungen" FontSize="50" HorizontalAlignment="Center" Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93" CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"/>
