@@ -60,7 +60,6 @@
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\Spielfeld.cs">
-    
     </Compile>
     <Page Include="Game\GameFrame.xaml">
       <SubType>Designer</SubType>
@@ -83,15 +82,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Menu\MenuEinstellungen.xaml">
+    <Page Include="Menu\MenuSpielStarten.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Menu.cs" />
-    <Compile Include="Menu\MenuEinstellungen.xaml.cs">
-      <DependentUpon>MenuEinstellungen.xaml</DependentUpon>
+    <Compile Include="Menu\MenuSpielStarten.xaml.cs">
+      <DependentUpon>MenuSpielStarten.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
