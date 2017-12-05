@@ -24,10 +24,20 @@ namespace TD_WPF
         private Spielfeld feld;
         public GameFrame()
         {
-            InitializeComponent();
-            feld = new Game.Spielfeld(this, 20,10);
+            InitializeComponent();            
+            Loaded += initializeSpielfeld;
         }
 
-        
+        private void initializeSpielfeld(object sender, RoutedEventArgs e)
+        {
+            double x = 20, y = 10;
+            Grid map = (Grid)this.FindName("Spielfeld");
+            double width = map.ActualWidth / x;
+            double height = map.ActualHeight / y;
+            feld = new Game.Spielfeld(this, x, y, width, height);
+
+        }
+
+
     }
 }

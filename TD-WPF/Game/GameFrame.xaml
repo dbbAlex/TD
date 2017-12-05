@@ -11,7 +11,7 @@
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
             <ColumnDefinition Width="0.2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Canvas Grid.Column="0">
+        <Canvas Name="Map" Grid.Column="0">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Grafik/grass.jpg"/>
             </Canvas.Background>

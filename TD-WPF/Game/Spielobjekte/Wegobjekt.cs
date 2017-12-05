@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.IO;
+using System.Reflection;
 using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Spielobjekte
@@ -16,15 +12,16 @@ namespace TD_WPF.Game.Spielobjekte
         public double y { get; set; }
         public double width { get; set; }
         public double height { get; set; }
-        public Bitmap image = new Bitmap(Image.FromFile("/Grafik/Weg.jpg"));
+        public string path = AppDomain.CurrentDomain.BaseDirectory + @"Grafik/Weg.jpg";
+        public Bitmap image = new Bitmap(Image.FromFile(""));
 
-        public Wegobjekt(int width, int height, int x, int y)
+        public Wegobjekt(double width, double height, double x, double y)
         {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            image = ImageTool.ResizeImage(image, width, height);
+            image = ImageTool.ResizeImage(image, Convert.ToInt32(width), Convert.ToInt32(height));
         }
 
 
