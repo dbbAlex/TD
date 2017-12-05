@@ -12,8 +12,8 @@ namespace TD_WPF.Game.Spielobjekte
         public double y { get; set; }
         public double width { get; set; }
         public double height { get; set; }
-        public string path = AppDomain.CurrentDomain.BaseDirectory + @"Grafik/Weg.jpg";
-        public Bitmap image = new Bitmap(Image.FromFile(""));
+        
+        public Bitmap image = new Bitmap(Properties.Resources.weg);
 
         public Wegobjekt(double width, double height, double x, double y)
         {

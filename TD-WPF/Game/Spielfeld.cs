@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using TD_WPF.Game.Spielobjekte;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Windows.Interop;
+using System.Collections;
 
 namespace TD_WPF.Game
 {
@@ -32,22 +28,34 @@ namespace TD_WPF.Game
         }
 
        
-
+        // Erstmal zum testen ob wir überhaubt die map mit random weg objekten erstellen können
         public void initializeMap()
         {
-            Bitmap bmp = new Bitmap(Convert.ToInt32(x), Convert.ToInt32(y));
+            Bitmap bmp = new Bitmap(Convert.ToInt32(map.ActualWidth), Convert.ToInt32(map.ActualHeight));
             Graphics g = Graphics.FromImage(bmp);
-
+            ArrayList list = new ArrayList();
             for (int i = 0; i < x; i++)
             {
                 for (int j = 0; j < y; j++)
                 {
                     if (r.NextDouble() < 0.5 && r.NextDouble() < 0.5) {
                         Wegobjekt weg = new Wegobjekt(width, height, x, y);
-                        g.DrawImage(weg.image, (float)x * i, (float) y * j);
+                        g.DrawImage(weg.image, (float)width * i, (float) height * j);
+                        list.Add(weg);
                     }
                 }
-            } 
+            }
+            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+            /*Versuch Bitmap in BitmapImage zu convertieren*/
+            IntPtr hBitmap = bmp.GetHbitmap();
+
+            BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
+
+            BitmapSource bmpImg = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, sizeOptions);
+
+            image.Source = bmpImg;
+            map.Children.Add(image);
+            bmp.Save("C://Users//Adrian.Fennert//Desktop//BeispielBMP.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
         }
     }
 }

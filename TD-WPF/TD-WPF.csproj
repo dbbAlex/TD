@@ -131,10 +131,13 @@
     <Resource Include="Grafik\grass.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Grafik\Weg.jpg" />
+    <Resource Include="Grafik\weg.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UI_Layout.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\weg.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
