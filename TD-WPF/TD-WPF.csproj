@@ -86,15 +86,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Menu\MenuEinstellungen.xaml">
+    <Page Include="Menu\MenuSpielStarten.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Menu.cs" />
-    <Compile Include="Menu\MenuEinstellungen.xaml.cs">
-      <DependentUpon>MenuEinstellungen.xaml</DependentUpon>
+    <Compile Include="Menu\MenuSpielStarten.xaml.cs">
+      <DependentUpon>MenuSpielStarten.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -118,6 +118,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\TDCalc.xlsx" />
+    <None Include="Resources\Tower Defense Konzept.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -130,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Grafik\Weg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UI_Layout.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
