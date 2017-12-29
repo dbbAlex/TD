@@ -31,7 +31,7 @@ namespace TD_WPF
         private void initializeSpielfeld(object sender, RoutedEventArgs e)
         {
             // Raster initialisieren
-            int x = 20, y = 10;
+            int x = 20, y = 20;
             // Spielfeld holen
             Grid spiel = (Grid)this.FindName("Spielfeld");
             // Karte auf der Gezeichnet wird holen

@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
+    <Compile Include="Game\Spielobjekte\Endpunkt.cs" />
     <Compile Include="Tools\ImageTool.cs" />
     <Page Include="Game\GameFrame.xaml">
       <SubType>Designer</SubType>
@@ -138,6 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\weg.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Grafik\weg1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
