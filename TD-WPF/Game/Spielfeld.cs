@@ -26,15 +26,94 @@ namespace TD_WPF.Game
             this.height = height;
             this.spielfeld = (Grid)container.FindName("Spielfeld");
             this.map = (Canvas)spielfeld.FindName("Map");
-            initializeMap();
         }
 
        
-        // Erstmal zum testen ob wir überhaubt die map mit random weg objekten erstellen können
-        public void initializeMap()
+        public void update(bool isShowGrid)
+        {
+            addBitmapToCanvas(drawRoute(isShowGrid));
+        }
+
+        private Bitmap drawRoute(bool isShowGrid)
+        {
+            // Bitmap zum zeichnen erstellen
+            Bitmap bmp = new Bitmap(width * x, height * y);
+            Graphics g = Graphics.FromImage(bmp);
+
+            //Iterate through list and draw on bitmap
+            foreach (var obj in strecke)
+            {
+                g.DrawImage(obj.image, Convert.ToInt32(width * obj.x), Convert.ToInt32(height * obj.y));
+            }
+
+            if (isShowGrid)
+                g.DrawImage(showGrid(), 0, 0);
+
+            return bmp;
+        }
+
+        private void addBitmapToCanvas(Bitmap bmp)
+        {
+            // convert Bitmap to Image
+            IntPtr hBitmap = bmp.GetHbitmap();
+            BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
+            BitmapSource bmpImg = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, sizeOptions);
+            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+            image.Source = bmpImg;
+            image.Stretch = System.Windows.Media.Stretch.Uniform;
+
+            
+
+            //add BitmapImage to canvas
+            map.Children.Clear();
+            map.Children.Add(image);
+        }
+
+
+        #region Methods for level editor
+
+        public Bitmap showGrid()
+        {
+            Bitmap bmp = new Bitmap(width * x, height * y);
+            Graphics g = Graphics.FromImage(bmp);
+
+            for(int i = width; i < width * x; i += width)
+            {
+                g.DrawLine(Pens.Black, i, 0, i, height * y);
+            }
+            for (int i = height; i < height * y; i += height)
+            {
+                g.DrawLine(Pens.Black, 0, i, width * x, i);
+            }
+
+            return bmp;
+        }
+
+        public bool isFreeField(int pX, int pY)
+        {
+            bool isStrecke = true;
+            foreach (var item in strecke)
+            {
+                if(pX == Convert.ToInt32(item.x) && pY == Convert.ToInt32(item.y))
+                {
+                    isStrecke = false;
+                    break;
+                }
+            }
+
+            return isStrecke;
+        }
+        
+        #endregion
+
+
+
+        #region Methods for random game generation
+
+        public void initializeRandomMap()
         {
             calculateRoute();
-            drawRoute();
+            addBitmapToCanvas(drawRoute(true));
         }
 
         private void calculateRoute()
@@ -79,30 +158,7 @@ namespace TD_WPF.Game
 
             } while (strecke.Count < weg);            
         }
-
-        private void drawRoute()
-        {
-            // Bitmap zum zeichnen erstellen
-            Bitmap bmp = new Bitmap(Convert.ToInt32(map.ActualWidth), Convert.ToInt32(map.ActualHeight));
-            Graphics g = Graphics.FromImage(bmp);
-
-            //Iterate through list and draw on bitmap
-            foreach (var obj in strecke)
-            {
-                g.DrawImage(obj.image, Convert.ToInt32(width*obj.x), Convert.ToInt32(height*obj.y));                
-            }
-            
-            // convert Bitmap to Image
-            IntPtr hBitmap = bmp.GetHbitmap();
-            BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
-            BitmapSource bmpImg = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, sizeOptions);
-            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-            image.Source = bmpImg;
-
-            //add BitmapImage to canvas
-            map.Children.Add(image);
-        }
-
+                
         private List<Spielobjekt> getPossibleNeighbourFields(Spielobjekt obj)
         {
             List<Spielobjekt> list = new List<Spielobjekt>();
@@ -156,6 +212,9 @@ namespace TD_WPF.Game
         private Endpunkt randomField()
         {
             return new Endpunkt(width, height, r.Next(x), r.Next(y));
-        }        
+        }
+
+        #endregion
+
     }
 }
