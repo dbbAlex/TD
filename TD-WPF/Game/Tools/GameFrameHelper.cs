@@ -17,5 +17,23 @@ namespace TD_WPF.Game.Tools
 
             return list;
         }
+
+        public static LinkedList<OptionElement> getGameOptions()
+        {
+            LinkedList<OptionElement> list = new LinkedList<OptionElement>();
+
+            // TODO: fill list
+
+            return list;
+        }
+
+        public static System.Windows.Controls.Grid getGameStats()
+        {
+            System.Windows.Controls.Grid grid = new System.Windows.Controls.Grid();
+
+            // TODO: fill grid
+
+            return grid;
+        }
     }
 }
