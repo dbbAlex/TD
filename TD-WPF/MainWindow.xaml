@@ -10,7 +10,6 @@
         Background="Black"
         Width="1024"
         Height="700"
-        ResizeMode="NoResize"
         >
     <local:GameFrame/>
 </Window>

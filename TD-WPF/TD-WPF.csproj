@@ -60,9 +60,11 @@
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Option\OptionElement.cs" />
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
     <Compile Include="Game\Spielobjekte\Endpunkt.cs" />
+    <Compile Include="Game\Tools\GameFrameHelper.cs" />
     <Compile Include="Tools\ImageTool.cs" />
     <Page Include="Game\GameFrame.xaml">
       <SubType>Designer</SubType>

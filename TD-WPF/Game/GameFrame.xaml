@@ -11,10 +11,12 @@
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
             <ColumnDefinition Width="0.2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Canvas Name="Map" Grid.Column="0" MouseMove="CanvasMouseMove">
+        <Canvas Name="Map" Grid.Column="0" MouseMove="canvasMouseMove">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Grafik/grass.jpg"/>
             </Canvas.Background>
+            <Image Name="MapImage" Width="{Binding ActualWidth, ElementName=Map}" Height="{Binding ActualHeight, ElementName=Map}" 
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill"/>
         </Canvas>
         <Grid Grid.Column="1" Background="Black">
 

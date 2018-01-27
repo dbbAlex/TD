@@ -12,20 +12,18 @@ namespace TD_WPF.Game
 {
     class Spielfeld
     {
-        Grid spielfeld;
-        Canvas map;
+        GameFrame container;
         int x, y, width, height;
         LinkedList<Spielobjekt> strecke = new LinkedList<Spielobjekt>();
         Random r = new Random();
 
-        public Spielfeld(System.Windows.Controls.UserControl container, int x, int y, int width, int height)
+        public Spielfeld(GameFrame container, int x, int y, int width, int height)
         {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.spielfeld = (Grid)container.FindName("Spielfeld");
-            this.map = (Canvas)spielfeld.FindName("Map");
+            this.container = container;
         }
 
        
@@ -58,15 +56,7 @@ namespace TD_WPF.Game
             IntPtr hBitmap = bmp.GetHbitmap();
             BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
             BitmapSource bmpImg = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, sizeOptions);
-            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
-            image.Source = bmpImg;
-            image.Stretch = System.Windows.Media.Stretch.Uniform;
-
-            
-
-            //add BitmapImage to canvas
-            map.Children.Clear();
-            map.Children.Add(image);
+            container.MapImage.Source = bmpImg;
         }
 
 

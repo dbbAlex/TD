@@ -21,74 +21,74 @@ namespace TD_WPF
     /// </summary>
     public partial class GameFrame : UserControl
     {
-        private Spielfeld feld;
-        private Canvas map;
+        private Spielfeld feld { get; set;}
+        private Image imgMap { get; set; }
         private int width, height;
         private int x = 20, y = 15;
+        private bool isMapEditor = false;
+        private Object loadGame = null;
+            
 
         public GameFrame()
         {
-            InitializeComponent();            
-            Loaded += initializeSpielfeld;
+            InitializeComponent();
+            SizeChanged += controlSizeChange;    
+            if(isMapEditor)
+                Loaded += initializeEditor;
+            else
+                Loaded += initializeSpielfeld; 
+        }
+
+        private void initialize()
+        {            
+            // Zellgröße berechnen
+            width = Convert.ToInt32(this.Map.ActualWidth / x);
+            height = Convert.ToInt32(this.Map.ActualHeight / y);
+            // neues Spielfeld erstellens
+            feld = new Game.Spielfeld(this, x, y, width, height);
         }
 
         private void initializeSpielfeld(object sender, RoutedEventArgs e)
         {
-            // Raster initialisieren
-            //int x = 20, y = 15;
-            // Spielfeld holen
-            Grid spiel = (Grid)this.FindName("Spielfeld");
-            // Karte auf der Gezeichnet wird holen
-            map = (Canvas) spiel.FindName("Map");
-            // Karte anpassen
-            int pixelsForCanvasX = Convert.ToInt32(map.ActualWidth);
-            spiel.ColumnDefinitions[0].Width = new GridLength(pixelsForCanvasX);
-            spiel.ColumnDefinitions[1].Width = new GridLength(this.ActualWidth - spiel.ColumnDefinitions[0].Width.Value);
-            // Zellgröße berechnen
-            width = Convert.ToInt32(map.ActualWidth / x);
-            height = Convert.ToInt32(map.ActualHeight / y);
-            // neues Spielfeld erstellens
-            feld = new Game.Spielfeld(this, x, y, width, height);
-            feld.initializeRandomMap();
+            initialize();
+            if(loadGame != null)
+            {
+                // load neccessary objects from db
+            }
+            else
+                feld.initializeRandomMap();
 
         }
 
-        private void CanvasMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void initializeEditor(object sender, RoutedEventArgs e)
+        {
+            initialize();
+        }
+
+        private void canvasMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             // remove old rectangle
             // reverse loop because it's faster than RemoveAll(item is Rectangle)
-            for(int i = map.Children.Count - 1; i >= 0; i--)
+            for(int i = this.Map.Children.Count - 1; i >= 0; i--)
             {
-                Object item = map.Children[i];
+                Object item = this.Map.Children[i];
                 if (item is Rectangle)
-                    map.Children.RemoveAt(i);
+                    this.Map.Children.RemoveAt(i);
             }
 
             // we need to calculate where the mouse points on the original bitmap which is strechet by canvas
-
-            // calculate real bitmap size
-            int fieldWidth = x * width;
-            int fieldHeight = y * height;
-
-            // get actual canvas size
-            double mapWidth = map.ActualWidth;
-            double mapHeight = map.ActualHeight;
-
-            // get decrease percentage
-            double decreaseWidth = (mapWidth - fieldWidth) / mapWidth;
-            double decreaseHeight = (mapHeight - fieldHeight) / mapHeight;
+            
+            // get width in actual canvas size
+            double xwidth = this.Map.ActualWidth / x;
+            double yheight = this.Map.ActualHeight / y;
 
             // get original mouse position
-            double originalX = e.GetPosition(this).X;
-            double OriginalY = e.GetPosition(this).Y;
-
-            // calculate bitmap mouse position 
-            double decreasedX = originalX - (originalX * decreaseWidth);
-            double decreasedY = OriginalY - (OriginalY * decreaseHeight);
+            double originalX = e.GetPosition(this.MapImage).X;
+            double OriginalY = e.GetPosition(this.MapImage).Y;            
 
             // calculate xy-axis
-            int calcX = Convert.ToInt32(decreasedX) / width;
-            int calcY = Convert.ToInt32(decreasedY) / height;
+            int calcX = Convert.ToInt32(Math.Floor(originalX / xwidth));
+            int calcY = Convert.ToInt32(Math.Floor(OriginalY / yheight));
             // correct xy-axis if out of range
             calcX = calcX >= x ? calcX-1 : calcX;
             calcY = calcY >= y ? calcY-1 : calcY;
@@ -96,21 +96,57 @@ namespace TD_WPF
             bool isFree = feld.isFreeField(calcX, calcY);
 
             // calculate points for field where mouse is over
-            int p1 = calcX * width;
-            int p2 = calcY * height;
+            double p1 = calcX * xwidth;
+            double p2 = calcY * yheight;
             
             Rectangle rec = new Rectangle()
             {
-                Height = height -1,
-                Width = width -1,
-                Fill = isFree ? Brushes.LawnGreen : Brushes.IndianRed,
+                Height = yheight-1,
+                Width = xwidth-1,
+                Fill = isFree ? getTransparentBrush(150, Brushes.LawnGreen.Color) : getTransparentBrush(150, Brushes.IndianRed.Color),
             };
-            Canvas.SetLeft(rec, Convert.ToDouble(p1)+1);
-            Canvas.SetTop(rec, Convert.ToDouble(p2)+1);
+            Canvas.SetLeft(rec, p1+1);
+            Canvas.SetTop(rec, p2+1);
             //Canvas.SetLeft(rec, Convert.ToDouble(p.Y));
             //Canvas.SetTop(rec, Convert.ToDouble(p.Y));
-            map.Children.Add(rec);
+            this.Map.Children.Add(rec);
         } 
 
+        private void setIsMapEditor(bool isMapEditor)
+        {
+            this.isMapEditor = isMapEditor;
+        }
+
+        private bool isMapeEditor()
+        {
+            return this.isMapEditor;
+        }
+
+        private void setloadGame(Object loadGame)
+        {
+            this.loadGame = loadGame;
+        }
+
+        private Object getLoad()
+        {
+            return this.loadGame;
+        }
+
+        private SolidColorBrush getTransparentBrush(byte a, Color brushColor)
+        {
+            return new SolidColorBrush(Color.FromArgb(a, brushColor.R, brushColor.G, brushColor.B));
+        }
+
+        private void controlSizeChange(object sender, RoutedEventArgs e)
+        {
+            // remove old rectangle
+            // reverse loop because it's faster than RemoveAll(item is Rectangle)
+            for (int i = this.Map.Children.Count - 1; i >= 0; i--)
+            {
+                Object item = this.Map.Children[i];
+                if (item is Rectangle)
+                    this.Map.Children.RemoveAt(i);
+            }
+        }
     }
 }
