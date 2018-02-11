@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TD_WPF.Game;
+using TD_WPF.Game.Tools;
 
 namespace TD_WPF
 {
@@ -25,7 +26,7 @@ namespace TD_WPF
         private Image imgMap { get; set; }
         private int width, height;
         private int x = 20, y = 15;
-        private bool isMapEditor = false;
+        private bool isMapEditor = true;
         private Object loadGame = null;
             
 
@@ -63,6 +64,51 @@ namespace TD_WPF
         private void initializeEditor(object sender, RoutedEventArgs e)
         {
             initialize();
+            calcualteRows();
+            fillEditorItems();
+            feld.initializeMapEditor();
+        }
+
+        private void fillEditorItems()
+        {
+            LinkedList<ContentControl> mapItems = GameFrameHelper.getEditorOptions();
+            LinkedListNode<ContentControl> current = mapItems.First;
+            LinkedListNode<ContentControl> last = mapItems.Last;
+            Action work = delegate
+            {   
+                for (int row = 0; row < this.Control.RowDefinitions.Count; row++)
+                {
+                    for (int column = 0; column < this.Control.ColumnDefinitions.Count; column++)
+                    {                        
+                        Grid.SetRow(current.Value, row);
+                        Grid.SetColumn(current.Value, column);
+                        this.Control.Children.Add(current.Value);
+                        if (current == last)
+                            return;
+                        current = current.Next;
+                    }
+                }
+            };
+            work();
+        }
+
+        private void calcualteRows()
+        {
+            this.Control.RowDefinitions.Clear();
+            Double p = this.Control.ActualWidth /2 / this.Control.ActualHeight;
+            Double last = p;
+            for(; last < 1; last += p)
+            {
+                RowDefinition gridRow = new RowDefinition();
+                gridRow.Height = new GridLength(p, GridUnitType.Star);
+                this.Control.RowDefinitions.Add(gridRow);
+            }
+            if(last != 1)
+            {
+                RowDefinition gridRow = new RowDefinition();
+                gridRow.Height = new GridLength(1-(last-p), GridUnitType.Star);
+                this.Control.RowDefinitions.Add(gridRow);
+            }
         }
 
         private void canvasMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -147,6 +193,10 @@ namespace TD_WPF
                 if (item is Rectangle)
                     this.Map.Children.RemoveAt(i);
             }
+
+            //calculate rows
+            //TODO:hwufhe
+
         }
     }
 }

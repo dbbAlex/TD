@@ -16,7 +16,7 @@ namespace TD_WPF.Game.Spielobjekte
             this.y = y;
             this.width = width;
             this.height = height;
-            image = new Bitmap(Properties.Resources.spawn);
+            image = new Bitmap(Properties.Resource.spawn);
             image = ImageTool.ResizeImage(image, Convert.ToInt32(width), Convert.ToInt32(height));
         }
 

@@ -62,6 +62,11 @@ namespace TD_WPF.Game
 
         #region Methods for level editor
 
+        public void initializeMapEditor()
+        {
+            addBitmapToCanvas(drawRoute(true));
+        }
+
         public Bitmap showGrid()
         {
             Bitmap bmp = new Bitmap(width * x, height * y);
