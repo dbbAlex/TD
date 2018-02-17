@@ -19,7 +19,10 @@
                         <Border BorderThickness="{TemplateBinding BorderThickness}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 Background="Transparent">
-                            <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" Stretch="Fill"/>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" Stretch="Fill"/>
+                                <Label Content="{Binding Path=Name, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </StackPanel>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

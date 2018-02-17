@@ -60,6 +60,7 @@
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Handler\OptionEventHandler.cs" />
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
     <Compile Include="Game\Spielobjekte\Map\Endpunkt.cs" />

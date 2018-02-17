@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TD_WPF.Game;
+using TD_WPF.Game.Handler;
 using TD_WPF.Game.Tools;
 
 namespace TD_WPF
@@ -22,17 +23,18 @@ namespace TD_WPF
     /// </summary>
     public partial class GameFrame : UserControl
     {
-        private Spielfeld feld { get; set;}
-        private Image imgMap { get; set; }
+        private Spielfeld feld;
         private int width, height;
         private int x = 20, y = 15;
         private bool isMapEditor = true;
         private Object loadGame = null;
+        public OptionEventHandler optionHandler { get; set; }
             
 
         public GameFrame()
         {
             InitializeComponent();
+            optionHandler = new OptionEventHandler(this);
             SizeChanged += controlSizeChange;    
             if(isMapEditor)
                 Loaded += initializeEditor;
@@ -71,10 +73,10 @@ namespace TD_WPF
 
         private void fillEditorItems()
         {
-            LinkedList<ContentControl> mapItems = GameFrameHelper.getEditorOptions();
+            LinkedList<ContentControl> mapItems = GameFrameHelper.getEditorOptions(this);
             LinkedListNode<ContentControl> current = mapItems.First;
             LinkedListNode<ContentControl> last = mapItems.Last;
-            Action work = delegate
+            Action fillOptions = delegate
             {   
                 for (int row = 0; row < this.Control.RowDefinitions.Count; row++)
                 {
@@ -89,7 +91,7 @@ namespace TD_WPF
                     }
                 }
             };
-            work();
+            fillOptions();
         }
 
         private void calcualteRows()
@@ -158,22 +160,22 @@ namespace TD_WPF
             this.Map.Children.Add(rec);
         } 
 
-        private void setIsMapEditor(bool isMapEditor)
+        public void setIsMapEditor(bool isMapEditor)
         {
             this.isMapEditor = isMapEditor;
         }
 
-        private bool isMapeEditor()
+        public bool isMapeEditor()
         {
             return this.isMapEditor;
         }
 
-        private void setloadGame(Object loadGame)
+        public void setloadGame(Object loadGame)
         {
             this.loadGame = loadGame;
         }
 
-        private Object getLoad()
+        public Object getLoad()
         {
             return this.loadGame;
         }
@@ -197,6 +199,11 @@ namespace TD_WPF
             //calculate rows
             //TODO:hwufhe
 
+        }
+                
+        public OptionEventHandler getHandler()
+        {
+            return this.optionHandler;
         }
     }
 }
