@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Shapes;
+using TD_WPF.Game.Spielobjekte;
 
 namespace TD_WPF.Game.Handler
 {
@@ -22,7 +24,10 @@ namespace TD_WPF.Game.Handler
         public void HandleEditorOptionEvent(object sender, EventArgs a)
         {
             nameOfEditorOption = ((RadioButton)sender).Name;
-            Console.WriteLine("nameOfEditorOption : " + nameOfEditorOption);
+
+            this.gameFrame.removeRecatngles();
+            this.gameFrame.possibleHint.Clear();
+            this.gameFrame.showHints();
         }
 
         public void HandleGameOptionEvent(object sender, EventArgs a)

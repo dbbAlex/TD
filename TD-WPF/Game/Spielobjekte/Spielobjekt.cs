@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace TD_WPF.Game.Spielobjekte
 {
-    abstract class Spielobjekt {
+    public abstract class Spielobjekt {
         public double x { get; set; }
         public double y { get; set; }
         public double width { get; set; }

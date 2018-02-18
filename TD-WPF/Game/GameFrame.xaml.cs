@@ -14,21 +14,22 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TD_WPF.Game;
 using TD_WPF.Game.Handler;
+using TD_WPF.Game.Spielobjekte;
 using TD_WPF.Game.Tools;
 
 namespace TD_WPF
 {
-    /// <summary>
-    /// Interaktionslogik für GameFrame.xaml
-    /// </summary>
     public partial class GameFrame : UserControl
     {
-        private Spielfeld feld;
+        public Spielfeld feld { get; set; }
         private int width, height;
-        private int x = 20, y = 15;
-        private bool isMapEditor = true;
-        private Object loadGame = null;
+        public int x { get; set; } = 20;
+        public int y { get; set; } = 15;
+        public bool isMapEditor { get; set; } = true;
+        public bool showGrid { get; set; } = true;
+        public Object loadGame { get; set; } = null;
         public OptionEventHandler optionHandler { get; set; }
+        public List<Spielobjekt> possibleHint { get; set; } = new List<Spielobjekt>();
             
 
         public GameFrame()
@@ -112,75 +113,110 @@ namespace TD_WPF
                 this.Control.RowDefinitions.Add(gridRow);
             }
         }
+        
+        private void canvasMouseClick(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Point p = getXYMousePosition(e);
+            if (isMapEditor && optionHandler.nameOfEditorOption != null && feld.isFreeField(Convert.ToInt32(p.X), Convert.ToInt32(p.Y)))
+            {
+                if (optionHandler.nameOfEditorOption.Equals("weg") && this.feld.strecke.Count > 0 
+                    && !(this.feld.strecke.Last.Value.GetType() == typeof(Endpunkt)) 
+                    && isPossibleOption(p.X, p.Y))
+                {
+                    redraw(new Wegobjekt(this.feld.width, this.feld.height, p.X, p.Y), this.feld.strecke);                                        
+                }
+                else if(optionHandler.nameOfEditorOption.Equals("spawn") 
+                    && this.feld.strecke.Count == 0)
+                {
+                    redraw(new Startpunkt(this.feld.width, this.feld.height, p.X, p.Y), this.feld.strecke);
+                }
+                else if (optionHandler.nameOfEditorOption.Equals("ziel") && this.feld.strecke.Count > 0
+                    && this.feld.strecke.Last.Value.GetType() == typeof(Wegobjekt) && isPossibleOption(p.X, p.Y))
+                {
+                    redraw(new Endpunkt(this.feld.width, this.feld.height, p.X, p.Y), this.feld.strecke);
+                }
+                else if (optionHandler.nameOfEditorOption.Equals("ground"))
+                {
+                    redraw(new Turmfundament(this.feld.width, this.feld.height, p.X, p.Y), this.feld.tower);
+                }
+            }
+        }
+
+        private bool isPossibleOption(double px, double py)
+        {
+            bool possible = false;
+
+            if(possibleHint.Count != 0)
+            {
+                foreach (var item in possibleHint)
+                {
+                    if(item.x == px && item.y == py)
+                    {
+                        possible = true;
+                        break;
+                    }
+                }
+            }
+
+            return possible;
+        }
+
+        private void redraw(Spielobjekt o, LinkedList<Spielobjekt> l)
+        {
+            l.AddLast(o);
+            removeRecatngles();
+            possibleHint.Clear();
+            this.feld.addBitmapToCanvas(this.feld.drawRoute(this.showGrid));
+            showHints();
+        }
+
+        private Point getXYMousePosition(System.Windows.Input.MouseEventArgs e)
+        {
+            // calculate xy-axis
+            int calcX = Convert.ToInt32(Math.Floor(e.GetPosition(this.MapImage).X / (this.Map.ActualWidth / x)));
+            int calcY = Convert.ToInt32(Math.Floor(e.GetPosition(this.MapImage).Y / (this.Map.ActualHeight / y)));
+            // correct xy-axis if out of range
+            calcX = calcX >= x ? calcX - 1 : calcX;
+            calcY = calcY >= y ? calcY - 1 : calcY;
+            return new Point(calcX, calcY);
+        }
 
         private void canvasMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            
+            if ((!isMapEditor || (this.optionHandler.nameOfEditorOption != null && (this.optionHandler.nameOfEditorOption.Equals("ground") || 
+                (this.optionHandler.nameOfEditorOption.Equals("spawn") && this.feld.strecke.Count == 0)))) && this.Map.IsMouseOver)
+            {
+                removeRecatngles();
+                Point p = getXYMousePosition(e);
+
+                bool isFree = feld.isFreeField(Convert.ToInt32(p.X), Convert.ToInt32(p.Y));
+
+                Rectangle rec = new Rectangle()
+                {
+                    Height = (this.Map.ActualHeight / y) - 1,
+                    Width = (this.Map.ActualWidth / x) - 1,
+                    Fill = isFree ? getTransparentBrush(150, Brushes.LawnGreen.Color) : getTransparentBrush(150, Brushes.IndianRed.Color),
+                };
+                Canvas.SetLeft(rec, p.X * (this.Map.ActualWidth / x) + 1);
+                Canvas.SetTop(rec, p.Y * (this.Map.ActualHeight / y) + 1);
+                this.Map.Children.Add(rec);
+            }
+        } 
+
+        public void removeRecatngles()
+        {
             // remove old rectangle
             // reverse loop because it's faster than RemoveAll(item is Rectangle)
-            for(int i = this.Map.Children.Count - 1; i >= 0; i--)
+            for (int i = this.Map.Children.Count - 1; i >= 0; i--)
             {
                 Object item = this.Map.Children[i];
                 if (item is Rectangle)
                     this.Map.Children.RemoveAt(i);
             }
-
-            // we need to calculate where the mouse points on the original bitmap which is strechet by canvas
-            
-            // get width in actual canvas size
-            double xwidth = this.Map.ActualWidth / x;
-            double yheight = this.Map.ActualHeight / y;
-
-            // get original mouse position
-            double originalX = e.GetPosition(this.MapImage).X;
-            double OriginalY = e.GetPosition(this.MapImage).Y;            
-
-            // calculate xy-axis
-            int calcX = Convert.ToInt32(Math.Floor(originalX / xwidth));
-            int calcY = Convert.ToInt32(Math.Floor(OriginalY / yheight));
-            // correct xy-axis if out of range
-            calcX = calcX >= x ? calcX-1 : calcX;
-            calcY = calcY >= y ? calcY-1 : calcY;
-
-            bool isFree = feld.isFreeField(calcX, calcY);
-
-            // calculate points for field where mouse is over
-            double p1 = calcX * xwidth;
-            double p2 = calcY * yheight;
-            
-            Rectangle rec = new Rectangle()
-            {
-                Height = yheight-1,
-                Width = xwidth-1,
-                Fill = isFree ? getTransparentBrush(150, Brushes.LawnGreen.Color) : getTransparentBrush(150, Brushes.IndianRed.Color),
-            };
-            Canvas.SetLeft(rec, p1+1);
-            Canvas.SetTop(rec, p2+1);
-            //Canvas.SetLeft(rec, Convert.ToDouble(p.Y));
-            //Canvas.SetTop(rec, Convert.ToDouble(p.Y));
-            this.Map.Children.Add(rec);
-        } 
-
-        public void setIsMapEditor(bool isMapEditor)
-        {
-            this.isMapEditor = isMapEditor;
         }
 
-        public bool isMapeEditor()
-        {
-            return this.isMapEditor;
-        }
-
-        public void setloadGame(Object loadGame)
-        {
-            this.loadGame = loadGame;
-        }
-
-        public Object getLoad()
-        {
-            return this.loadGame;
-        }
-
-        private SolidColorBrush getTransparentBrush(byte a, Color brushColor)
+        public SolidColorBrush getTransparentBrush(byte a, Color brushColor)
         {
             return new SolidColorBrush(Color.FromArgb(a, brushColor.R, brushColor.G, brushColor.B));
         }
@@ -200,10 +236,31 @@ namespace TD_WPF
             //TODO:hwufhe
 
         }
-                
-        public OptionEventHandler getHandler()
+        
+        public void showHints()
         {
-            return this.optionHandler;
+            if ((this.optionHandler.nameOfEditorOption.Equals("weg") 
+                || this.optionHandler.nameOfEditorOption.Equals("ziel")) && this.feld.strecke.Count > 0 
+                && this.feld.strecke.Last.Value.GetType() != typeof(Endpunkt))
+            {
+                Spielobjekt last = this.feld.strecke.Last.Value;
+                possibleHint = this.feld.calculatePossibleFields(this.feld.getPossibleNeighbourFields(last),
+                    new List<Spielobjekt>());
+                foreach (var item in possibleHint)
+                {
+                    double p1 = item.x * (this.Map.ActualWidth / this.x);
+                    double p2 = item.y * (this.Map.ActualHeight / this.y);
+                    Rectangle rec = new Rectangle()
+                    {
+                        Width = (this.Map.ActualWidth / this.x) - 1,
+                        Height = (this.Map.ActualHeight / this.y) - 1,
+                        Fill = this.getTransparentBrush(150, System.Windows.Media.Brushes.LawnGreen.Color)
+                    };
+                    Canvas.SetLeft(rec, p1 + 1);
+                    Canvas.SetTop(rec, p2 + 1);
+                    this.Map.Children.Add(rec);
+                }
+            }
         }
     }
 }

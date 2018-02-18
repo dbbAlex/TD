@@ -1700,6 +1700,10 @@
         6rQPygEH/9k=
 </value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Grafik\Shared\ground.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="spawn" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
@@ -1745,5 +1749,8 @@
         8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3Ciiiv5LP3ASloooAKTNLRQAUUUUAFFNkBaMhTg44NN+0XN0y
         ebHbRCMbf3QPz+596BElFFFAwopDS0AFFFFABRRTCeaAP//Z
 </value>
+  </data>
+  <data name="ziel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Grafik\Map\ziel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

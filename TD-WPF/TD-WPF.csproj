@@ -64,6 +64,8 @@
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
     <Compile Include="Game\Spielobjekte\Map\Endpunkt.cs" />
+    <Compile Include="Game\Spielobjekte\Map\Startpunkt.cs" />
+    <Compile Include="Game\Spielobjekte\Map\Turmfundament.cs" />
     <Compile Include="Game\Tools\GameFrameHelper.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -144,7 +146,6 @@
   <ItemGroup>
     <Folder Include="Game\Spielobjekte\Items\" />
     <Folder Include="Grafik\Items\" />
-    <Folder Include="Grafik\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\start.bmp" />
@@ -154,6 +155,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Grafik\Shared\ground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Grafik\Map\ziel.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

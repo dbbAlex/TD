@@ -10,11 +10,14 @@ using System.Collections.Generic;
 
 namespace TD_WPF.Game
 {
-    class Spielfeld
+    public class Spielfeld
     {
         GameFrame container;
-        int x, y, width, height;
-        LinkedList<Spielobjekt> strecke = new LinkedList<Spielobjekt>();
+        int x, y;
+        public int width { get; set; }
+        public int height { get; set; }
+        public LinkedList<Spielobjekt> strecke { get; set;}
+        public LinkedList<Spielobjekt> tower { get; set; }
         Random r = new Random();
 
         public Spielfeld(GameFrame container, int x, int y, int width, int height)
@@ -24,6 +27,8 @@ namespace TD_WPF.Game
             this.width = width;
             this.height = height;
             this.container = container;
+            this.strecke = new LinkedList<Spielobjekt>();
+            this.tower = new LinkedList<Spielobjekt>();
         }
 
        
@@ -32,7 +37,7 @@ namespace TD_WPF.Game
             addBitmapToCanvas(drawRoute(isShowGrid));
         }
 
-        private Bitmap drawRoute(bool isShowGrid)
+        public Bitmap drawRoute(bool isShowGrid)
         {
             // Bitmap zum zeichnen erstellen
             Bitmap bmp = new Bitmap(width * x, height * y);
@@ -44,13 +49,18 @@ namespace TD_WPF.Game
                 g.DrawImage(obj.image, Convert.ToInt32(width * obj.x), Convert.ToInt32(height * obj.y));
             }
 
+            foreach (var obj in tower)
+            {
+                g.DrawImage(obj.image, Convert.ToInt32(width * obj.x), Convert.ToInt32(height * obj.y));
+            }
+
             if (isShowGrid)
                 g.DrawImage(showGrid(), 0, 0);
 
             return bmp;
         }
 
-        private void addBitmapToCanvas(Bitmap bmp)
+        public void addBitmapToCanvas(Bitmap bmp)
         {
             // convert Bitmap to Image
             IntPtr hBitmap = bmp.GetHbitmap();
@@ -120,7 +130,7 @@ namespace TD_WPF.Game
             int weg = r.Next(min, max);
 
             // Felder festlegen
-            Endpunkt start = randomField();
+            Startpunkt start = randomField();
             strecke.AddFirst(start);
 
             Spielobjekt current = start;
@@ -154,7 +164,7 @@ namespace TD_WPF.Game
             } while (strecke.Count < weg);            
         }
                 
-        private List<Spielobjekt> getPossibleNeighbourFields(Spielobjekt obj)
+        public List<Spielobjekt> getPossibleNeighbourFields(Spielobjekt obj)
         {
             List<Spielobjekt> list = new List<Spielobjekt>();
 
@@ -177,7 +187,7 @@ namespace TD_WPF.Game
             return list;
         }
 
-        private List<Spielobjekt> calculatePossibleFields(List<Spielobjekt> fields, List<Spielobjekt> space)
+        public List<Spielobjekt> calculatePossibleFields(List<Spielobjekt> fields, List<Spielobjekt> space)
         {
             List<Spielobjekt> removable = new List<Spielobjekt>();
             foreach (var item in strecke)
@@ -204,9 +214,9 @@ namespace TD_WPF.Game
             return fields;
         }
 
-        private Endpunkt randomField()
+        private Startpunkt randomField()
         {
-            return new Endpunkt(width, height, r.Next(x), r.Next(y));
+            return new Startpunkt(width, height, r.Next(x), r.Next(y));
         }
 
         #endregion

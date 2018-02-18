@@ -73,6 +73,16 @@ namespace TD_WPF.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ground {
+            get {
+                object obj = ResourceManager.GetObject("ground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap spawn {
             get {
                 object obj = ResourceManager.GetObject("spawn", resourceCulture);
@@ -86,6 +96,16 @@ namespace TD_WPF.Properties {
         internal static System.Drawing.Bitmap weg {
             get {
                 object obj = ResourceManager.GetObject("weg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ziel {
+            get {
+                object obj = ResourceManager.GetObject("ziel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
