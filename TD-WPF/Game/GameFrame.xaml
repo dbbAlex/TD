@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TD_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" MouseLeftButtonUp="canvasMouseClick">
+    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" MouseUp="canvasMouseClick">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.2*"/>

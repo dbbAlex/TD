@@ -48,7 +48,8 @@ namespace TD_WPF.Game.Tools
                             BorderBrush = System.Windows.Media.Brushes.LightGray,
                             Content = file.FullName,
                             GroupName = group,
-                            Style = Application.Current.FindResource("ImageRadioButtonStyle") as System.Windows.Style
+                            Style = Application.Current.FindResource("ImageRadioButtonStyle") as System.Windows.Style,
+                            Focusable = false
                         };
                         Binding heightBinding = new Binding("Width");
                         heightBinding.Source = rb;
