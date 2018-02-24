@@ -8,14 +8,15 @@ using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Spielobjekte
 {
-    class Endpunkt : Spielobjekt
+    class Turmfundament : Spielobjekt
     {
-        public Endpunkt(double width, double height, double x, double y) : base(width, height, x, y)
+        public Turmfundament(double width, double height, double x, double y) : base(width, height, x, y)
         {
-            this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.ziel),
+            this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.ground), 
                 Convert.ToInt32(width), Convert.ToInt32(height));
         }
 
 
     }
 }
+

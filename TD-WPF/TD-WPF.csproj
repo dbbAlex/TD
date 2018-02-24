@@ -63,9 +63,10 @@
     <Compile Include="Game\Handler\OptionEventHandler.cs" />
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
+    <Compile Include="Game\Spielobjekte\Items\Turm.cs" />
     <Compile Include="Game\Spielobjekte\Map\Endpunkt.cs" />
     <Compile Include="Game\Spielobjekte\Map\Startpunkt.cs" />
-    <Compile Include="Game\Spielobjekte\Map\Turmfundament.cs" />
+    <Compile Include="Game\Spielobjekte\Shared\Turmfundament.cs" />
     <Compile Include="Game\Tools\GameFrameHelper.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -143,10 +144,7 @@
   <ItemGroup>
     <None Include="Grafik\Map\spawn.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Spielobjekte\Items\" />
-    <Folder Include="Grafik\Items\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\start.bmp" />
   </ItemGroup>
@@ -161,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Grafik\Map\ziel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Grafik\Items\tower.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

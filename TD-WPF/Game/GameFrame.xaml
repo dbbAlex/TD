@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TD_WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" MouseUp="canvasMouseClick">
+             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
+    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" Background="Transparent" MouseUp="canvasMouseClick">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.2*"/>

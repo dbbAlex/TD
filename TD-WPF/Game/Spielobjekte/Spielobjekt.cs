@@ -14,5 +14,13 @@ namespace TD_WPF.Game.Spielobjekte
         public double width { get; set; }
         public double height { get; set; }
         public Bitmap image { get; set; }
+
+        public Spielobjekt(double width, double height, double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
     }
 }

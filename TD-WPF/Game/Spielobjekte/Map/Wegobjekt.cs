@@ -8,14 +8,10 @@ namespace TD_WPF.Game.Spielobjekte
 {
     class Wegobjekt : Spielobjekt
     {
-        public Wegobjekt(double width, double height, double x, double y)
+        public Wegobjekt(double width, double height, double x, double y) : base(width, height, x, y)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.image = new Bitmap(Properties.Resource.weg);
-            this.image = ImageTool.ResizeImage(image, Convert.ToInt32(width), Convert.ToInt32(height));
+            this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.weg), 
+                Convert.ToInt32(width), Convert.ToInt32(height));
         }
 
 

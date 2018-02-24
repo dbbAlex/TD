@@ -6,16 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using TD_WPF.Tools;
 
-namespace TD_WPF.Game.Spielobjekte
+namespace TD_WPF.Game.Spielobjekte.Items
 {
-    class Endpunkt : Spielobjekt
+    class Turm : Spielobjekt
     {
-        public Endpunkt(double width, double height, double x, double y) : base(width, height, x, y)
+        public Turm(double width, double height, double x, double y) : base(width, height, x, y)
         {
-            this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.ziel),
+            this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.tower), 
                 Convert.ToInt32(width), Convert.ToInt32(height));
         }
 
 
     }
 }
+

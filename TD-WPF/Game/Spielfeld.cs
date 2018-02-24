@@ -12,49 +12,50 @@ namespace TD_WPF.Game
 {
     public class Spielfeld
     {
+        #region attributes
         GameFrame container;
-        int x, y;
-        public int width { get; set; }
-        public int height { get; set; }
-        public LinkedList<Spielobjekt> strecke { get; set;}
+        public LinkedList<Spielobjekt> strecke { get; set; }
         public LinkedList<Spielobjekt> tower { get; set; }
-        Random r = new Random();
+        public LinkedList<Spielobjekt> towerground { get; set; }
+        private Random r = new Random();
 
-        public Spielfeld(GameFrame container, int x, int y, int width, int height)
+        #endregion
+        public Spielfeld(GameFrame container)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
             this.container = container;
             this.strecke = new LinkedList<Spielobjekt>();
             this.tower = new LinkedList<Spielobjekt>();
+            this.towerground = new LinkedList<Spielobjekt>();
         }
-
-       
-        public void update(bool isShowGrid)
+               
+        public void update()
         {
-            addBitmapToCanvas(drawRoute(isShowGrid));
+            addBitmapToCanvas(drawRoute());
         }
 
-        public Bitmap drawRoute(bool isShowGrid)
+        public Bitmap drawRoute()
         {
             // Bitmap zum zeichnen erstellen
-            Bitmap bmp = new Bitmap(width * x, height * y);
+            Bitmap bmp = new Bitmap(this.container.width * this.container.x, this.container.height * this.container.y);
             Graphics g = Graphics.FromImage(bmp);
 
             //Iterate through list and draw on bitmap
             foreach (var obj in strecke)
             {
-                g.DrawImage(obj.image, Convert.ToInt32(width * obj.x), Convert.ToInt32(height * obj.y));
+                g.DrawImage(obj.image, Convert.ToInt32(this.container.width * obj.x), Convert.ToInt32(this.container.height * obj.y));
+            }
+
+            foreach (var obj in towerground)
+            {
+                g.DrawImage(obj.image, Convert.ToInt32(this.container.width * obj.x), Convert.ToInt32(this.container.height * obj.y));
             }
 
             foreach (var obj in tower)
             {
-                g.DrawImage(obj.image, Convert.ToInt32(width * obj.x), Convert.ToInt32(height * obj.y));
+                g.DrawImage(obj.image, Convert.ToInt32(this.container.width * obj.x), Convert.ToInt32(this.container.height * obj.y));
             }
 
-            if (isShowGrid)
+            if (this.container.showGrid)
                 g.DrawImage(showGrid(), 0, 0);
 
             return bmp;
@@ -66,67 +67,65 @@ namespace TD_WPF.Game
             IntPtr hBitmap = bmp.GetHbitmap();
             BitmapSizeOptions sizeOptions = BitmapSizeOptions.FromEmptyOptions();
             BitmapSource bmpImg = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, sizeOptions);
-            container.MapImage.Source = bmpImg;
+            this.container.MapImage.Source = bmpImg;
         }
 
+        public bool isFreeField(int pX, int pY, List<LinkedList<Spielobjekt>> lists)
+        {
+            foreach (var list in lists)
+            {
+                foreach (var item in list)
+                {
+                    if (pX == Convert.ToInt32(item.x) && pY == Convert.ToInt32(item.y))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
         #region Methods for level editor
 
         public void initializeMapEditor()
         {
-            addBitmapToCanvas(drawRoute(true));
+            addBitmapToCanvas(drawRoute());
         }
 
         public Bitmap showGrid()
         {
-            Bitmap bmp = new Bitmap(width * x, height * y);
+            Bitmap bmp = new Bitmap(this.container.width * this.container.x, 
+                this.container.height * this.container.y);
             Graphics g = Graphics.FromImage(bmp);
 
-            for(int i = width; i < width * x; i += width)
+            for(int i = this.container.width; i < this.container.width * this.container.x; i += this.container.width)
             {
-                g.DrawLine(Pens.Black, i, 0, i, height * y);
+                g.DrawLine(Pens.Black, i, 0, i, this.container.height * this.container.y);
             }
-            for (int i = height; i < height * y; i += height)
+            for (int i = this.container.height; i < this.container.height * this.container.y; i += this.container.height)
             {
-                g.DrawLine(Pens.Black, 0, i, width * x, i);
+                g.DrawLine(Pens.Black, 0, i, this.container.width * this.container.x, i);
             }
 
             return bmp;
         }
-
-        public bool isFreeField(int pX, int pY)
-        {
-            bool isStrecke = true;
-            foreach (var item in strecke)
-            {
-                if(pX == Convert.ToInt32(item.x) && pY == Convert.ToInt32(item.y))
-                {
-                    isStrecke = false;
-                    break;
-                }
-            }
-
-            return isStrecke;
-        }
-        
+                
         #endregion
-
-
-
+        
         #region Methods for random game generation
 
         public void initializeRandomMap()
         {
             calculateRoute();
-            addBitmapToCanvas(drawRoute(true));
+            addBitmapToCanvas(drawRoute());
         }
 
         private void calculateRoute()
         {
             List<Spielobjekt> space = new List<Spielobjekt>();
             // Min/max Wegobjekte festlegen
-            int min = Convert.ToInt32(x * y * 0.1);
-            int max = Convert.ToInt32(x * y * 0.2);
+            int min = Convert.ToInt32(this.container.x * this.container.y * 0.1);
+            int max = Convert.ToInt32(this.container.x * this.container.y * 0.2);
             int weg = r.Next(min, max);
 
             // Felder festlegen
@@ -152,7 +151,8 @@ namespace TD_WPF.Game
 
                 // get next object
                 int index = r.Next(list.Count);
-                next = strecke.Count + 1 == weg ? new Endpunkt(width, height, list[index].x, list[index].y) : list[index];
+                next = strecke.Count + 1 == weg ? 
+                    new Endpunkt(this.container.width, this.container.height, list[index].x, list[index].y) : list[index];
                 strecke.AddLast(next);
 
                 //add space to list
@@ -161,7 +161,31 @@ namespace TD_WPF.Game
 
                 current = next;
 
-            } while (strecke.Count < weg);            
+            } while (strecke.Count < weg);
+
+            // add towerGround
+            int towerGroundSize = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(strecke.Count / 20)));
+
+            do
+            {
+                int random = r.Next(strecke.Count);
+                LinkedListNode<Spielobjekt> node = strecke.First;
+                while(random > 0)
+                {
+                    node = node.Next;
+                    random--;
+                }
+                List<Spielobjekt> list = calculatePossibleFields(getPossibleNeighbourFields(node.Value), null);
+                if (list.Count == 0)
+                    continue;
+
+                int index = r.Next(list.Count);
+                towerground.AddLast(new Turmfundament(this.container.width, this.container.height, 
+                    list[index].x, list[index].y));
+
+                towerGroundSize--;
+            } while (towerGroundSize != 0);
+                        
         }
                 
         public List<Spielobjekt> getPossibleNeighbourFields(Spielobjekt obj)
@@ -169,20 +193,20 @@ namespace TD_WPF.Game
             List<Spielobjekt> list = new List<Spielobjekt>();
 
             //unten
-            if(obj.y + 1 < y)
-                list.Add(new Wegobjekt(width, height, obj.x, obj.y + 1));
+            if(obj.y + 1 < this.container.y)
+                list.Add(new Wegobjekt(this.container.width, this.container.height, obj.x, obj.y + 1));
 
             //oben
             if (obj.y - 1 >= 0)
-                list.Add(new Wegobjekt(width, height, obj.x, obj.y - 1));
+                list.Add(new Wegobjekt(this.container.width, this.container.height, obj.x, obj.y - 1));
 
             //links
             if (obj.x - 1 >= 0)
-                list.Add(new Wegobjekt(width, height, obj.x-1, obj.y));
+                list.Add(new Wegobjekt(this.container.width, this.container.height, obj.x-1, obj.y));
 
             //rechts
-            if (obj.x + 1 < x)
-                list.Add(new Wegobjekt(width, height, obj.x+1, obj.y));
+            if (obj.x + 1 < this.container.x)
+                list.Add(new Wegobjekt(this.container.width, this.container.height, obj.x+1, obj.y));
 
             return list;
         }
@@ -190,22 +214,20 @@ namespace TD_WPF.Game
         public List<Spielobjekt> calculatePossibleFields(List<Spielobjekt> fields, List<Spielobjekt> space)
         {
             List<Spielobjekt> removable = new List<Spielobjekt>();
-            foreach (var item in strecke)
+            List<LinkedList<Spielobjekt>> lists = new List<LinkedList<Spielobjekt>> { this.strecke,
+                this.tower, space != null ? new LinkedList<Spielobjekt> (space) : new LinkedList<Spielobjekt>() };
+            foreach (var list in lists)
             {
-                foreach (var element in fields)
+                foreach (var item in list)
                 {
-                    if (item.x == element.x && item.y == element.y)
-                        removable.Add(element);
+                    foreach (var element in fields)
+                    {
+                        if (item.x == element.x && item.y == element.y)
+                            removable.Add(element);
+                    }
                 }
-            }
-            foreach (var item in space)
-            {
-                foreach (var element in fields)
-                {
-                    if (item.x == element.x && item.y == element.y)
-                        removable.Add(element);
-                }
-            }
+            }            
+            
             foreach (var item in removable)
             {
                 fields.Remove(item);
@@ -216,7 +238,8 @@ namespace TD_WPF.Game
 
         private Startpunkt randomField()
         {
-            return new Startpunkt(width, height, r.Next(x), r.Next(y));
+            return new Startpunkt(this.container.width, this.container.height, 
+                r.Next(this.container.x), r.Next(this.container.y));
         }
 
         #endregion

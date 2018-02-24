@@ -33,7 +33,10 @@ namespace TD_WPF.Game.Handler
         public void HandleGameOptionEvent(object sender, EventArgs a)
         {
             nameOfGameOption = ((RadioButton)sender).Name;
-            Console.WriteLine("nameOfGameOption : " + nameOfGameOption);
+
+            this.gameFrame.removeRecatngles();
+            this.gameFrame.possibleHint.Clear();
+            this.gameFrame.showHints();
         }
     }
 }
