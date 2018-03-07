@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:TD_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
-    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" Background="Transparent" MouseUp="canvasMouseClick">
+    <Grid Name="Spielfeld" MouseMove="canvasMouseMove" Background="Transparent" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
-        <Canvas Name="Map" Grid.Column="0">
+        <Canvas Name="Map" Grid.Column="0" MouseUp="canvasMouseClick">
             <Canvas.Background>
                 <ImageBrush ImageSource="/Grafik/General/grass.jpg"/>
             </Canvas.Background>

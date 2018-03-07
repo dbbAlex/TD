@@ -57,17 +57,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Game\Enumerations.cs" />
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\Handler\OptionEventHandler.cs" />
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
+    <Compile Include="Game\Spielobjekte\Enemy\Gegner.cs" />
     <Compile Include="Game\Spielobjekte\Items\Turm.cs" />
     <Compile Include="Game\Spielobjekte\Map\Endpunkt.cs" />
     <Compile Include="Game\Spielobjekte\Map\Startpunkt.cs" />
+    <Compile Include="Game\Spielobjekte\MoveableObject.cs" />
     <Compile Include="Game\Spielobjekte\Shared\Turmfundament.cs" />
+    <Compile Include="Game\Tools\CollisionDetector.cs" />
     <Compile Include="Game\Tools\GameFrameHelper.cs" />
+    <Compile Include="Game\Tools\GameObjectMover.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -144,7 +149,9 @@
   <ItemGroup>
     <None Include="Grafik\Map\spawn.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Grafik\Enemy\gegner.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\start.bmp" />
   </ItemGroup>

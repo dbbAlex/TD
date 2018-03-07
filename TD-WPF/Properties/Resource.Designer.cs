@@ -63,6 +63,16 @@ namespace TD_WPF.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap gegner {
+            get {
+                object obj = ResourceManager.GetObject("gegner", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap grass {
             get {
                 object obj = ResourceManager.GetObject("grass", resourceCulture);

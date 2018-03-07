@@ -102,6 +102,7 @@ namespace TD_WPF
             LinkedList<ContentControl> mapItems = isMapEditor ? GameFrameHelper.getEditorOptions(this) : GameFrameHelper.getGameOptions(this);
             LinkedListNode<ContentControl> current = mapItems.First;
             LinkedListNode<ContentControl> last = mapItems.Last;
+
             Action fillOptions = delegate
             {   
                 for (int row = 0; row < this.Control.RowDefinitions.Count; row++)
@@ -208,14 +209,7 @@ namespace TD_WPF
         #region further events
         private void controlSizeChange(object sender, RoutedEventArgs e)
         {
-            // remove old rectangle
-            // reverse loop because it's faster than RemoveAll(item is Rectangle)
-            for (int i = this.Map.Children.Count - 1; i >= 0; i--)
-            {
-                Object item = this.Map.Children[i];
-                if (item is Rectangle)
-                    this.Map.Children.RemoveAt(i);
-            }
+            removeRecatngles();
         }
 
         #endregion
@@ -256,7 +250,7 @@ namespace TD_WPF
             for (int i = this.Map.Children.Count - 1; i >= 0; i--)
             {
                 Object item = this.Map.Children[i];
-                if (item is Rectangle)
+                if (item is Rectangle && ((Rectangle)item).Name.Length == 0)
                     this.Map.Children.RemoveAt(i);
             }
         }
@@ -276,7 +270,7 @@ namespace TD_WPF
                 {
                     Spielobjekt last = this.feld.strecke.Last.Value;
                     possibleHint = this.feld.calculatePossibleFields(this.feld.getPossibleNeighbourFields(last),
-                        new List<Spielobjekt>());                    
+                        new List<Spielobjekt>());
                 }
             }
             else

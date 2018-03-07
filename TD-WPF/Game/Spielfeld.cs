@@ -7,6 +7,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Interop;
 using System.Collections;
 using System.Collections.Generic;
+using TD_WPF.Game.Spielobjekte.Items;
+using TD_WPF.Game.Tools;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace TD_WPF.Game
 {
@@ -26,6 +30,19 @@ namespace TD_WPF.Game
             this.strecke = new LinkedList<Spielobjekt>();
             this.tower = new LinkedList<Spielobjekt>();
             this.towerground = new LinkedList<Spielobjekt>();
+        }
+
+        public void randomEnemiesToRemove()
+        {
+            LinkedList<MoveableObject> e = new LinkedList<MoveableObject>();
+
+            for(int i = 1; i > 0; i--)
+            {
+                e.AddLast(new Gegner(container.width, container.height, container.x, container.y, 5));
+                GameObjectMover.startTimerForMovableObject(container, strecke, e.Last.Value);
+                //container.Dispatcher.BeginInvoke((Action)(() => GameObjectMover.moveGameObject(container, strecke, e.Last.Value)));
+                //await Task.Delay(1000);
+            }
         }
                
         public void update()
@@ -118,6 +135,9 @@ namespace TD_WPF.Game
         {
             calculateRoute();
             addBitmapToCanvas(drawRoute());
+
+
+            randomEnemiesToRemove();
         }
 
         private void calculateRoute()

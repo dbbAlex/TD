@@ -15,8 +15,6 @@ namespace TD_WPF.Game.Spielobjekte.Items
             this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.tower), 
                 Convert.ToInt32(width), Convert.ToInt32(height));
         }
-
-
     }
 }
 
