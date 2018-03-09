@@ -21,6 +21,7 @@ namespace TD_WPF.Game
         public LinkedList<Spielobjekt> strecke { get; set; }
         public LinkedList<Spielobjekt> tower { get; set; }
         public LinkedList<Spielobjekt> towerground { get; set; }
+        public Waves waves { get; set; }
         private Random r = new Random();
 
         #endregion
@@ -34,15 +35,21 @@ namespace TD_WPF.Game
 
         public void randomEnemiesToRemove()
         {
-            LinkedList<MoveableObject> e = new LinkedList<MoveableObject>();
-
-            for(int i = 1; i > 0; i--)
+            waves = new Waves(); 
+            for (int w = 2; w > 0; w--)
             {
-                e.AddLast(new Gegner(container.width, container.height, container.x, container.y, 5));
-                GameObjectMover.startTimerForMovableObject(container, strecke, e.Last.Value);
-                //container.Dispatcher.BeginInvoke((Action)(() => GameObjectMover.moveGameObject(container, strecke, e.Last.Value)));
-                //await Task.Delay(1000);
+                Wave wave = new Wave();
+                for (int i = 3; i > 0; i--)
+                {
+                    wave.enemy.AddLast(new Gegner(container.width, container.height, strecke.First.Value.x, strecke.First.Value.y, 5, 1000 / 60));
+                    //GameObjectMover.startTimerForMovableObject(container, wave.enemy.Last.Value);
+                }
+                wave.intervalInMilli = 1000;
+                waves.waves.AddLast(wave);
             }
+            waves.intervalInMilli = 1000;
+            GameObjectMover.startWaves(container);         
+            //container.Dispatcher.InvokeAsync(() => GameObjectMover.test(container));
         }
                
         public void update()

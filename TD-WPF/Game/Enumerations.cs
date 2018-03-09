@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TD_WPF.Game
 {
-    class Enumerations
+    public class Enumerations
     {
         public enum Navigation {North, East, South, West};
     }

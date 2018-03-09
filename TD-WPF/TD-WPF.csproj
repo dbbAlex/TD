@@ -70,6 +70,8 @@
     <Compile Include="Game\Spielobjekte\Map\Startpunkt.cs" />
     <Compile Include="Game\Spielobjekte\MoveableObject.cs" />
     <Compile Include="Game\Spielobjekte\Shared\Turmfundament.cs" />
+    <Compile Include="Game\Spielobjekte\Wave.cs" />
+    <Compile Include="Game\Spielobjekte\Waves.cs" />
     <Compile Include="Game\Tools\CollisionDetector.cs" />
     <Compile Include="Game\Tools\GameFrameHelper.cs" />
     <Compile Include="Game\Tools\GameObjectMover.cs" />

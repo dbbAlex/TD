@@ -147,12 +147,73 @@ namespace TD_WPF.Game.Tools
             return 0;
         }
 
-        public static void startTimerForMovableObject(GameFrame gameFrame, LinkedList<Spielobjekt> weg, MoveableObject gameObject)
+        public static void startWaves(GameFrame gameFrame)
         {
-            int fps = 1000/60;
-            gameObject.x = weg.First.Value.x;
-            gameObject.y = weg.First.Value.y;
-            gameObject.currentDirection = getNextDirection(weg.First.Value, weg.First.Next.Value);
+            LinkedListNode<Wave> current = gameFrame.feld.waves.waves.First;
+            if (current == null)
+                return;
+            LinkedListNode<Wave> next = current.Next;
+            double prevWaveDelay = 1;
+            do
+            {
+                Wave wave = current.Value;
+                System.Timers.Timer timer = new System.Timers.Timer(prevWaveDelay);
+                timer.Elapsed += async (sender, e) =>
+                {                    
+                    timer.Stop();
+                    timer.Close();
+                    timer.Dispose();
+                    await gameFrame.Dispatcher.InvokeAsync((Action)(() => startWave(ref gameFrame, ref wave)));
+                };
+                timer.Start();
+
+                prevWaveDelay += gameFrame.feld.waves.intervalInMilli + ((wave.enemy.Count - 1) * wave.intervalInMilli) + (500 * gameFrame.feld.strecke.Count - 1);
+                current = next;
+                if (current == null)
+                    break;
+                next = current.Next;
+            } while (true);
+        }
+
+        public static void startWave(ref GameFrame gameFrame, ref Wave wave)
+        {
+            GameFrame g = gameFrame;
+            Wave w = wave;
+            LinkedListNode<Gegner> current = w.enemy.First;
+            if (current == null)
+                return;
+            LinkedListNode<Gegner> next = current.Next;
+            double delay = 1;
+            do
+            {
+                MoveableObject m = current.Value;
+                System.Timers.Timer timer = new System.Timers.Timer(delay);
+                timer.Elapsed += async (sender, e) => 
+                {
+                    timer.Stop();
+                    timer.Close();
+                    timer.Dispose();
+                    await g.Dispatcher.InvokeAsync((Action)(() => startTimerForMovableObject(ref g, ref m)));
+                };
+                timer.Start();
+
+                delay += w.intervalInMilli;
+
+                current = next;
+                if (current == null)
+                    break;
+                next = current.Next;
+            } while (true);
+        }
+
+        public static void startTimerForMovableObject(ref GameFrame gameFrame, ref MoveableObject gameObject)
+        {
+            GameFrame g = gameFrame;
+            MoveableObject m = gameObject;
+            double fps = 1000 / 60;
+            gameObject.x = gameFrame.feld.strecke.First.Value.x;
+            gameObject.y = gameFrame.feld.strecke.First.Value.y;
+            gameObject.currentDirection = getNextDirection(gameFrame.feld.strecke.First.Value, gameFrame.feld.strecke.First.Next.Value);
             Rectangle rec = new Rectangle()
             {
                 Name = "gegner",
@@ -168,24 +229,24 @@ namespace TD_WPF.Game.Tools
             Canvas.SetTop(rec, position.Y + 1);
             gameFrame.Map.Children.Add(rec);
 
-            System.Timers.Timer timer = new System.Timers.Timer(fps); // 60 fps
-            timer.Elapsed += async (sender, e) => await gameFrame.Dispatcher.InvokeAsync((Action)(
-                () => {
-                    if(!(gameObject.x == weg.Last.Value.x && gameObject.y == weg.Last.Value.y))
-                        handleEnemyMove(gameFrame, weg, gameObject, fps, rec);
-                    else
-                    {
-                        gameFrame.Map.Children.Remove(rec);
-                        timer.Stop();
-                        timer.Close();
-                    }
-                }));
+            System.Timers.Timer timer = new System.Timers.Timer(fps);
+            timer.Elapsed += async (sender, e) =>
+            {
+                if (!(m.x == g.feld.strecke.Last.Value.x && m.y == g.feld.strecke.Last.Value.y))
+                    await g.Dispatcher.InvokeAsync((Action)(() => handleEnemyMove(ref g, ref m, ref fps, ref rec)));
+                else
+                {
+                    timer.Stop();
+                    timer.Close();
+                    timer.Dispose();
+                }
+            };
             timer.Start();
         }
 
-        public static void handleEnemyMove(GameFrame gameFrame, LinkedList<Spielobjekt> weg, MoveableObject gameObject, int fps, Rectangle rec)
+        public static void handleEnemyMove(ref GameFrame gameFrame, ref MoveableObject gameObject, ref double fps, ref Rectangle rec)
         {
-            LinkedListNode<Spielobjekt> current = getCurrentPosition(weg, gameObject);
+            LinkedListNode<Spielobjekt> current = getCurrentPosition(gameFrame.feld.strecke, gameObject);
             LinkedListNode<Spielobjekt> next = current.Next;
 
             if (next != null)
@@ -196,32 +257,32 @@ namespace TD_WPF.Game.Tools
             double distanceHeight = (gameFrame.Map.ActualHeight / gameFrame.y) / fps;
             Point position = new Point(Canvas.GetLeft(rec), Canvas.GetTop(rec));
 
-            gameObject.currentDirection = gameObject.nextDirection;
-            gameObject.nextDirection = getNextDirection(current.Value, next.Value);
+            //gameObject.currentDirection = gameObject.nextDirection;
+            //gameObject.nextDirection = getNextDirection(current.Value, next.Value);
 
             if (0 == (int)gameObject.nextDirection)
             {
-                position.Y -= distanceHeight;
-                if (((gameFrame.Map.ActualHeight / gameFrame.y) * next.Value.y) - 1 >= position.Y)
-                    gameObject.y = next.Value.y;
+                position.Y -= gameObject.currentDirection != gameObject.nextDirection ? distanceHeight+1 : distanceHeight;
+                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y - 1)) >= position.Y)
+                    gameObject.y--;
             }
             else if (1 == (int)gameObject.nextDirection)
             {
-                position.X += distanceWidth;
-                if (((gameFrame.Map.ActualWidth / gameFrame.x) * next.Value.x) - 1 <= position.X)
-                    gameObject.x = next.Value.x;
+                position.X += gameObject.currentDirection != gameObject.nextDirection ? distanceWidth-1: distanceWidth;
+                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x + 1)) <= position.X)
+                    gameObject.x++;
             }
             else if (2 == (int)gameObject.nextDirection)
             {
-                position.Y += distanceHeight;
-                if (((gameFrame.Map.ActualHeight / gameFrame.y) * next.Value.y) - 1 <= position.Y)
-                    gameObject.y = next.Value.y;
+                position.Y += gameObject.currentDirection != gameObject.nextDirection ? distanceHeight-1 : distanceHeight;
+                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y + 1)) <= position.Y)
+                    gameObject.y++;
             }
             else
             {
-                position.X -= distanceWidth;
-                if (((gameFrame.Map.ActualWidth / gameFrame.x) * next.Value.x) - 1 >= position.X)
-                    gameObject.x = next.Value.x;
+                position.X -= gameObject.currentDirection != gameObject.nextDirection ? distanceWidth+1 : distanceWidth;
+                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x - 1))  >= position.X)
+                    gameObject.x--;
             }
             rec.SetValue(Canvas.TopProperty, position.Y);
             rec.SetValue(Canvas.LeftProperty, position.X);

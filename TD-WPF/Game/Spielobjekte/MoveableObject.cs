@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TD_WPF.Game.Spielobjekte
 {
-    class MoveableObject : Spielobjekt
+    public class MoveableObject : Spielobjekt
     {
         public Enumerations.Navigation currentDirection { get; set; } = Enumerations.Navigation.East;
         public Enumerations.Navigation nextDirection { get; set; } = Enumerations.Navigation.East;

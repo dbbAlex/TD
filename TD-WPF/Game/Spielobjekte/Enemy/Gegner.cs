@@ -8,13 +8,14 @@ using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Spielobjekte.Items
 {
-    class Gegner : MoveableObject
+    public class Gegner : MoveableObject
     {
         public int health { get; set; }
-        
-        public Gegner(double width, double height, double x, double y, int health) : base(width, height, x, y)
+        public double intervalInMilli { get; set; }
+        public Gegner(double width, double height, double x, double y, int health, double intervalInMilli) : base(width, height, x, y)
         {
             this.health = health;
+            this.intervalInMilli = intervalInMilli;
             this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.gegner),
                 Convert.ToInt32(width), Convert.ToInt32(height));
         }        
