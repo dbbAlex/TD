@@ -10,6 +10,9 @@ namespace TD_WPF.Game.Spielobjekte.Items
 {
     class Turm : Spielobjekt
     {
+        public double interval { get; set; }
+        public int damage { get; set; }
+        public int range { get; set; }
         public Turm(double width, double height, double x, double y) : base(width, height, x, y)
         {
             this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.tower), 

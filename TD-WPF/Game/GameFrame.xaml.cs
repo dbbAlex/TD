@@ -123,7 +123,7 @@ namespace TD_WPF
         #endregion
 
         #region mouselistener
-        private void canvasMouseClick(object sender, System.Windows.Input.MouseEventArgs e)
+        private void canvasMouseClick(object sender, MouseEventArgs e)
         {
             if (this.Map.IsMouseOver)
             {

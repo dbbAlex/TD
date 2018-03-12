@@ -36,12 +36,12 @@ namespace TD_WPF.Game
         public void randomEnemiesToRemove()
         {
             waves = new Waves(); 
-            for (int w = 2; w > 0; w--)
+            for (int w = 1; w > 0; w--)
             {
                 Wave wave = new Wave();
-                for (int i = 3; i > 0; i--)
+                for (int i = 1; i > 0; i--)
                 {
-                    wave.enemy.AddLast(new Gegner(container.width, container.height, strecke.First.Value.x, strecke.First.Value.y, 5, 1000 / 60));
+                    wave.enemy.AddLast(new Gegner(container.width, container.height, strecke.First.Value.x, strecke.First.Value.y, 5, 2, 1000 / 60));
                     //GameObjectMover.startTimerForMovableObject(container, wave.enemy.Last.Value);
                 }
                 wave.intervalInMilli = 1000;

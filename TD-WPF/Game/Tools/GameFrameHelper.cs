@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace TD_WPF.Game.Tools
 {
@@ -43,19 +44,20 @@ namespace TD_WPF.Game.Tools
                 {
                     foreach (var file in dirInfo.GetFiles())
                     {
-                        RadioButton rb = new RadioButton()
+                        Button b = new Button()
                         {
                             Name = file.Name.Substring(0, file.Name.IndexOf('.')),
-                            BorderBrush = System.Windows.Media.Brushes.LightGray,
-                            Content = file.FullName,
-                            GroupName = group,
-                            Style = Application.Current.FindResource("ImageRadioButtonStyle") as System.Windows.Style
+                            Content = file.Name.Substring(0, file.Name.IndexOf('.')),
+                            Background = new ImageBrush(new BitmapImage(new Uri(file.FullName)))
+                            {
+                                Stretch = Stretch.Fill
+                            }
                         };
                         Binding heightBinding = new Binding("Width");
-                        heightBinding.Source = rb;
-                        rb.SetBinding(RadioButton.HeightProperty, heightBinding);
-                        rb.Checked += handler;
-                        list.AddLast(rb);
+                        heightBinding.Source = b;
+                        b.SetBinding(Button.HeightProperty, heightBinding);
+                        b.Click += handler;
+                        list.AddLast(b);
                     }
                 }
             }

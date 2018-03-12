@@ -23,16 +23,17 @@ namespace TD_WPF.Game.Handler
 
         public void HandleEditorOptionEvent(object sender, EventArgs a)
         {
-            nameOfEditorOption = ((RadioButton)sender).Name;
+            nameOfEditorOption = ((Button)sender).Name;
 
             this.gameFrame.removeRecatngles();
             this.gameFrame.possibleHint.Clear();
             this.gameFrame.showHints();
+            this.gameFrame.Map.Focus();
         }
 
         public void HandleGameOptionEvent(object sender, EventArgs a)
         {
-            nameOfGameOption = ((RadioButton)sender).Name;
+            nameOfGameOption = ((Button)sender).Name;
 
             this.gameFrame.removeRecatngles();
             this.gameFrame.possibleHint.Clear();

@@ -163,7 +163,15 @@ namespace TD_WPF.Game.Tools
                     timer.Stop();
                     timer.Close();
                     timer.Dispose();
-                    await gameFrame.Dispatcher.InvokeAsync((Action)(() => startWave(ref gameFrame, ref wave)));
+                    try
+                    {
+                        await gameFrame.Dispatcher.InvokeAsync((Action)(() => startWave(ref gameFrame, ref wave)));
+                    }
+                    catch (Exception)
+                    {
+                        //Application closed
+                    }
+                    
                 };
                 timer.Start();
 
@@ -193,7 +201,15 @@ namespace TD_WPF.Game.Tools
                     timer.Stop();
                     timer.Close();
                     timer.Dispose();
-                    await g.Dispatcher.InvokeAsync((Action)(() => startTimerForMovableObject(ref g, ref m)));
+                    try
+                    {
+                        await g.Dispatcher.InvokeAsync((Action)(() => startTimerForMovableObject(ref g, ref m)));
+                    }
+                    catch (Exception)
+                    {
+                        //Application closed
+                    }
+                    
                 };
                 timer.Start();
 
@@ -214,26 +230,34 @@ namespace TD_WPF.Game.Tools
             gameObject.x = gameFrame.feld.strecke.First.Value.x;
             gameObject.y = gameFrame.feld.strecke.First.Value.y;
             gameObject.currentDirection = getNextDirection(gameFrame.feld.strecke.First.Value, gameFrame.feld.strecke.First.Next.Value);
-            Rectangle rec = new Rectangle()
+            Ellipse ell = new Ellipse()
             {
                 Name = "gegner",
-                Width = (gameFrame.Map.ActualWidth / gameFrame.x) - 1,
-                Height = (gameFrame.Map.ActualHeight / gameFrame.y) - 1,
+                Width = (gameFrame.Map.ActualWidth / gameFrame.x) / 2,
+                Height = (gameFrame.Map.ActualHeight / gameFrame.y) / 2,
                 Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(gameObject.image.GetHbitmap(),
                                    IntPtr.Zero,
                                    Int32Rect.Empty,
                                    BitmapSizeOptions.FromEmptyOptions()))
             };
             Point position = new Point(gameObject.x * (gameFrame.Map.ActualWidth / gameFrame.x), gameObject.y * (gameFrame.Map.ActualHeight / gameFrame.y));
-            Canvas.SetLeft(rec, position.X + 1);
-            Canvas.SetTop(rec, position.Y + 1);
-            gameFrame.Map.Children.Add(rec);
+            Canvas.SetLeft(ell, position.X + ((gameFrame.Map.ActualWidth / gameFrame.x) - ell.Width) /2);
+            Canvas.SetTop(ell, position.Y + ((gameFrame.Map.ActualHeight / gameFrame.y) - ell.Height) / 2);
+            gameFrame.Map.Children.Add(ell);
 
             System.Timers.Timer timer = new System.Timers.Timer(fps);
             timer.Elapsed += async (sender, e) =>
             {
                 if (!(m.x == g.feld.strecke.Last.Value.x && m.y == g.feld.strecke.Last.Value.y))
-                    await g.Dispatcher.InvokeAsync((Action)(() => handleEnemyMove(ref g, ref m, ref fps, ref rec)));
+                    try
+                    {
+                        await g.Dispatcher.InvokeAsync((Action)(() => handleEnemyMove(ref g, ref m, ref fps, ref ell)));
+                    }
+                    catch (Exception)
+                    {
+                        // Application was closed                       
+                    }
+                    
                 else
                 {
                     timer.Stop();
@@ -244,51 +268,71 @@ namespace TD_WPF.Game.Tools
             timer.Start();
         }
 
-        public static void handleEnemyMove(ref GameFrame gameFrame, ref MoveableObject gameObject, ref double fps, ref Rectangle rec)
+        public static void handleEnemyMove(ref GameFrame gameFrame, ref MoveableObject gameObject, ref double fps, ref Ellipse ell)
         {
+            // get current and next field 
             LinkedListNode<Spielobjekt> current = getCurrentPosition(gameFrame.feld.strecke, gameObject);
             LinkedListNode<Spielobjekt> next = current.Next;
 
-            if (next != null)
+            // current/next direction
+            if(current.Previous == null)
+            {
                 gameObject.nextDirection = getNextDirection(current.Value, next.Value);
+                gameObject.currentDirection = gameObject.nextDirection;
+            }
             else
-                gameObject.nextDirection = gameObject.currentDirection;
+            {
+                gameObject.currentDirection = getNextDirection(current.Previous.Value, current.Value);
+                if(next != null)
+                    gameObject.nextDirection = getNextDirection(current.Value, next.Value);
+                else
+                    gameObject.nextDirection = gameObject.currentDirection;
+            }                
+
+            // calculate distance to add to current position
             double distanceWidth = (gameFrame.Map.ActualWidth / gameFrame.x) / fps;
             double distanceHeight = (gameFrame.Map.ActualHeight / gameFrame.y) / fps;
-            Point position = new Point(Canvas.GetLeft(rec), Canvas.GetTop(rec));
 
-            //gameObject.currentDirection = gameObject.nextDirection;
-            //gameObject.nextDirection = getNextDirection(current.Value, next.Value);
-
-            if (0 == (int)gameObject.nextDirection)
+            // get current point
+            Point position = new Point(Canvas.GetLeft(ell), Canvas.GetTop(ell));
+            
+            if (0 == (int)gameObject.nextDirection)//up
             {
-                position.Y -= gameObject.currentDirection != gameObject.nextDirection ? distanceHeight+1 : distanceHeight;
-                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y - 1)) >= position.Y)
+                position.Y -= distanceHeight;
+                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y - 1) + ((gameFrame.Map.ActualHeight / gameFrame.y) - ell.Height) / 2) >= position.Y)
+                {
                     gameObject.y--;
+                }                                   
             }
-            else if (1 == (int)gameObject.nextDirection)
+            else if (1 == (int)gameObject.nextDirection)//right
             {
-                position.X += gameObject.currentDirection != gameObject.nextDirection ? distanceWidth-1: distanceWidth;
-                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x + 1)) <= position.X)
+                position.X += distanceWidth;
+                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x + 1) + ((gameFrame.Map.ActualWidth / gameFrame.x) - ell.Width) / 2) <= position.X)
+                {
                     gameObject.x++;
+                }
             }
-            else if (2 == (int)gameObject.nextDirection)
+            else if (2 == (int)gameObject.nextDirection)//down
             {
-                position.Y += gameObject.currentDirection != gameObject.nextDirection ? distanceHeight-1 : distanceHeight;
-                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y + 1)) <= position.Y)
+                position.Y += distanceHeight;
+                if (((gameFrame.Map.ActualHeight / gameFrame.y) * (current.Value.y + 1) + ((gameFrame.Map.ActualHeight / gameFrame.y) - ell.Height) / 2) <= position.Y)
+                {
                     gameObject.y++;
+                }
             }
-            else
+            else//left
             {
-                position.X -= gameObject.currentDirection != gameObject.nextDirection ? distanceWidth+1 : distanceWidth;
-                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x - 1))  >= position.X)
+                position.X -= distanceWidth;
+                if (((gameFrame.Map.ActualWidth / gameFrame.x) * (current.Value.x - 1) + ((gameFrame.Map.ActualWidth / gameFrame.x) - ell.Width) / 2)  >= position.X)
+                {
                     gameObject.x--;
+                }
             }
-            rec.SetValue(Canvas.TopProperty, position.Y);
-            rec.SetValue(Canvas.LeftProperty, position.X);
+            ell.SetValue(Canvas.TopProperty, position.Y);
+            ell.SetValue(Canvas.LeftProperty, position.X);
 
             gameObject.currentDirection = gameObject.nextDirection;
-        }
+        }        
 
         public static LinkedListNode<Spielobjekt> getCurrentPosition(LinkedList<Spielobjekt> weg, MoveableObject gameObject)
         {
