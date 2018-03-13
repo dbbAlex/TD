@@ -28,8 +28,8 @@ namespace TD_WPF
         public int height { get; set; }
         public int x { get; set; } = 20;
         public int y { get; set; } = 15;
-        public bool isMapEditor { get; set; } = !true;
-        public bool showGrid { get; set; } = true;
+        public bool isMapEditor { get; set; } = true;
+        public bool showGrid { get; set; } = !true;
         public Object loadGame { get; set; } = null;
         public OptionEventHandler optionHandler { get; set; }
         public List<Spielobjekt> possibleHint { get; set; } = new List<Spielobjekt>();

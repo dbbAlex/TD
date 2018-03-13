@@ -58,10 +58,26 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Game\Enumerations.cs" />
+    <Compile Include="Game\GameControl.xaml.cs">
+      <DependentUpon>GameControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\GameUtils\GameCreator.cs" />
+    <Compile Include="Game\GameUtils\GameManager.cs" />
+    <Compile Include="Game\GameObjects\DynamicGameObject.cs" />
+    <Compile Include="Game\GameObjects\DynamicGameObjects\Enemy.cs" />
+    <Compile Include="Game\GameObjects\DynamicGameObjects\Shot.cs" />
+    <Compile Include="Game\GameObjects\GameObject.cs" />
+    <Compile Include="Game\GameObjects\StaticGameObjects\Base.cs" />
+    <Compile Include="Game\GameObjects\StaticGameObjects\Ground.cs" />
+    <Compile Include="Game\GameObjects\StaticGameObjects\Path.cs" />
+    <Compile Include="Game\GameObjects\StaticGameObjects\Spawn.cs" />
+    <Compile Include="Game\GameObjects\StaticGameObjects\Tower.cs" />
     <Compile Include="Game\Handler\OptionEventHandler.cs" />
+    <Compile Include="Game\RoundObjects\Wave.cs" />
+    <Compile Include="Game\RoundObjects\Waves.cs" />
     <Compile Include="Game\Spielfeld.cs">
     </Compile>
     <Compile Include="Game\Spielobjekte\Enemy\Gegner.cs" />
@@ -75,12 +91,17 @@
     <Compile Include="Game\Tools\CollisionDetector.cs" />
     <Compile Include="Game\Tools\GameFrameHelper.cs" />
     <Compile Include="Game\Tools\GameObjectMover.cs" />
+    <Compile Include="Game\GameUtils\GameUtils.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="Tools\ImageTool.cs" />
+    <Page Include="Game\GameControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\GameFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -172,6 +193,7 @@
   <ItemGroup>
     <None Include="Grafik\Items\tower.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
