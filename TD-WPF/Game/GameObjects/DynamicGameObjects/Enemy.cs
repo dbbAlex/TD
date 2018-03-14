@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -36,9 +31,27 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
             };
         }
 
-        public override void update(GameControl gameControl)
+        public override void update(GameControl gameControl, float deltaTime)
         {
-            base.update(gameControl);
+            // get next path
+            StaticGameObjects.Path next = GameUtils.GameUtils.GetNextPath(GameUtils.GameUtils.GetPathPosition(this, gameControl), gameControl);
+
+            // get unit for x and y
+            float unitX = next.x * next.width - this.x * this.width;
+            float unitY = next.y * next.height - this.y * this.height;
+            // calculate distance 
+            float distance = (float)Math.Sqrt(Math.Pow((this.x * this.width - next.x * next.width), 2) + Math.Pow((this.y * this.height - next.y * next.height), 2));
+            // calculate new coordinates
+            float _x = x + unitX * speed;
+            float _y = y + unitY * speed;
+            // check for collision
+
+            // update fields
+            this.x = _x;
+            this.y = _y;
+
+            // call base update for size
+            base.update(gameControl, deltaTime);
         }
     }
 }

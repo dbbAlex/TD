@@ -18,9 +18,10 @@ namespace TD_WPF.Game.GameManagerTask
 
         public async void run(GameControl gameControl)
         {
-            float time;
-            float oldTime;
             Stopwatch timer = new Stopwatch();
+            float time = timer.ElapsedMilliseconds;
+            float oldTime;
+            
             timer.Start();
 
             start(gameControl);
@@ -30,7 +31,7 @@ namespace TD_WPF.Game.GameManagerTask
                 // get start time
                 oldTime = timer.ElapsedMilliseconds;
                 // update all instances
-                update(gameControl);
+                update(gameControl, oldTime - time);
                 // set time after update
                 time = timer.ElapsedMilliseconds;
                 // check if we are in time
@@ -64,23 +65,27 @@ namespace TD_WPF.Game.GameManagerTask
             }
         }
 
-        public void update(GameControl gameControl)
+        public void update(GameControl gameControl, float deltaTime)
         {
             foreach (var item in gameControl.gameCreator.paths)
             {
-                item.update(gameControl);
+                item.update(gameControl, deltaTime);
             }
             foreach (var item in gameControl.gameCreator.ground)
             {
-                item.update(gameControl);
+                item.update(gameControl, deltaTime);
             }
             foreach (var item in gameControl.gameCreator.shots)
             {
-                item.update(gameControl);
+                item.update(gameControl, deltaTime);
             }
             foreach (var item in gameControl.gameCreator.enemies)
             {
-                item.update(gameControl);
+                item.update(gameControl, deltaTime);
+            }
+            foreach (var item in gameControl.marks)
+            {
+                item.update(gameControl, deltaTime);
             }
         }
 
@@ -99,6 +104,10 @@ namespace TD_WPF.Game.GameManagerTask
                 item.render(gameControl);
             }
             foreach (var item in gameControl.gameCreator.enemies)
+            {
+                item.render(gameControl);
+            }
+            foreach (var item in gameControl.marks)
             {
                 item.render(gameControl);
             }

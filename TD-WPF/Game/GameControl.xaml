@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TD_WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
-    <Grid Name="MainGrid">
+    <Grid Name="MainGrid"  MouseMove="MouseMoveOverCanvas">
         <Grid.Background>
             <ImageBrush ImageSource="/Grafik/General/grass.jpg"/>
         </Grid.Background>
@@ -14,7 +14,7 @@
             <ColumnDefinition Width="0.8*"/>
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
-        <Canvas Name="Canvas" Grid.Column="0" Background="Transparent" />
+        <Canvas Name="Canvas" Grid.Column="0" Background="Transparent" MouseLeftButtonUp="MouseClickOnCanvas"/>
         <Grid Name="ControlGrid"  Grid.Column="1" Background="Black">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*"/>

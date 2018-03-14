@@ -30,18 +30,20 @@ namespace TD_WPF.Game.GameObjects
         {
             this.shape.Width = width;
             this.shape.Height = height;
-            Canvas.SetLeft(this.shape, this.x * width);
-            Canvas.SetTop(this.shape, this.y * height);
+            Canvas.SetLeft(this.shape, this.x * this.width);
+            Canvas.SetTop(this.shape, this.y * this.height);
         }
 
         public void start(GameControl gameControl)
         {
+            Canvas.SetLeft(this.shape, this.x * this.width);
+            Canvas.SetTop(this.shape, this.y * this.height);
             gameControl.Canvas.Children.Add(this.shape);
         }
 
 
 
-        public virtual void update(GameControl gameControl)
+        public virtual void update(GameControl gameControl, float deltaTime)
         {
             this.width = (float)gameControl.Canvas.ActualWidth / gameControl.gameCreator.x;
             this.height = (float)gameControl.Canvas.ActualHeight / gameControl.gameCreator.y;

@@ -34,9 +34,9 @@ namespace TD_WPF.Game.GameUtils
 
         public void initilizeRandomPath()
         {
-            paths = GameUtils.generateRandomPath((float)gameControl.Canvas.ActualWidth,
+            paths = GameUtils.GenerateRandomPath((float)gameControl.Canvas.ActualWidth,
                (float)gameControl.Canvas.ActualHeight, this.x, this.y);
-            ground = GameUtils.generateRandomGround(paths, (float)gameControl.Canvas.ActualWidth,
+            ground = GameUtils.GenerateRandomGround(paths, (float)gameControl.Canvas.ActualWidth,
                (float)gameControl.Canvas.ActualHeight, this.x, this.y);
         }
     }

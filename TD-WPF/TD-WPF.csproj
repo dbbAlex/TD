@@ -64,6 +64,8 @@
     <Compile Include="Game\GameFrame.xaml.cs">
       <DependentUpon>GameFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
+    <Compile Include="Game\GameUtils\ControlUtils.cs" />
     <Compile Include="Game\GameUtils\GameCreator.cs" />
     <Compile Include="Game\GameUtils\GameManager.cs" />
     <Compile Include="Game\GameObjects\DynamicGameObject.cs" />

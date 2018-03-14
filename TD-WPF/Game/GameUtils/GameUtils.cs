@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TD_WPF.Game.GameObjects;
 using TD_WPF.Game.GameObjects.StaticGameObjects;
 
 namespace TD_WPF.Game.GameUtils
 {
     public class GameUtils
     {
-        public static LinkedList<Path> generateRandomPath(float fieldWidth, float fieldHeight, int x , int y)
+        public static LinkedList<Path> GenerateRandomPath(float fieldWidth, float fieldHeight, int x , int y)
         {
             Random random = new Random();
             LinkedList<Path> paths = new LinkedList<Path>(); // store the path
@@ -62,7 +63,7 @@ namespace TD_WPF.Game.GameUtils
             return paths;
         }
 
-        public static LinkedList<Ground> generateRandomGround(LinkedList<Path> paths, float fieldWidth, float fieldHeight, int x, int y)
+        public static LinkedList<Ground> GenerateRandomGround(LinkedList<Path> paths, float fieldWidth, float fieldHeight, int x, int y)
         {
             Random random = new Random();
             LinkedList<Ground> ground = new LinkedList<Ground>();
@@ -141,6 +142,33 @@ namespace TD_WPF.Game.GameUtils
             }
 
             return next;
+        }
+
+        public static Path GetPathPosition(GameObject gameObject, GameControl gameControl)
+        {
+            foreach (var item in gameControl.gameCreator.paths)
+            {
+                if (gameObject.x >= item.x && gameObject.x < item.x + item.width
+                    && gameObject.y >= item.y && gameObject.y < item.y + item.height)
+                {
+                    return item;
+                }
+            } 
+
+            return null;
+        }
+
+        public static Path GetNextPath(Path current, GameControl gameControl)
+        {
+            LinkedListNode<Path> cur = gameControl.gameCreator.paths.First;
+            while(cur.Value != current)
+            {
+                cur = cur.Next;
+                if (cur == null)
+                    return null;
+            }
+
+            return cur.Next != null ? cur.Next.Value : null;
         }
     }    
 }
