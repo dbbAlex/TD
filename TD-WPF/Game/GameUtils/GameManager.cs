@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
-namespace TD_WPF.Game.GameManagerTask
+namespace TD_WPF.Game.GameUtils
 {
     public class GameManager
     {
@@ -19,37 +13,25 @@ namespace TD_WPF.Game.GameManagerTask
         public async void run(GameControl gameControl)
         {
             Stopwatch timer = new Stopwatch();
-            float time = timer.ElapsedMilliseconds;
-            float oldTime;
-            
             timer.Start();
-
+            float previousTime = timer.ElapsedMilliseconds;
+            float lag = 0F;
             start(gameControl);
-
             while (running)
             {
-                // get start time
-                oldTime = timer.ElapsedMilliseconds;
-                // update all instances
-                update(gameControl, oldTime - time);
-                // set time after update
-                time = timer.ElapsedMilliseconds;
-                // check if we are in time
-                if (time - oldTime > MAX_LOOP_TIME)
+                float currentTime = timer.ElapsedMilliseconds;
+                float ellapsed = currentTime - previousTime;
+                previousTime = currentTime;
+                lag += ellapsed;
+
+                while (lag >= MAX_LOOP_TIME)
                 {
-                    // update took to long so we skip this frame
-                    continue;
+                    update(gameControl, 0F);
+                    lag -= MAX_LOOP_TIME;
                 }
-                // we are in time so we can render this frame
+                
                 render(gameControl);
-                // get timer after rendering
-                time = timer.ElapsedMilliseconds;
-                // check if we are to fast
-                if (time - oldTime < MAX_LOOP_TIME)
-                {
-                    // wait until the looptime is reached to keep the speed constant
-                    await Task.Delay(Convert.ToInt32(MAX_LOOP_TIME - (time - oldTime)));
-                }
+                
             }
         }
 
@@ -63,6 +45,7 @@ namespace TD_WPF.Game.GameManagerTask
             {
                 item.start(gameControl);
             }
+            gameControl.gameCreator.waves?.start(gameControl);
         }
 
         public void update(GameControl gameControl, float deltaTime)
@@ -75,18 +58,13 @@ namespace TD_WPF.Game.GameManagerTask
             {
                 item.update(gameControl, deltaTime);
             }
-            foreach (var item in gameControl.gameCreator.shots)
-            {
-                item.update(gameControl, deltaTime);
-            }
-            foreach (var item in gameControl.gameCreator.enemies)
-            {
-                item.update(gameControl, deltaTime);
-            }
+
+            gameControl.gameCreator.waves?.update(gameControl, deltaTime);
             foreach (var item in gameControl.marks)
             {
                 item.update(gameControl, deltaTime);
             }
+
         }
 
         public void render(GameControl gameControl)
@@ -99,14 +77,7 @@ namespace TD_WPF.Game.GameManagerTask
             {
                 item.render(gameControl);
             }
-            foreach (var item in gameControl.gameCreator.shots)
-            {
-                item.render(gameControl);
-            }
-            foreach (var item in gameControl.gameCreator.enemies)
-            {
-                item.render(gameControl);
-            }
+            gameControl.gameCreator.waves?.render(gameControl);
             foreach (var item in gameControl.marks)
             {
                 item.render(gameControl);

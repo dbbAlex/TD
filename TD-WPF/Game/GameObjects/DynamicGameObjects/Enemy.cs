@@ -5,6 +5,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TD_WPF.Game.RoundObjects;
 using TD_WPF.Tools;
 
 namespace TD_WPF.Game.GameObjects.DynamicGameObjects
@@ -13,8 +14,11 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
     {
         public int health { get; set; }
         public int damage { get; set; }
-        public Enemy(float x, float y, float width, float height, float speed, int health, int damage) : base(x, y, width, height, speed)
+        public Wave wave { get; set; }
+        public bool active { get; set; } = false;
+        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave) : base(x, y, width, height, speed)
         {
+            this.wave = wave;
             this.health = health;
             this.damage = damage;
             this.image = ImageTool.ResizeImage(new Bitmap(Properties.Resource.gegner),
@@ -31,25 +35,35 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
             };
         }
 
+        public override void start(GameControl gameControl)
+        {
+            base.start(gameControl);
+            active = true;
+        }
+
         public override void update(GameControl gameControl, float deltaTime)
         {
             // get next path
             StaticGameObjects.Path next = GameUtils.GameUtils.GetNextPath(GameUtils.GameUtils.GetPathPosition(this, gameControl), gameControl);
+            if(next == null)
+            {
+                this.active = false;
+                this.wave.enemies.Remove(this);
+                return;
+            }
 
-            // get unit for x and y
-            float unitX = next.x * next.width - this.x * this.width;
-            float unitY = next.y * next.height - this.y * this.height;
-            // calculate distance 
-            float distance = (float)Math.Sqrt(Math.Pow((this.x * this.width - next.x * next.width), 2) + Math.Pow((this.y * this.height - next.y * next.height), 2));
-            // calculate new coordinates
-            float _x = x + unitX * speed;
-            float _y = y + unitY * speed;
-            // check for collision
-
-            // update fields
-            this.x = _x;
-            this.y = _y;
-
+            if(this.x != next.x)
+            {
+                this.x *= speed * deltaTime;
+                if (this.x > next.x)
+                    this.x = next.x;
+            }
+            else if(this.y != next.y)
+            {
+                this.y *= speed * deltaTime;
+                if (this.y > next.y)
+                    this.y = next.y;
+            }
             // call base update for size
             base.update(gameControl, deltaTime);
         }

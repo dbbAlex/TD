@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TD_WPF.Game.GameObjects;
+using TD_WPF.Game.GameObjects.DynamicGameObjects;
 using TD_WPF.Game.GameObjects.StaticGameObjects;
+using TD_WPF.Game.RoundObjects;
 
 namespace TD_WPF.Game.GameUtils
 {
     public class GameUtils
     {
+        #region generate methods
         public static LinkedList<Path> GenerateRandomPath(float fieldWidth, float fieldHeight, int x , int y)
         {
             Random random = new Random();
@@ -97,6 +100,34 @@ namespace TD_WPF.Game.GameUtils
             return ground;
         }
 
+        public static Waves GenerateRandomWaves(float intervalBetweenWaves, float intervalBetweenEnemies, Spawn spawn)
+        {
+            Random random = new Random();
+            Waves waves = new Waves(intervalBetweenWaves);
+
+            for (int i = /*random.Next(10)+*/1; i > 0 ; i--)
+            {
+                waves.waves.Add(GenerateRandomWave(intervalBetweenEnemies, spawn));
+            }
+
+            return waves;
+        }
+
+        public static Wave GenerateRandomWave(float intervalBetweenEnemies, Spawn spawn)
+        {
+            Random random = new Random();
+            Wave wave = new Wave(intervalBetweenEnemies);
+
+            for (int i = /*random.Next(10)+*/1; i > 0; i--)
+            {
+                wave.enemies.Add(new Enemy(spawn.x, spawn.y, spawn.width, spawn.height, 2F, random.Next(10), random.Next(10), wave));
+            }
+
+            return wave;
+        }
+        #endregion
+
+        #region other methods
         public static List<Path> NextPaths(int x, int y, float width, float height, float _x, float _y)
         {
             List<Path> list = new List<Path>();
@@ -148,8 +179,7 @@ namespace TD_WPF.Game.GameUtils
         {
             foreach (var item in gameControl.gameCreator.paths)
             {
-                if (gameObject.x >= item.x && gameObject.x < item.x + item.width
-                    && gameObject.y >= item.y && gameObject.y < item.y + item.height)
+                if ((float)Math.Floor(gameObject.x) == item.x && Math.Floor(gameObject.y) == item.y)
                 {
                     return item;
                 }
@@ -170,5 +200,7 @@ namespace TD_WPF.Game.GameUtils
 
             return cur.Next != null ? cur.Next.Value : null;
         }
-    }    
+
+        #endregion
+    }
 }

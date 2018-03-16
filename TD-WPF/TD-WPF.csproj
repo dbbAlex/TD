@@ -61,9 +61,6 @@
     <Compile Include="Game\GameControl.xaml.cs">
       <DependentUpon>GameControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\GameFrame.xaml.cs">
-      <DependentUpon>GameFrame.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
     <Compile Include="Game\GameUtils\ControlUtils.cs" />
     <Compile Include="Game\GameUtils\GameCreator.cs" />
@@ -77,22 +74,8 @@
     <Compile Include="Game\GameObjects\StaticGameObjects\Path.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Spawn.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Tower.cs" />
-    <Compile Include="Game\Handler\OptionEventHandler.cs" />
     <Compile Include="Game\RoundObjects\Wave.cs" />
     <Compile Include="Game\RoundObjects\Waves.cs" />
-    <Compile Include="Game\Spielfeld.cs">
-    </Compile>
-    <Compile Include="Game\Spielobjekte\Enemy\Gegner.cs" />
-    <Compile Include="Game\Spielobjekte\Items\Turm.cs" />
-    <Compile Include="Game\Spielobjekte\Map\Endpunkt.cs" />
-    <Compile Include="Game\Spielobjekte\Map\Startpunkt.cs" />
-    <Compile Include="Game\Spielobjekte\MoveableObject.cs" />
-    <Compile Include="Game\Spielobjekte\Shared\Turmfundament.cs" />
-    <Compile Include="Game\Spielobjekte\Wave.cs" />
-    <Compile Include="Game\Spielobjekte\Waves.cs" />
-    <Compile Include="Game\Tools\CollisionDetector.cs" />
-    <Compile Include="Game\Tools\GameFrameHelper.cs" />
-    <Compile Include="Game\Tools\GameObjectMover.cs" />
     <Compile Include="Game\GameUtils\GameUtils.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -101,10 +84,6 @@
     </Compile>
     <Compile Include="Tools\ImageTool.cs" />
     <Page Include="Game\GameControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Game\GameFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -117,8 +96,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CornerButton.cs" />
-    <Compile Include="Game\Spielobjekte\Spielobjekt.cs" />
-    <Compile Include="Game\Spielobjekte\Map\Wegobjekt.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

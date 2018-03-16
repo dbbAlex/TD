@@ -26,7 +26,7 @@ namespace TD_WPF.Game.GameObjects
             this.height = height;
         }
 
-        public void render(GameControl gameControl)
+        public virtual void render(GameControl gameControl)
         {
             this.shape.Width = width;
             this.shape.Height = height;
@@ -34,7 +34,7 @@ namespace TD_WPF.Game.GameObjects
             Canvas.SetTop(this.shape, this.y * this.height);
         }
 
-        public void start(GameControl gameControl)
+        public virtual void start(GameControl gameControl)
         {
             Canvas.SetLeft(this.shape, this.x * this.width);
             Canvas.SetTop(this.shape, this.y * this.height);

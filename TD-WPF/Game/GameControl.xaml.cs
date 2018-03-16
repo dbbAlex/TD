@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using TD_WPF.Game.GameManagerTask;
 using TD_WPF.Game.GameObjects;
 using TD_WPF.Game.GameObjects.StaticGameObjects;
 using TD_WPF.Game.GameUtils;
@@ -17,8 +16,8 @@ namespace TD_WPF.Game
     public partial class GameControl : UserControl
     {
         #region constants
-        const string HINT = "hint";
-        const string MOUSE_OVER = "over";
+        public const string HINT = "hint";
+        public const string MOUSE_OVER = "over";
         #endregion
 
         #region attibutes
@@ -26,7 +25,7 @@ namespace TD_WPF.Game
         public GameManager gameManager { get; set; }
         public Control selectedControl { get; set; }
         public List<Mark> marks { get; set; } = new List<Mark>();
-        public bool isEditor { get; set; } = !false;
+        public bool isEditor { get; set; } = false;
         #endregion
 
         public GameControl()
@@ -41,7 +40,8 @@ namespace TD_WPF.Game
             createControls();
 
             this.gameCreator = new GameCreator(this);
-            //this.gameCreator.initilizeRandomPath();
+            this.gameCreator.initilizeRandomPath();
+            //this.gameCreator.initializeRandomWaves();
             this.gameManager = new GameManager();
             this.Dispatcher.InvokeAsync(() => this.gameManager.run(this));
         }
