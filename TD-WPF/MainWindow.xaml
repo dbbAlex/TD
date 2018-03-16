@@ -11,5 +11,5 @@
         Background="Black"
         Width="1024"
         Height="700">
-        <game:GameControl/>
+    <game:GameControl />
 </Window>

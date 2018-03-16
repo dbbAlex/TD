@@ -1,10 +1,13 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows;
+﻿
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
+
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
+
 [assembly: AssemblyTitle("TD-WPF")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
