@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TD_WPF.Tools
 {
-    class ImageTool
+    internal class ImageTool
     {
         /// @Author mpen --> https://stackoverflow.com/questions/1922040/resize-an-image-c-sharp
         /// <summary>
-        /// Resize the image to the specified width and height.
+        ///     Resize the image to the specified width and height.
         /// </summary>
         /// <param name="image">The image to resize.</param>
         /// <param name="width">The width to resize to.</param>

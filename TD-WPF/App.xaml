@@ -7,11 +7,11 @@
         <Style x:Key="ImageRadioButtonStyle" TargetType="RadioButton">
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Opacity" Value="0.5"/>
+                    <Setter Property="Opacity" Value="0.5" />
                 </Trigger>
             </Style.Triggers>
 
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderThickness" Value="2" />
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -20,7 +20,8 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 Background="Transparent">
                             <StackPanel Orientation="Vertical">
-                                <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" Stretch="Fill"/>
+                                <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Stretch="Fill" />
                                 <Label Content="{Binding Path=Name, RelativeSource={RelativeSource TemplatedParent}}" />
                             </StackPanel>
                         </Border>
@@ -31,28 +32,37 @@
 
 
         <ControlTemplate x:Key="RoundButtonControl" TargetType="{x:Type local:CornerButton}">
-            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"
+                    SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsDefaulted" Value="False">
-                    <Setter Property="Cursor" Value="Hand"></Setter>
-                    <Setter Property="CornerRadius" TargetName="border" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CornerRadius}"/>
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="CornerRadius" TargetName="border"
+                            Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CornerRadius}" />
                     <!--<Setter Property="CornerRadius" TargetName="border" Value="10"/>-->
-                    <Setter Property="Background" Value="#FFB9E6F2"/>
+                    <Setter Property="Background" Value="#FFB9E6F2" />
                 </Trigger>
 
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" TargetName="border" Value="#FFB9E6F2"/>
+                    <Setter Property="Background" TargetName="border" Value="#FFB9E6F2" />
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" TargetName="border" Value="#FFCCEBF3"/>
+                    <Setter Property="Background" TargetName="border" Value="#FFCCEBF3" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
         <Style x:Key="RoundButton" TargetType="local:CornerButton">
-            <Setter Property="Template" Value="{DynamicResource RoundButtonControl}"/>
+            <Setter Property="Template" Value="{DynamicResource RoundButtonControl}" />
         </Style>
     </Application.Resources>
 </Application>
