@@ -2,11 +2,11 @@
 {
     public abstract class DynamicGameObject : GameObject
     {
-        public DynamicGameObject(float x, float y, float width, float height, float speed) : base(x, y, width, height)
+        protected DynamicGameObject(float x, float y, float width, float height, float speed) : base(x, y, width, height)
         {
-            this.speed = speed;
+            this.Speed = 1 * speed;
         }
 
-        public float speed { get; set; }
+        protected float Speed { get; private set; }
     }
 }

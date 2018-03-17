@@ -15,44 +15,43 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         public Shot(float x, float y, float width, float height, float speed, int damage, Enemy enemy) : base(x, y,
             width, height, speed)
         {
-            this.damage = damage;
-            this.enemy = enemy;
-            image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
+            this.Damage = damage;
+            this.Enemy = enemy;
+            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            shape = new Ellipse
+            this.Shape = new Ellipse
             {
                 Name = GetType().Name,
                 Width = width,
                 Height = height,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(),
+                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromEmptyOptions()))
             };
         }
 
-        public int damage { get; set; }
-        public Enemy enemy { get; set; }
+        public int Damage { get; set; }
+        public Enemy Enemy { get; set; }
 
-        public override void update(GameControl gameControl, float deltaTime)
+        public override void Update(GameControl gameControl)
         {
             // get unit for x and y
-            var unitX = enemy.x * enemy.width - x * width;
-            var unitY = enemy.y * enemy.height - y * height;
+            var unitX = Enemy.X * Enemy.Width - X * Width;
+            var unitY = Enemy.Y * Enemy.Height - Y * Height;
             // calculate distance 
-            var distance = (float) Math.Sqrt(Math.Pow(x * width - enemy.x * enemy.width, 2) +
-                                             Math.Pow(y * height - enemy.y * enemy.height, 2));
+            var distance = (float) Math.Sqrt(Math.Pow(X * Width - Enemy.X * Enemy.Width, 2) +
+                                             Math.Pow(Y * Height - Enemy.Y * Enemy.Height, 2));
             // calculate new coordinates
-            var _x = x + unitX * speed;
-            var _y = y + unitY * speed;
+            var _x = X + unitX * Speed;
+            var _y = Y + unitY * Speed;
             // check for collision
 
             // update fields
-            x = _x;
-            y = _y;
+            X = _x;
+            Y = _y;
 
-            // call base update for size
-            base.update(gameControl, deltaTime);
+            base.Update(gameControl);
         }
     }
 }

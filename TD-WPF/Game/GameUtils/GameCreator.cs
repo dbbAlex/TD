@@ -8,34 +8,32 @@ namespace TD_WPF.Game.GameUtils
     {
         public GameCreator(GameControl gameControl)
         {
-            this.gameControl = gameControl;
+            this.GameControl = gameControl;
         }
 
-        public void initilizeRandomPath()
+        public void InitilizeRandomPath()
         {
-            paths = GameUtils.GenerateRandomPath((float) gameControl.Canvas.ActualWidth,
-                (float) gameControl.Canvas.ActualHeight, x, y);
-            ground = GameUtils.GenerateRandomGround(paths, (float) gameControl.Canvas.ActualWidth,
-                (float) gameControl.Canvas.ActualHeight, x, y);
+            Paths = GameUtils.GenerateRandomPath((float) GameControl.Canvas.ActualWidth,
+                (float) GameControl.Canvas.ActualHeight, X, Y);
+            Ground = GameUtils.GenerateRandomGround(Paths, (float) GameControl.Canvas.ActualWidth,
+                (float) GameControl.Canvas.ActualHeight, X, Y);
         }
 
-        public void initializeRandomWaves()
+        public void InitializeRandomWaves()
         {
-            waves = GameUtils.GenerateRandomWaves(5F, 2F, (Spawn) paths.First.Value);
+            Waves = GameUtils.GenerateRandomWaves(10f, 5f, (Spawn) Paths[0]);
         }
 
         #region attributes
+        // base and spawn will be stored in paths too
+        public List<Path> Paths { get; private set; } = new List<Path>(); 
+        // we dont need towers because we will get them by iterationg the ground which referes to the tower
+        public List<Ground> Ground { get; private set; } = new List<Ground>();          
 
-        public LinkedList<Path> paths { get; set; } =
-            new LinkedList<Path>(); // base and spawn will be stored in paths too
-
-        public LinkedList<Ground> ground { get; set; } =
-            new LinkedList<Ground>(); // we dont need towers because we will get them by iterationg the ground which referes to the tower         
-
-        public Waves waves { get; set; }
-        public GameControl gameControl { get; set; }
-        public int x { get; set; } = 20;
-        public int y { get; set; } = 15;
+        public Waves Waves { get; private set; }
+        private GameControl GameControl { get; set; }
+        public int X { get; set; } = 20;
+        public int Y { get; set; } = 15;
 
         #endregion
     }

@@ -6,36 +6,37 @@ namespace TD_WPF.Game.RoundObjects
     {
         public Waves(float intervall)
         {
-            this.intervall = intervall;
+            this.Intervall = intervall;
         }
 
-        public float intervall { get; set; }
-        public List<Wave> waves { get; set; } = new List<Wave>();
-        public int waveIndex { get; set; }
-        public float lastDeltaTime { get; set; }
+        private float Intervall { get; set; }
+        public List<Wave> WaveList { get; set; } = new List<Wave>();
+        private int WaveIndex { get; set; }
+        private float LastInterval { get; set; }
 
-        public void start(GameControl gameControl)
+        public void Start(GameControl gameControl, float currentInterval)
         {
-            waves[waveIndex].start(gameControl);
-            waveIndex++;
+            WaveList[WaveIndex].Start(gameControl, currentInterval);
+            WaveIndex++;
+            LastInterval = currentInterval;
         }
 
-        public void update(GameControl gameControl, float deltaTime)
+        public void Update(GameControl gameControl, float currentInterval)
         {
-            foreach (var item in waves.FindAll(wave => wave.active)) item.update(gameControl, deltaTime);
+            var findAll = WaveList.FindAll(wave => wave.Active);
+            foreach (var item in findAll) item.Update(gameControl, currentInterval);
 
-            if (waveIndex < waves.Count && (deltaTime - lastDeltaTime >= intervall || lastDeltaTime == 0))
+            if (WaveIndex < WaveList.Count && currentInterval - LastInterval >= Intervall)
             {
-                waves[waveIndex].start(gameControl);
-                waveIndex++;
+                WaveList[WaveIndex].Start(gameControl, currentInterval);
+                WaveIndex++;
+                LastInterval = currentInterval;
             }
-
-            lastDeltaTime = deltaTime;
         }
 
-        public void render(GameControl gameControl)
+        public void Render(GameControl gameControl)
         {
-            foreach (var item in waves.FindAll(wave => wave.active)) item.render(gameControl);
+            foreach (var item in WaveList.FindAll(wave => wave.Active)) item.Render(gameControl);
         }
     }
 }

@@ -15,25 +15,19 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         public Tower(float x, float y, float width, float height, float shotIntervall, float shotSpeed, int shotDamage)
             : base(x, y, width, height)
         {
-            this.shotIntervall = shotIntervall;
-            this.shotSpeed = shotSpeed;
-            this.shotDamage = shotDamage;
-            image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
+            this.ShotIntervall = shotIntervall;
+            this.ShotSpeed = shotSpeed;
+            this.ShotDamage = shotDamage;
+            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            shape = new Rectangle
-            {
-                Name = GetType().Name,
-                Width = this.width,
-                Height = this.height,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()))
-            };
+            this.Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions()));
         }
 
-        public float shotIntervall { get; set; }
-        public float shotSpeed { get; set; }
-        public int shotDamage { get; set; }
+        private float ShotIntervall { get; set; }
+        private float ShotSpeed { get; set; }
+        private int ShotDamage { get; set; }
     }
 }

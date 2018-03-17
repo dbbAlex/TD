@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -8,69 +9,92 @@ using System.Windows.Shapes;
 using TD_WPF.Game.RoundObjects;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
+using Path = TD_WPF.Game.GameObjects.StaticGameObjects.Path;
 
 namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave) :
+        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave, int pathPosition) :
             base(x, y, width, height, speed)
         {
-            this.wave = wave;
-            this.health = health;
-            this.damage = damage;
-            image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
+            this.Wave = wave;
+            this.Health = health;
+            this.Damage = damage;
+            this.PathPosition = pathPosition;
+            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            shape = new Ellipse
+            this.Shape = new Ellipse
             {
                 Name = GetType().Name,
                 Width = width,
                 Height = height,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(),
+                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromEmptyOptions()))
             };
         }
 
-        public int health { get; set; }
-        public int damage { get; set; }
-        public Wave wave { get; set; }
-        public bool active { get; set; }
+        public int Health { get; set; }
+        public int Damage { get; set; }
+        public Wave Wave { get; set; }
+        public bool Active { get; private set; }
+        private  int PathPosition { get; set; }
 
-        public override void start(GameControl gameControl)
+
+        public override void Start(GameControl gameControl)
         {
-            base.start(gameControl);
-            active = true;
+            base.Start(gameControl);
+            Active = true;
         }
 
-        public override void update(GameControl gameControl, float deltaTime)
+        public override void Update(GameControl gameControl)
         {
-            // get next path
-            var next = GameUtils.GameUtils.GetNextPath(GameUtils.GameUtils.GetPathPosition(this, gameControl),
-                gameControl);
+            Path next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == this.PathPosition+1);
             if (next == null)
             {
-                active = false;
-                wave.enemies.Remove(this);
+                Active = false;
                 return;
             }
 
-            if (x != next.x)
+            if (X < next.X)
             {
-                x *= speed * deltaTime;
-                if (x > next.x)
-                    x = next.x;
+                X += Speed;
+                if (X >= next.X)
+                {
+                    X = next.X;
+                    PathPosition++;
+                }
             }
-            else if (y != next.y)
+            else if (X > next.X)
             {
-                y *= speed * deltaTime;
-                if (y > next.y)
-                    y = next.y;
+                X -= Speed;
+                if (X <= next.X)
+                {
+                    X = next.X;
+                    PathPosition++;
+                }
             }
-
-            // call base update for size
-            base.update(gameControl, deltaTime);
+            else if (Y < next.Y)
+            {
+                Y += Speed;
+                if (Y >= next.Y)
+                {
+                    Y = next.Y;
+                    PathPosition++;
+                }
+            }
+            else if (Y > next.Y)
+            {
+                Y -= Speed;
+                if (Y <= next.Y)
+                {
+                    Y = next.Y;
+                    PathPosition++;
+                }
+            }
+            base.Update(gameControl);
         }
     }
 }

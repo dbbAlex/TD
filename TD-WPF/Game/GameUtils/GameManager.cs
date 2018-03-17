@@ -6,60 +6,58 @@ namespace TD_WPF.Game.GameUtils
 {
     public class GameManager
     {
-        public const float FPS = 60F;
-        public const float MAX_LOOP_TIME = 1000 / FPS;
+        private const float Fps = 60f;
+        private const float MaxLoopTime = 1000 / Fps;
 
-        public bool running { get; set; } = true;
+        private bool Running { get; set; } = true;
 
-        public async void run(GameControl gameControl)
+        public async void Run(GameControl gameControl)
         {
             var timer = new Stopwatch();
             timer.Start();
-            float time = timer.ElapsedMilliseconds;
-            float oldTime = timer.ElapsedMilliseconds;
 
-            start(gameControl);
-            while (running)
+            Start(gameControl, timer.ElapsedMilliseconds);
+            while (Running)
             {
                 // get start time
-                oldTime = timer.ElapsedMilliseconds;
+                float lastTime = timer.ElapsedMilliseconds;
                 // update all instances
-                update(gameControl, oldTime - time);
+                Update(gameControl, lastTime);
                 // set time after update
-                time = timer.ElapsedMilliseconds;
+                float time = timer.ElapsedMilliseconds;
                 // check if we are in time
-                if (time - oldTime > MAX_LOOP_TIME) continue;
+                if (time - lastTime > MaxLoopTime) continue;
                 // we are in time so we can render this frame
-                render(gameControl);
+                Render(gameControl);
                 // get timer after rendering
                 time = timer.ElapsedMilliseconds;
                 // check if we are to fast
-                if (time - oldTime < MAX_LOOP_TIME) await Task.Delay(Convert.ToInt32(MAX_LOOP_TIME - (time - oldTime)));
+                if (time - lastTime < MaxLoopTime) await Task.Delay(Convert.ToInt32(MaxLoopTime - (time - lastTime)));
             }
         }
 
-        public void start(GameControl gameControl)
+        private void Start(GameControl gameControl, float currentInterval)
         {
-            foreach (var item in gameControl.gameCreator.paths) item.start(gameControl);
-            foreach (var item in gameControl.gameCreator.ground) item.start(gameControl);
-            gameControl.gameCreator.waves?.start(gameControl);
+            foreach (var item in gameControl.GameCreator.Paths) item.Start(gameControl);
+            foreach (var item in gameControl.GameCreator.Ground) item.Start(gameControl);
+            gameControl.GameCreator.Waves?.Start(gameControl, currentInterval);
         }
 
-        public void update(GameControl gameControl, float deltaTime)
+        private void Update(GameControl gameControl, float currentinterval)
         {
-            foreach (var item in gameControl.gameCreator.paths) item.update(gameControl, deltaTime);
-            foreach (var item in gameControl.gameCreator.ground) item.update(gameControl, deltaTime);
+            foreach (var item in gameControl.GameCreator.Paths) item.Update(gameControl);
+            foreach (var item in gameControl.GameCreator.Ground) item.Update(gameControl);
 
-            gameControl.gameCreator.waves?.update(gameControl, deltaTime);
-            foreach (var item in gameControl.marks) item.update(gameControl, deltaTime);
+            gameControl.GameCreator.Waves?.Update(gameControl, currentinterval);
+            foreach (var item in gameControl.Marks) item.Update(gameControl);
         }
 
-        public void render(GameControl gameControl)
+        private void Render(GameControl gameControl)
         {
-            foreach (var item in gameControl.gameCreator.paths) item.render(gameControl);
-            foreach (var item in gameControl.gameCreator.ground) item.render(gameControl);
-            gameControl.gameCreator.waves?.render(gameControl);
-            foreach (var item in gameControl.marks) item.render(gameControl);
+            foreach (var item in gameControl.GameCreator.Paths) item.Render(gameControl);
+            foreach (var item in gameControl.GameCreator.Ground) item.Render(gameControl);
+            gameControl.GameCreator.Waves?.Render(gameControl);
+            foreach (var item in gameControl.Marks) item.Render(gameControl);
         }
     }
 }

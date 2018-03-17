@@ -1,45 +1,49 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using TD_WPF.Game.GameObjects.DynamicGameObjects;
 
 namespace TD_WPF.Game.RoundObjects
 {
     public class Wave
     {
-        public float lastDeltaTime;
-
-        public Wave(float intervall)
+        public Wave(float interval)
         {
-            this.intervall = intervall;
+            this.Interval = 1000*interval;
         }
 
-        public float intervall { get; set; }
-        public List<Enemy> enemies { get; set; } = new List<Enemy>();
-        public int enemyIndex { get; set; }
-        public bool active { get; set; }
+        private float Interval { get; set; }
+        private float LastInterval { get; set; }
+        public List<Enemy> Enemies { get; set; } = new List<Enemy>();
+        private int EnemyIndex { get; set; } = 0;
+        public bool Active { get; private set; }
 
-        public void start(GameControl gameControl)
+        public void Start(GameControl gameControl, float currentInterval)
         {
-            active = true;
-            enemies[enemyIndex].start(gameControl);
-            enemyIndex++;
+            Active = true;
+            Enemies[EnemyIndex].Start(gameControl);
+            EnemyIndex++;
+            LastInterval = currentInterval;
         }
 
-        public void update(GameControl gameControl, float deltaTime)
+        public void Update(GameControl gameControl, float currentInterval)
         {
-            foreach (var item in enemies.FindAll(enemy => enemy.active)) item.update(gameControl, deltaTime);
+            var findAll = Enemies.FindAll(enemy => enemy.Active);
+            foreach (var item in findAll) item.Update(gameControl);
 
-            if (enemyIndex < enemies.Count && (deltaTime - lastDeltaTime >= intervall || lastDeltaTime == 0))
+            if (EnemyIndex < Enemies.Count && currentInterval - LastInterval >= Interval)
             {
-                enemies[enemyIndex].start(gameControl);
-                enemyIndex++;
+                Enemies[EnemyIndex].Start(gameControl);
+                EnemyIndex++;
+            }else if (EnemyIndex > Enemies.Count() && findAll.Count > 0)
+            {
+                Active = false;
             }
-
-            lastDeltaTime = deltaTime;
         }
 
-        public void render(GameControl gameControl)
+        public void Render(GameControl gameControl)
         {
-            foreach (var item in enemies.FindAll(enemy => enemy.active)) item.render(gameControl);
+            foreach (var item in Enemies.FindAll(enemy => enemy.Active)) item.Render(gameControl);
         }
     }
 }

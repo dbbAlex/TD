@@ -8,14 +8,14 @@ using TD_WPF.Game.RoundObjects;
 
 namespace TD_WPF.Game.GameUtils
 {
-    public class GameUtils
+    public static class GameUtils
     {
         #region generate methods
 
-        public static LinkedList<Path> GenerateRandomPath(float fieldWidth, float fieldHeight, int x, int y)
+        public static List<Path> GenerateRandomPath(float fieldWidth, float fieldHeight, int x, int y)
         {
             var random = new Random();
-            var paths = new LinkedList<Path>(); // store the path
+            var paths = new List<Path>(); // store the path
             var space = new List<Path>(); // store spaces between path elements -> just for nice path
 
             // determine path length
@@ -28,14 +28,14 @@ namespace TD_WPF.Game.GameUtils
             var height = fieldHeight / y;
 
             // get a random spawn 
-            paths.AddLast(new Spawn(random.Next(x), random.Next(y), width, height));
+            paths.Add(new Spawn(random.Next(x), random.Next(y), width, height, 0));
 
             // store current path object for further use
-            var current = paths.First.Value;
+            GameObject current = paths[0];
             do
             {
                 // get next possible fileds
-                var list = PossiblePaths(NextPaths(x, y, width, height, current.x, current.y), space, paths, null);
+                var list = PossiblePaths(NextPaths(x, y, width, height, current.X, current.Y, paths.Count), space, paths, null);
 
 
                 if (list.Count == 0) // if list is empty then generation failed
@@ -43,17 +43,17 @@ namespace TD_WPF.Game.GameUtils
                     // restart generation
                     paths.Clear();
                     space.Clear();
-                    paths.AddLast(new Spawn(random.Next(x), random.Next(y), width, height));
-                    current = paths.First.Value;
+                    paths.Add(new Spawn(random.Next(x), random.Next(y), width, height, 0));
+                    current = paths[0];
                     continue;
                 }
 
                 // get next possible path randomly
                 var index = random.Next(list.Count);
-                var next = paths.Count + 1 == maxPathObjects
-                    ? new Base(list[index].x, list[index].y, width, height)
+                var next = paths.Count == maxPathObjects
+                    ? new Base(list[index].X, list[index].Y, width, height, list[index].Index)
                     : list[index];
-                paths.AddLast(next);
+                paths.Add(next);
 
                 // add other path to space
                 list.Remove(next);
@@ -61,16 +61,16 @@ namespace TD_WPF.Game.GameUtils
 
                 // increase
                 current = next;
-            } while (paths.Count < maxPathObjects);
+            } while (paths.Count <= maxPathObjects);
 
             return paths;
         }
 
-        public static LinkedList<Ground> GenerateRandomGround(LinkedList<Path> paths, float fieldWidth,
+        public static List<Ground> GenerateRandomGround(List<Path> paths, float fieldWidth,
             float fieldHeight, int x, int y)
         {
             var random = new Random();
-            var ground = new LinkedList<Ground>();
+            var ground = new List<Ground>();
             var groundCount = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(paths.Count / x)));
 
             // calculate width and hight
@@ -80,21 +80,14 @@ namespace TD_WPF.Game.GameUtils
             {
                 // get random path
                 var randomIndex = random.Next(paths.Count);
-                var node = paths.First;
-                while (randomIndex > 0)
-                {
-                    node = node.Next;
-                    randomIndex--;
-                }
-
-
-                var list = PossiblePaths(NextPaths(x, y, width, height, node.Value.x, node.Value.y), null, paths,
-                    new LinkedList<Path>(ground.Cast<Path>()));
+                GameObject obj = paths.Find(p => p.Index == randomIndex);
+                var list = PossiblePaths(NextPaths(x, y, width, height, obj.X, obj.Y, ground.Count+1), null, paths,
+                    new List<Path>(ground.Cast<Path>()));
                 if (list.Count == 0)
                     continue;
 
                 randomIndex = random.Next(list.Count);
-                ground.AddLast(new Ground(list[randomIndex].x, list[randomIndex].y, width, height));
+                ground.Add(new Ground(list[randomIndex].X, list[randomIndex].Y, width, height, -1));
 
                 groundCount--;
             } while (groundCount != 0);
@@ -108,19 +101,19 @@ namespace TD_WPF.Game.GameUtils
             var waves = new Waves(intervalBetweenWaves);
 
             for (var i = /*random.Next(10)+*/1; i > 0; i--)
-                waves.waves.Add(GenerateRandomWave(intervalBetweenEnemies, spawn));
+                waves.WaveList.Add(GenerateRandomWave(intervalBetweenEnemies, spawn));
 
             return waves;
         }
 
-        public static Wave GenerateRandomWave(float intervalBetweenEnemies, Spawn spawn)
+        private static Wave GenerateRandomWave(float intervalBetweenEnemies, Spawn spawn)
         {
             var random = new Random();
             var wave = new Wave(intervalBetweenEnemies);
 
-            for (var i = /*random.Next(10)+*/1; i > 0; i--)
-                wave.enemies.Add(new Enemy(spawn.x, spawn.y, spawn.width, spawn.height, 2F, random.Next(10),
-                    random.Next(10), wave));
+            for (var i = /*random.Next(10)+*/5; i > 0; i--)
+                wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10),
+                    random.Next(10), wave, 0));
 
             return wave;
         }
@@ -129,69 +122,47 @@ namespace TD_WPF.Game.GameUtils
 
         #region other methods
 
-        public static List<Path> NextPaths(int x, int y, float width, float height, float _x, float _y)
+        public static List<Path> NextPaths(int x, int y, float width, float height, float _x, float _y, int index)
         {
             var list = new List<Path>();
             //unten
             if (_y + 1 < y)
-                list.Add(new Path(_x, _y + 1, width, height));
+                list.Add(new Path(_x, _y + 1, width, height, index));
 
             //oben
             if (_y - 1 >= 0)
-                list.Add(new Path(_x, _y - 1, width, height));
+                list.Add(new Path(_x, _y - 1, width, height, index));
 
             //links
             if (_x - 1 >= 0)
-                list.Add(new Path(_x - 1, _y, width, height));
+                list.Add(new Path(_x - 1, _y, width, height, index));
 
             //rechts
             if (_x + 1 < x)
-                list.Add(new Path(_x + 1, _y, width, height));
+                list.Add(new Path(_x + 1, _y, width, height, index));
 
             return list;
         }
 
-        public static List<Path> PossiblePaths(List<Path> next, List<Path> space, LinkedList<Path> paths,
-            LinkedList<Path> ground)
+        public static List<Path> PossiblePaths(List<Path> next, List<Path> space, List<Path> paths,
+            List<Path> ground)
         {
             var removable = new List<Path>();
-            var lists = new List<LinkedList<Path>>
+            var lists = new List<List<Path>>
             {
-                paths != null ? paths : new LinkedList<Path>(),
-                ground != null ? ground : new LinkedList<Path>(),
-                space != null ? new LinkedList<Path>(space) : new LinkedList<Path>()
+                paths ?? new List<Path>(),
+                ground ?? new List<Path>(),
+                space ?? new List<Path>()
             };
             foreach (var list in lists)
             foreach (var item in list)
             foreach (var element in next)
-                if (item.x == element.x && item.y == element.y)
+                if (item.X == element.X && item.Y == element.Y)
                     removable.Add(element);
 
             foreach (var item in removable) next.Remove(item);
 
             return next;
-        }
-
-        public static Path GetPathPosition(GameObject gameObject, GameControl gameControl)
-        {
-            foreach (var item in gameControl.gameCreator.paths)
-                if ((float) Math.Floor(gameObject.x) == item.x && Math.Floor(gameObject.y) == item.y)
-                    return item;
-
-            return null;
-        }
-
-        public static Path GetNextPath(Path current, GameControl gameControl)
-        {
-            var cur = gameControl.gameCreator.paths.First;
-            while (cur.Value != current)
-            {
-                cur = cur.Next;
-                if (cur == null)
-                    return null;
-            }
-
-            return cur.Next != null ? cur.Next.Value : null;
         }
 
         #endregion

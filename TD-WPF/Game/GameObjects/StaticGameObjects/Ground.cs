@@ -12,22 +12,16 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 {
     public class Ground : Path
     {
-        public Ground(float x, float y, float width, float height) : base(x, y, width, height)
+        public Ground(float x, float y, float width, float height, int index) : base(x, y, width, height, index)
         {
-            image = ImageTool.ResizeImage(new Bitmap(Resource.ground),
+            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.ground),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            shape = new Rectangle
-            {
-                Name = GetType().Name,
-                Width = this.width,
-                Height = this.height,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(),
+            this.Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()))
-            };
+                    BitmapSizeOptions.FromEmptyOptions()));
         }
 
-        public Tower tower { get; set; } = null;
+        public Tower Tower { get; set; } = null;
     }
 }
