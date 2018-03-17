@@ -18,13 +18,13 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave, int pathPosition) :
             base(x, y, width, height, speed)
         {
-            this.Wave = wave;
-            this.Health = health;
-            this.Damage = damage;
-            this.PathPosition = pathPosition;
-            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
+            Wave = wave;
+            Health = health;
+            Damage = damage;
+            PathPosition = pathPosition;
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            this.Shape = new Ellipse
+            Shape = new Ellipse
             {
                 Name = GetType().Name,
                 Width = width,
@@ -51,7 +51,7 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Update(GameControl gameControl)
         {
-            Path next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == this.PathPosition+1);
+            Path next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == PathPosition+1);
             if (next == null)
             {
                 Active = false;

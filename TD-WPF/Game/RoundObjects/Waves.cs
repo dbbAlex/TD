@@ -6,31 +6,34 @@ namespace TD_WPF.Game.RoundObjects
     {
         public Waves(float intervall)
         {
-            this.Intervall = intervall;
+            Intervall = 1000*intervall;
         }
 
-        private float Intervall { get; set; }
-        public List<Wave> WaveList { get; set; } = new List<Wave>();
+        private float Intervall { get; }
+        public List<Wave> WaveList { get; } = new List<Wave>();
         private int WaveIndex { get; set; }
-        private float LastInterval { get; set; }
+        private bool Active { get; set; }
 
         public void Start(GameControl gameControl, float currentInterval)
         {
             WaveList[WaveIndex].Start(gameControl, currentInterval);
             WaveIndex++;
-            LastInterval = currentInterval;
+            Active = true;
         }
 
         public void Update(GameControl gameControl, float currentInterval)
         {
-            var findAll = WaveList.FindAll(wave => wave.Active);
-            foreach (var item in findAll) item.Update(gameControl, currentInterval);
-
-            if (WaveIndex < WaveList.Count && currentInterval - LastInterval >= Intervall)
+            if (!Active) return;
+            Wave wave = WaveList[WaveIndex-1];
+            if (wave.Active) wave.Update(gameControl, currentInterval);
+            else if(WaveIndex < WaveList.Count && currentInterval - wave.LastInterval >= Intervall)
             {
                 WaveList[WaveIndex].Start(gameControl, currentInterval);
                 WaveIndex++;
-                LastInterval = currentInterval;
+            }
+            else if (WaveIndex == WaveList.Count && !wave.Active)
+            {
+                Active = false;
             }
         }
 

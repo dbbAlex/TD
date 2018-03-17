@@ -4,7 +4,7 @@
     {
         protected DynamicGameObject(float x, float y, float width, float height, float speed) : base(x, y, width, height)
         {
-            this.Speed = 1 * speed;
+            Speed = 1 * speed;
         }
 
         protected float Speed { get; private set; }

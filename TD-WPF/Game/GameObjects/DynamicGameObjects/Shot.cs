@@ -15,11 +15,11 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         public Shot(float x, float y, float width, float height, float speed, int damage, Enemy enemy) : base(x, y,
             width, height, speed)
         {
-            this.Damage = damage;
-            this.Enemy = enemy;
-            this.Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
+            Damage = damage;
+            Enemy = enemy;
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            this.Shape = new Ellipse
+            Shape = new Ellipse
             {
                 Name = GetType().Name,
                 Width = width,

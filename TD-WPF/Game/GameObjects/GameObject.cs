@@ -1,11 +1,7 @@
-﻿using System;
-using System.Drawing;
-using System.Windows;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace TD_WPF.Game.GameObjects
 {
@@ -13,15 +9,15 @@ namespace TD_WPF.Game.GameObjects
     {
         protected GameObject(float x, float y, float width, float height)
         {
-            this.X = x;
-            this.Y = y;
-            this.Width = width;
-            this.Height = height;
-            Shape = new System.Windows.Shapes.Rectangle
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+            Shape = new Rectangle
             {
                 Name = GetType().Name,
-                Width = this.Width,
-                Height = this.Height,
+                Width = Width,
+                Height = Height
             };
         }
 

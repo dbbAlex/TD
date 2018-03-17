@@ -8,7 +8,7 @@ namespace TD_WPF.Game.GameUtils
     {
         public GameCreator(GameControl gameControl)
         {
-            this.GameControl = gameControl;
+            GameControl = gameControl;
         }
 
         public void InitilizeRandomPath()
@@ -21,7 +21,7 @@ namespace TD_WPF.Game.GameUtils
 
         public void InitializeRandomWaves()
         {
-            Waves = GameUtils.GenerateRandomWaves(10f, 5f, (Spawn) Paths[0]);
+            Waves = GameUtils.GenerateRandomWaves(5f, 2f, (Spawn) Paths[0]);
         }
 
         #region attributes
