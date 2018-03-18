@@ -24,7 +24,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
             : base(x, y, width, height)
         {
             Range = range;
-            ShotIntervall = shotIntervall;
+            ShotIntervall = 1000 * shotIntervall;
             ShotSpeed = shotSpeed;
             ShotDamage = shotDamage;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),

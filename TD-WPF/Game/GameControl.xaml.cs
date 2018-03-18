@@ -307,8 +307,8 @@ namespace TD_WPF.Game
                     var ground = GameCreator.Ground.First(g => g.X == hint.X && g.Y == hint.Y);
                     if (ground != null)
                     {
-                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 2F, 5F, 5,
-                            ground.Width * 3);
+                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.2f, 5,
+                            ground.Width * 2);
                         tower.Start(this);
                         ground.Tower = tower;
                     }

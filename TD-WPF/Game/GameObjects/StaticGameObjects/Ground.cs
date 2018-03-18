@@ -22,5 +22,17 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         }
 
         public Tower Tower { get; set; } = null;
+
+        public void Update(GameControl gameControl, float currentInterval)
+        {
+            base.Update(gameControl);
+            Tower?.Update(gameControl, currentInterval);
+        }
+
+        public override void Render(GameControl gameControl)
+        {
+            base.Render(gameControl);
+            Tower?.Render(gameControl);
+        }
     }
 }

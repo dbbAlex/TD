@@ -173,7 +173,9 @@
     <None Include="Grafik\Items\tower.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Grafik\Enemy\Enemy.png" />
+    <Resource Include="Grafik\Enemy\Enemy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Grafik\Shot\Shot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

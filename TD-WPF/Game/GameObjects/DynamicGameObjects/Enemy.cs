@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,13 +23,13 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
             Health = health;
             Damage = damage;
             PathPosition = pathPosition;
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.gegner),
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.enemy),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape = new Ellipse
             {
                 Name = GetType().Name,
-                Width = width,
-                Height = height,
+                Width = width / 2,
+                Height = height / 2,
                 Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
@@ -45,7 +46,9 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
-            base.Start(gameControl);
+            Canvas.SetLeft(Shape, X * Width + (Width/2)/2);
+            Canvas.SetTop(Shape, Y * Height + (Height/2)/2);
+            gameControl.Canvas.Children.Add(Shape);
             Active = true;
         }
 
@@ -95,6 +98,14 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
                 }
             }
             base.Update(gameControl);
+        }
+
+        public override void Render(GameControl gameControl)
+        {
+            Shape.Width = Width/2;
+            Shape.Height = Height/2;
+            Canvas.SetLeft(Shape, X * Width + (Width/2)/2);
+            Canvas.SetTop(Shape, Y * Height + (Height/2)/2);
         }
     }
 }

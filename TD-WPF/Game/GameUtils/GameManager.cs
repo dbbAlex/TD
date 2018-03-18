@@ -46,8 +46,8 @@ namespace TD_WPF.Game.GameUtils
         private void Update(GameControl gameControl, float currentinterval)
         {
             foreach (var item in gameControl.GameCreator.Paths) item.Update(gameControl);
-            foreach (var item in gameControl.GameCreator.Ground) item.Update(gameControl);
-
+            foreach (var item in gameControl.GameCreator.Ground) item.Update(gameControl, currentinterval);
+            foreach (var item in gameControl.Shots) item.Update(gameControl);
             gameControl.GameCreator.Waves?.Update(gameControl, currentinterval);
             foreach (var item in gameControl.Marks) item.Update(gameControl);
         }
@@ -56,6 +56,7 @@ namespace TD_WPF.Game.GameUtils
         {
             foreach (var item in gameControl.GameCreator.Paths) item.Render(gameControl);
             foreach (var item in gameControl.GameCreator.Ground) item.Render(gameControl);
+            foreach (var item in gameControl.Shots) item.Render(gameControl);
             gameControl.GameCreator.Waves?.Render(gameControl);
             foreach (var item in gameControl.Marks) item.Render(gameControl);
         }
