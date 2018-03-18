@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using TD_WPF.Game.GameObjects;
+using TD_WPF.Game.GameObjects.DynamicGameObjects;
 using TD_WPF.Game.GameObjects.StaticGameObjects;
 using TD_WPF.Game.GameUtils;
 
@@ -46,7 +47,8 @@ namespace TD_WPF.Game
         public GameCreator GameCreator { get; private set; }
         private GameManager GameManager { get; set; }
         private Control SelectedControl { get; set; }
-        public List<Mark> Marks { get; set; } = new List<Mark>();
+        public List<Mark> Marks { get; } = new List<Mark>();
+        public List<Shot> Shots { get; } = new List<Shot>();
         private bool IsEditor { get; set; } = false;
 
         #endregion
@@ -129,7 +131,7 @@ namespace TD_WPF.Game
                         (float) Canvas.ActualWidth / GameCreator.X, (float) Canvas.ActualHeight / GameCreator.Y,
                         GameCreator.Paths[GameCreator.Paths.Count - 1].X,
                         GameCreator.Paths[GameCreator.Paths.Count - 1].Y, 0), null, GameCreator.Paths,
-                    new List<Path>(GameCreator.Ground.Cast<Path>()));
+                    new List<Path>(GameCreator.Ground));
 
                 foreach (var item in list)
                 {
@@ -169,8 +171,8 @@ namespace TD_WPF.Game
                                        || !IsEditor && SelectedControl == null))
             {
                 var p = e.GetPosition(Canvas);
-                var _x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
-                var _y = (float) Math.Floor(p.Y / (Canvas.ActualHeight / GameCreator.Y));
+                var x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
+                var y = (float) Math.Floor(p.Y / (Canvas.ActualHeight / GameCreator.Y));
 
                 var color = Color.FromArgb(150, 124, 252, 0);
 
@@ -179,10 +181,10 @@ namespace TD_WPF.Game
                     foreach (var list in new List<List<Path>>
                     {
                         GameCreator.Paths,
-                        new List<Path>(GameCreator.Ground.Cast<Path>())
+                        new List<Path>(GameCreator.Ground)
                     })
                     foreach (var item in list)
-                        if (_x == item.X && _y == item.Y)
+                        if (x == item.X && y == item.Y)
                         {
                             color = Color.FromArgb(150, 205, 92, 92);
                             return;
@@ -195,15 +197,15 @@ namespace TD_WPF.Game
                 var mark = Marks.Find(m => m.Code.Equals(MouseOver));
                 if (mark == null)
                 {
-                    mark = new Mark(_x, _y, (float) Canvas.ActualWidth / GameCreator.X,
+                    mark = new Mark(x, y, (float) Canvas.ActualWidth / GameCreator.X,
                         (float) Canvas.ActualHeight / GameCreator.Y, color, MouseOver);
                     mark.Start(this);
                     Marks.Add(mark);
                 }
                 else
                 {
-                    mark.X = _x;
-                    mark.Y = _y;
+                    mark.X = x;
+                    mark.Y = y;
                     mark.Color = color;
                 }
             }
@@ -220,8 +222,8 @@ namespace TD_WPF.Game
         {
             if (!Canvas.IsMouseOver) return;
             var p = e.GetPosition(Canvas);
-            var _x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
-            var _y = (float) Math.Floor(p.Y / (Canvas.ActualHeight / GameCreator.Y));
+            var x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
+            var y = (float) Math.Floor(p.Y / (Canvas.ActualHeight / GameCreator.Y));
 
             var isEmptySpace = true;
 
@@ -230,10 +232,10 @@ namespace TD_WPF.Game
                 foreach (var list in new List<List<Path>>
                 {
                     GameCreator.Paths,
-                    new List<Path>(GameCreator.Ground.Cast<Path>())
+                    new List<Path>(GameCreator.Ground)
                 })
                 foreach (var item in list)
-                    if (_x == item.X && _y == item.Y)
+                    if (x == item.X && y == item.Y)
                     {
                         isEmptySpace = false;
                         return;
@@ -244,7 +246,7 @@ namespace TD_WPF.Game
 
             GameObject hint = null;
             foreach (var item in Marks)
-                if (item.Code.Equals(Hint) && _x == item.X && _y == item.Y)
+                if (item.Code.Equals(Hint) && x == item.X && y == item.Y)
                 {
                     hint = item;
                     break;
@@ -253,7 +255,8 @@ namespace TD_WPF.Game
             if (IsEditor && SelectedControl != null && isEmptySpace)
             {
                 if (SelectedControl.Name.Equals("weg") && GameCreator.Paths.Count > 0
-                                                       && !(GameCreator.Paths[GameCreator.Paths.Count-1].GetType() == typeof(Base))
+                                                       && !(GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() ==
+                                                            typeof(Base))
                                                        && hint != null)
                 {
                     var path = new Path(hint.X, hint.Y, hint.Width, hint.Height, GameCreator.Paths.Count);
@@ -265,13 +268,14 @@ namespace TD_WPF.Game
                 else if (SelectedControl.Name.Equals("spawn")
                          && GameCreator.Paths.Count == 0)
                 {
-                    var spawn = new Spawn(_x, _y, (float) Canvas.ActualWidth / GameCreator.X,
+                    var spawn = new Spawn(x, y, (float) Canvas.ActualWidth / GameCreator.X,
                         (float) Canvas.ActualHeight / GameCreator.Y, 0);
                     spawn.Start(this);
                     GameCreator.Paths.Add(spawn);
                 }
                 else if (SelectedControl.Name.Equals("ziel") && GameCreator.Paths.Count > 0
-                                                             && GameCreator.Paths[GameCreator.Paths.Count-1].GetType() ==
+                                                             && GameCreator.Paths[GameCreator.Paths.Count - 1]
+                                                                 .GetType() ==
                                                              typeof(Path) && hint != null)
                 {
                     var basePoint = new Base(hint.X, hint.Y, hint.Width, hint.Height, GameCreator.Paths.Count);
@@ -281,7 +285,7 @@ namespace TD_WPF.Game
                 }
                 else if (SelectedControl.Name.Equals("ground"))
                 {
-                    var ground = new Ground(_x, _y, (float) Canvas.ActualWidth / GameCreator.X,
+                    var ground = new Ground(x, y, (float) Canvas.ActualWidth / GameCreator.X,
                         (float) Canvas.ActualHeight / GameCreator.Y, GameCreator.Ground.Count);
                     ground.Start(this);
                     GameCreator.Ground.Add(ground);
@@ -293,7 +297,7 @@ namespace TD_WPF.Game
 
                 if (SelectedControl.Name.Equals("ground") && isEmptySpace)
                 {
-                    var ground = new Ground(_x, _y, (float) Canvas.ActualWidth / GameCreator.X,
+                    var ground = new Ground(x, y, (float) Canvas.ActualWidth / GameCreator.X,
                         (float) Canvas.ActualHeight / GameCreator.Y, GameCreator.Ground.Count);
                     ground.Start(this);
                     GameCreator.Ground.Add(ground);
@@ -303,7 +307,8 @@ namespace TD_WPF.Game
                     var ground = GameCreator.Ground.First(g => g.X == hint.X && g.Y == hint.Y);
                     if (ground != null)
                     {
-                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 2F, 5F, 5);
+                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 2F, 5F, 5,
+                            ground.Width * 3);
                         tower.Start(this);
                         ground.Tower = tower;
                     }

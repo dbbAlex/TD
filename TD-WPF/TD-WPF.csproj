@@ -57,12 +57,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Game\Enumerations.cs" />
     <Compile Include="Game\GameControl.xaml.cs">
       <DependentUpon>GameControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\GameObjects\RoundObjects\Wave.cs" />
+    <Compile Include="Game\GameObjects\RoundObjects\Waves.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
     <Compile Include="Game\GameUtils\ControlUtils.cs" />
+    <Compile Include="Game\GameUtils\TargetCondition.cs" />
     <Compile Include="Game\GameUtils\GameCreator.cs" />
     <Compile Include="Game\GameUtils\GameManager.cs" />
     <Compile Include="Game\GameObjects\DynamicGameObject.cs" />
@@ -74,8 +76,6 @@
     <Compile Include="Game\GameObjects\StaticGameObjects\Path.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Spawn.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Tower.cs" />
-    <Compile Include="Game\RoundObjects\Wave.cs" />
-    <Compile Include="Game\RoundObjects\Waves.cs" />
     <Compile Include="Game\GameUtils\GameUtils.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -172,7 +172,10 @@
   <ItemGroup>
     <None Include="Grafik\Items\tower.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Grafik\Enemy\Enemy.png" />
+    <Content Include="Grafik\Shot\Shot.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
