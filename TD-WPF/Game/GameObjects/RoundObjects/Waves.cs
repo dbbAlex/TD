@@ -41,5 +41,10 @@ namespace TD_WPF.Game.RoundObjects
         {
             foreach (var item in WaveList.FindAll(wave => wave.Active)) item.Render(gameControl);
         }
+
+        public void Deaktivate()
+        {
+            Active = false;
+        }
     }
 }

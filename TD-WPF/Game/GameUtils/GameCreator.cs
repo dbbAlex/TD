@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TD_WPF.Game.GameObjects.StaticGameObjects;
 using TD_WPF.Game.RoundObjects;
 
@@ -11,7 +12,16 @@ namespace TD_WPF.Game.GameUtils
             GameControl = gameControl;
         }
 
-        public void InitilizeRandomPath()
+        public void InitilizeRandomGame()
+        {
+            Random random = new Random();
+            Health = random.Next(50, 101);
+            Money = 50;
+            InitilizeRandomPath();
+            InitializeRandomWaves();
+        }
+
+        private void InitilizeRandomPath()
         {
             Paths = GameUtils.GenerateRandomPath((float) GameControl.Canvas.ActualWidth,
                 (float) GameControl.Canvas.ActualHeight, X, Y);
@@ -19,7 +29,7 @@ namespace TD_WPF.Game.GameUtils
                 (float) GameControl.Canvas.ActualHeight, X, Y);
         }
 
-        public void InitializeRandomWaves()
+        private void InitializeRandomWaves()
         {
             Waves = GameUtils.GenerateRandomWaves(5f, 2f, (Spawn) Paths[0]);
         }
@@ -34,6 +44,8 @@ namespace TD_WPF.Game.GameUtils
         private GameControl GameControl { get; set; }
         public int X { get; set; } = 20;
         public int Y { get; set; } = 15;
+        public int Health { get; set; }
+        public int Money { get; set; }
 
         #endregion
     }

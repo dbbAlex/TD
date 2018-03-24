@@ -9,26 +9,66 @@ using System.Windows.Media.Imaging;
 
 namespace TD_WPF.Game.GameUtils
 {
-    internal class ControlUtils
+    internal static class ControlUtils
     {
-        public static LinkedList<ContentControl> creatEditorConrtols(GameControl gameControl)
+        public const string InfoPanel = "InfoPanel";
+        private const string Health = "Health";
+        public const string HealthValue = "HealthValue";
+        private const string Money = "Money";
+        public const string MoneyValue = "MoneyValue";
+
+        public static LinkedList<ContentControl> CreatEditorConrtols(GameControl gameControl)
         {
             var folder = new List<string>();
             folder.Add("Map");
             folder.Add("Shared");
-            return createControls(folder, gameControl.HandleControlEvent, "editor");
+            return CreateControls(folder, gameControl.HandleControlEvent, "editor");
         }
 
-        public static LinkedList<ContentControl> createGameControls(GameControl gaemControl)
+        public static LinkedList<ContentControl> CreateGameControls(GameControl gaemControl)
         {
             var folder = new List<string>();
             folder.Add("Items");
             folder.Add("Shared");
-            return createControls(folder, gaemControl.HandleControlEvent, "game");
+            return CreateControls(folder, gaemControl.HandleControlEvent, "game");
         }
 
+        public static Grid CreateInoPanel(GameControl gameControl)
+        {
+            Grid grid = new Grid {Name = InfoPanel};
+            gameControl.RegisterName(grid.Name, grid);
 
-        private static LinkedList<ContentControl> createControls(List<string> folder, RoutedEventHandler handler,
+            for (int i = 0; i < 2; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
+                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(0.5, GridUnitType.Star)});
+            }
+
+            for (int i = 0; i < grid.RowDefinitions.Count; i++)
+            {
+                for (int j = 0; j < grid.ColumnDefinitions.Count; j++)
+                {
+                    Label label = new Label
+                    {
+                        Name = i == 0 ? j == 0 ? Health : HealthValue : j == 0 ? Money : MoneyValue,
+                        FontFamily = new FontFamily("Bauhaus 93"),
+                        Foreground = Brushes.White,
+                        Content = j == 0 ? i == 0 ? Health + ":" :
+                            Money + ":" :
+                            i == 0 ? gameControl.GameCreator.Health.ToString() :
+                            gameControl.GameCreator.Money.ToString()
+                    };
+                    Grid.SetRow(label, i);
+                    Grid.SetColumn(label, j);
+                    grid.Children.Add(label);
+                    gameControl.RegisterName(label.Name, label);
+                }
+            }
+
+            return grid;
+        }
+
+        private static LinkedList<ContentControl> CreateControls(List<string> folder, RoutedEventHandler handler,
             string group)
         {
             var list = new LinkedList<ContentControl>();

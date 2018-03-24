@@ -23,21 +23,21 @@ namespace TD_WPF.Game
             Loaded += Initialize;
         }
 
-        private void Initialize(object sender, RoutedEventArgs e)
-        {
-            CreateRowsForControls();
-            CreateControls();
-
-            GameCreator = new GameCreator(this);
-            GameCreator.InitilizeRandomPath();
-            GameCreator.InitializeRandomWaves();
-            GameManager = new GameManager();
-            Dispatcher.InvokeAsync(() => GameManager.Run(this));
-        }
-
         #region constants
 
         private const string Hint = "hint";
+
+        private void Initialize(object sender, RoutedEventArgs e)
+        {
+            GameCreator = new GameCreator(this);
+            GameManager = new GameManager();
+            GameCreator.InitilizeRandomGame();
+            CreateRowsForControls();
+            CreateControls();
+            
+            Dispatcher.InvokeAsync(() => GameManager.Run(this));
+        }
+
         private const string MouseOver = "over";
 
         #endregion
@@ -45,7 +45,7 @@ namespace TD_WPF.Game
         #region attibutes
 
         public GameCreator GameCreator { get; private set; }
-        private GameManager GameManager { get; set; }
+        public GameManager GameManager { get; set; }
         private Control SelectedControl { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
@@ -75,14 +75,22 @@ namespace TD_WPF.Game
 
         private void CreateControls()
         {
+            // info Panel
+            var infoPanel = ControlUtils.CreateInoPanel(this);
+            Grid.SetRow(infoPanel, 0);
+            Grid.SetColumnSpan(infoPanel, 2);
+            ControlGrid.Children.Add(infoPanel);
+            ControlGrid.RegisterName(infoPanel.Name, infoPanel);
+            
+            // controls
             var controls = IsEditor
-                ? ControlUtils.creatEditorConrtols(this)
-                : ControlUtils.createGameControls(this);
+                ? ControlUtils.CreatEditorConrtols(this)
+                : ControlUtils.CreateGameControls(this);
             var current = controls.First;
 
             void AddControls()
             {
-                for (var row = 0; row < ControlGrid.RowDefinitions.Count; row++)
+                for (var row = 1; row < ControlGrid.RowDefinitions.Count; row++)
                 for (var column = 0; column < ControlGrid.ColumnDefinitions.Count; column++)
                 {
                     Grid.SetRow(current.Value, row);
@@ -307,7 +315,7 @@ namespace TD_WPF.Game
                     var ground = GameCreator.Ground.First(g => g.X == hint.X && g.Y == hint.Y);
                     if (ground != null)
                     {
-                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.2f, 5,
+                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.9f, 5,
                             ground.Width * 2);
                         tower.Start(this);
                         ground.Tower = tower;

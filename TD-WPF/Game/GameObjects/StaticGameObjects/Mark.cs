@@ -16,6 +16,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 
         public override void Update(GameControl gameControl)
         {
+            if (!Active) return;
             base.Update(gameControl);
             Shape.Fill = new SolidColorBrush(Color);
         }

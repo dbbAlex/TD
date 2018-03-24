@@ -53,6 +53,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 
         public void Update(GameControl gameControl, float currentInterval)
         {
+            if (!Active) return;
             base.Update(gameControl);
             if (currentInterval - LastInterval >= ShotIntervall)
             {

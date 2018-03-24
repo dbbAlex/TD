@@ -99,7 +99,7 @@ namespace TD_WPF.Game.GameUtils
             var random = new Random();
             var waves = new Waves(intervalBetweenWaves);
 
-            for (var i = /*random.Next(10)+*/2; i > 0; i--)
+            for (var i = random.Next(10)+1; i > 0; i--)
                 waves.WaveList.Add(GenerateRandomWave(intervalBetweenEnemies, spawn));
 
             return waves;
@@ -110,9 +110,9 @@ namespace TD_WPF.Game.GameUtils
             var random = new Random();
             var wave = new Wave(intervalBetweenEnemies);
 
-            for (var i = /*random.Next(10)+*/2; i > 0; i--)
-                wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10),
-                    random.Next(10), wave, 0));
+            for (var i = random.Next(10)+1; i > 0; i--)
+                wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10, 51),
+                    random.Next(10, 21), wave, 0));
 
             return wave;
         }

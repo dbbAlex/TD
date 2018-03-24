@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TD_WPF.Game.GameUtils;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
@@ -34,7 +35,6 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public int Damage { get; set; }
         public Enemy Enemy { get; set; }
-        public bool Active { get; set; }
 
         public override void Start(GameControl gameControl)
         {
@@ -46,23 +46,7 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Update(GameControl gameControl)
         {
-            /*// get enemy center coordinates
-            var enemyCenterX = Enemy.X * Enemy.Width + Enemy.Width / 2;
-            var enemyCenterY = Enemy.Y * Enemy.Health + Enemy.Height / 2;
-            
-            // get our center coordinates
-            var centerX = X * Width + Width / 2;
-            var centerY = Y * Height + Height / 2;
-            
-            // get unit for x and y
-            var unitX =  enemyCenterX - centerX;
-            var unitY = enemyCenterY - centerY;
-            
-            // calculate distance 
-            var distance = (float) Math.Sqrt(Math.Pow(enemyCenterX - centerX, 2) +
-                                             Math.Pow(enemyCenterY - centerY, 2));*/
-
-
+            if (!Active) return;
             // set x coordinate
             if (X < Enemy.X)
             {
@@ -86,26 +70,25 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
                 Y -= Speed;
                 if (Y <= Enemy.Y) Y = Enemy.Y;
             }
-            // check for collision
-            /*var intersectionDetail = Shape.RenderedGeometry.FillContainsWithDetail(Enemy.Shape.RenderedGeometry);
-            if (intersectionDetail == IntersectionDetail.Intersects)
-            {
-                Active = false;
-                // move collision detection to render() because fillContainsWithDetails works with shapes position
-                // TODO: create destroy method in GameObject
-                // TODO: create a class to manage damage and call destroy methods
-            }*/
-            // update fields
 
             base.Update(gameControl);
         }
 
         public override void Render(GameControl gameControl)
         {
+            if(!Active) return;
             Shape.Width = Width / 3;
             Shape.Height = Height / 3;
             Canvas.SetLeft(Shape, X * Width + (Width / 3) / 2);
             Canvas.SetTop(Shape, Y * Height + (Height / 3) / 2);
+            
+            // check for collision TODO: maybe chek collision with other enemies
+            var intersectionDetail = Shape.RenderedGeometry.FillContainsWithDetail(Enemy.Shape.RenderedGeometry);
+            if (intersectionDetail == IntersectionDetail.Intersects)
+            {
+                DamageManager.ManageDamageFromShot(this, Enemy, gameControl);
+                Destroy(gameControl);
+            }
         }
     }
 }

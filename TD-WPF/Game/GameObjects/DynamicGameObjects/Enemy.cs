@@ -7,6 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TD_WPF.Game.GameUtils;
 using TD_WPF.Game.RoundObjects;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
@@ -40,7 +41,6 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         public int Health { get; set; }
         public int Damage { get; set; }
         public Wave Wave { get; set; }
-        public bool Active { get; private set; }
         private  int PathPosition { get; set; }
 
 
@@ -54,9 +54,13 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Update(GameControl gameControl)
         {
+            if (!Active) return;
             Path next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == PathPosition+1);
             if (next == null)
             {
+                // reached the end destroy and substract
+                DamageManager.ManageDamageFromEnemy(this, gameControl);
+                Destroy(gameControl);
                 Active = false;
                 return;
             }

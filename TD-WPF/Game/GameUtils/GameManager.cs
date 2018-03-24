@@ -60,5 +60,13 @@ namespace TD_WPF.Game.GameUtils
             gameControl.GameCreator.Waves?.Render(gameControl);
             foreach (var item in gameControl.Marks) item.Render(gameControl);
         }
+
+        public void EndGame(GameControl gameControl)
+        {
+            foreach (var item in gameControl.GameCreator.Paths) item.Deaktivate();
+            foreach (var item in gameControl.GameCreator.Ground) item.Deaktivate();
+            foreach (var item in gameControl.Shots) item.Deaktivate();
+            gameControl.GameCreator.Waves?.Deaktivate();
+        }
     }
 }

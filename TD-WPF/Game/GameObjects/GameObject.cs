@@ -27,6 +27,7 @@ namespace TD_WPF.Game.GameObjects
         public float Height { get; private set; }
         protected Bitmap Image { get; set; }
         public Shape Shape { get; protected set; }
+        public bool Active { get; set; }
 
         public virtual void Render(GameControl gameControl)
         {
@@ -40,14 +41,27 @@ namespace TD_WPF.Game.GameObjects
         {
             Canvas.SetLeft(Shape, X * Width);
             Canvas.SetTop(Shape, Y * Height);
+            Active = true;
             gameControl.Canvas.Children.Add(Shape);
         }
 
 
         public virtual void Update(GameControl gameControl)
         {
+            if (!Active) return;
             Width = (float) gameControl.Canvas.ActualWidth / gameControl.GameCreator.X;
             Height = (float) gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y;
+        }
+
+        public virtual void Destroy(GameControl gameControl)
+        {
+            this.Active = false; 
+            gameControl.Canvas.Children.Remove(Shape);
+        }
+
+        public virtual void Deaktivate()
+        {
+            Active = false;
         }
     }
 }

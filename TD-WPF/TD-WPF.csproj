@@ -64,6 +64,7 @@
     <Compile Include="Game\GameObjects\RoundObjects\Waves.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
     <Compile Include="Game\GameUtils\ControlUtils.cs" />
+    <Compile Include="Game\GameUtils\DamageManager.cs" />
     <Compile Include="Game\GameUtils\TargetCondition.cs" />
     <Compile Include="Game\GameUtils\GameCreator.cs" />
     <Compile Include="Game\GameUtils\GameManager.cs" />
@@ -170,12 +171,10 @@
     <None Include="Grafik\Map\ziel.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Grafik\Items\tower.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Grafik\Enemy\Enemy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Grafik\Items\Tower.png" />
     <Content Include="Grafik\Shot\Shot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

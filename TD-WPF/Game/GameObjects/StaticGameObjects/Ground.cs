@@ -25,6 +25,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 
         public void Update(GameControl gameControl, float currentInterval)
         {
+            if (!Active) return;
             base.Update(gameControl);
             Tower?.Update(gameControl, currentInterval);
         }
@@ -33,6 +34,12 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         {
             base.Render(gameControl);
             Tower?.Render(gameControl);
+        }
+
+        public override void Deaktivate()
+        {
+            base.Deaktivate();
+            Tower?.Deaktivate();
         }
     }
 }
