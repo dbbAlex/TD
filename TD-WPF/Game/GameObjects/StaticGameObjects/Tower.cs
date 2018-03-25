@@ -19,9 +19,9 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 {
     public class Tower : GameObject
     {
+
         public Tower(float x, float y, float width, float height, float shotIntervall, float shotSpeed, int shotDamage,
-            float range)
-            : base(x, y, width, height)
+            float range) : base(x, y, width, height)
         {
             Range = range;
             ShotIntervall = 1000 * shotIntervall;
@@ -41,6 +41,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         private int ShotDamage { get; set; }
         private float Range { get; set; }
         private float LastInterval { get; set; }
+        public const int Money = 10;
 
         private float LastShot { get; set; }
         private List<Shot> Shots { get; set; }

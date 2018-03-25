@@ -65,6 +65,8 @@
     <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
     <Compile Include="Game\GameUtils\ControlUtils.cs" />
     <Compile Include="Game\GameUtils\DamageManager.cs" />
+    <Compile Include="Game\GameUtils\InfoManager.cs" />
+    <Compile Include="Game\GameUtils\MoneyManager.cs" />
     <Compile Include="Game\GameUtils\TargetCondition.cs" />
     <Compile Include="Game\GameUtils\GameCreator.cs" />
     <Compile Include="Game\GameUtils\GameManager.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Game\GameObjects\StaticGameObjects\Spawn.cs" />
     <Compile Include="Game\GameObjects\StaticGameObjects\Tower.cs" />
     <Compile Include="Game\GameUtils\GameUtils.cs" />
+    <Compile Include="Game\GameUtils\TowerUpdateSelection.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

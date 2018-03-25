@@ -22,6 +22,8 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         {
             Wave = wave;
             Health = health;
+            // TODO: add money to constructor
+            Money = health;
             Damage = damage;
             PathPosition = pathPosition;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.enemy),
@@ -39,6 +41,7 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
         }
 
         public int Health { get; set; }
+        public int Money { get; set; }
         public int Damage { get; set; }
         public Wave Wave { get; set; }
         private  int PathPosition { get; set; }

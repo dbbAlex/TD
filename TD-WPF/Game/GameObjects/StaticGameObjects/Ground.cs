@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using TD_WPF.Game.GameUtils;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
@@ -22,6 +23,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         }
 
         public Tower Tower { get; set; } = null;
+        public const int Money = 5;
 
         public void Update(GameControl gameControl, float currentInterval)
         {

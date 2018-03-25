@@ -117,7 +117,7 @@ namespace TD_WPF.Game
 
         #region hint methods
 
-        private void RemoveHintMarks()
+        public void RemoveHintMarks()
         {
             for (var i = Marks.Count - 1; i >= 0; i--)
                 if (Marks[i].Code.Equals(Hint))
@@ -127,7 +127,7 @@ namespace TD_WPF.Game
                 }
         }
 
-        private void CreateHintMarks()
+        public void CreateHintMarks()
         {
             if (IsEditor)
             {
@@ -152,14 +152,18 @@ namespace TD_WPF.Game
             else
             {
                 if (SelectedControl.Name.Equals("ground") || GameCreator.Ground.Count <= 0) return;
-                foreach (var item in GameCreator.Ground)
-                    if (item.Tower == null)
-                    {
-                        var mark = new Mark(item.X, item.Y, item.Width, item.Height,
-                            Color.FromArgb(150, 124, 252, 0), Hint);
-                        mark.Start(this);
-                        Marks.Add(mark);
-                    }
+                if (SelectedControl.Name.Equals("Tower") && Tower.Money <= GameCreator.Money)
+                {
+                    foreach (var item in GameCreator.Ground)
+                        if (item.Tower == null)
+                        {
+                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
+                                Color.FromArgb(150, 124, 252, 0), Hint);
+                            mark.Start(this);
+                            Marks.Add(mark);
+                        }
+                }
+
             }
         }
 
@@ -301,28 +305,17 @@ namespace TD_WPF.Game
             }
             else if (!IsEditor && SelectedControl != null)
             {
-                // TODO: buy items before we can build it
-
-                if (SelectedControl.Name.Equals("ground") && isEmptySpace)
+                if (SelectedControl.Name.Equals("ground") && isEmptySpace && Ground.Money <= GameCreator.Money)
                 {
-                    var ground = new Ground(x, y, (float) Canvas.ActualWidth / GameCreator.X,
-                        (float) Canvas.ActualHeight / GameCreator.Y, GameCreator.Ground.Count);
-                    ground.Start(this);
-                    GameCreator.Ground.Add(ground);
+                    MoneyManager.BuildGround(this, x, y);
                 }
                 else if (hint != null)
                 {
                     var ground = GameCreator.Ground.First(g => g.X == hint.X && g.Y == hint.Y);
                     if (ground != null)
                     {
-                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.9f, 5,
-                            ground.Width * 2);
-                        tower.Start(this);
-                        ground.Tower = tower;
+                        MoneyManager.BuildTower(ground, SelectedControl.Name, this);
                     }
-
-                    RemoveHintMarks();
-                    CreateHintMarks();
                 }
             }
         }
