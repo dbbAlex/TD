@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
-namespace TD_WPF.Game.GameObjects
+namespace TD_WPF.Game.Objects
 {
     public abstract class GameObject
     {
@@ -55,7 +55,7 @@ namespace TD_WPF.Game.GameObjects
 
         public virtual void Destroy(GameControl gameControl)
         {
-            this.Active = false; 
+            Active = false;
             gameControl.Canvas.Children.Remove(Shape);
         }
 

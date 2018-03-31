@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using TD_WPF.Game.GameObjects;
-using TD_WPF.Game.GameObjects.DynamicGameObjects;
-using TD_WPF.Game.GameObjects.StaticGameObjects;
-using TD_WPF.Game.RoundObjects;
+using TD_WPF.Game.Objects;
+using TD_WPF.Game.Objects.DynamicGameObjects;
+using TD_WPF.Game.Objects.RoundObjects;
+using TD_WPF.Game.Objects.StaticGameObjects;
 
-namespace TD_WPF.Game.GameUtils
+namespace TD_WPF.Game.Utils
 {
     public static class GameUtils
     {
@@ -34,7 +34,8 @@ namespace TD_WPF.Game.GameUtils
             do
             {
                 // get next possible fileds
-                var list = PossiblePaths(NextPaths(x, y, width, height, current.X, current.Y, paths.Count), space, paths, null);
+                var list = PossiblePaths(NextPaths(x, y, width, height, current.X, current.Y, paths.Count), space,
+                    paths, null);
 
 
                 if (list.Count == 0) // if list is empty then generation failed
@@ -80,7 +81,7 @@ namespace TD_WPF.Game.GameUtils
                 // get random path
                 var randomIndex = random.Next(paths.Count);
                 GameObject obj = paths.Find(p => p.Index == randomIndex);
-                var list = PossiblePaths(NextPaths(x, y, width, height, obj.X, obj.Y, ground.Count+1), null, paths,
+                var list = PossiblePaths(NextPaths(x, y, width, height, obj.X, obj.Y, ground.Count + 1), null, paths,
                     new List<Path>(ground));
                 if (list.Count == 0)
                     continue;
@@ -99,7 +100,7 @@ namespace TD_WPF.Game.GameUtils
             var random = new Random();
             var waves = new Waves(intervalBetweenWaves);
 
-            for (var i = random.Next(10)+1; i > 0; i--)
+            for (var i = random.Next(10) + 1; i > 0; i--)
                 waves.WaveList.Add(GenerateRandomWave(intervalBetweenEnemies, spawn));
 
             return waves;
@@ -110,7 +111,7 @@ namespace TD_WPF.Game.GameUtils
             var random = new Random();
             var wave = new Wave(intervalBetweenEnemies);
 
-            for (var i = random.Next(10)+1; i > 0; i--)
+            for (var i = random.Next(10) + 1; i > 0; i--)
                 wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10, 51),
                     random.Next(10, 21), wave, 0));
 

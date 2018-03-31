@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace TD_WPF.Game.GameObjects.StaticGameObjects
+namespace TD_WPF.Game.Objects.StaticGameObjects
 {
     public class Mark : GameObject
     {
@@ -12,7 +12,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
         }
 
         public Color Color { get; set; }
-        public string Code { get; private set; }
+        public string Code { get; }
 
         public override void Update(GameControl gameControl)
         {

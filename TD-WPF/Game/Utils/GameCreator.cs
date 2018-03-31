@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TD_WPF.Game.GameObjects.StaticGameObjects;
-using TD_WPF.Game.RoundObjects;
+using TD_WPF.Game.Objects.RoundObjects;
+using TD_WPF.Game.Objects.StaticGameObjects;
 
-namespace TD_WPF.Game.GameUtils
+namespace TD_WPF.Game.Utils
 {
     public class GameCreator // equivalent zur Spielfeldklasse
     {
@@ -14,7 +14,7 @@ namespace TD_WPF.Game.GameUtils
 
         public void InitilizeRandomGame()
         {
-            Random random = new Random();
+            var random = new Random();
             Health = random.Next(50, 101);
             Money = 50;
             InitilizeRandomPath();
@@ -35,13 +35,15 @@ namespace TD_WPF.Game.GameUtils
         }
 
         #region attributes
+
         // base and spawn will be stored in paths too
-        public List<Path> Paths { get; private set; } = new List<Path>(); 
+        public List<Path> Paths { get; private set; } = new List<Path>();
+
         // we dont need towers because we will get them by iterationg the ground which referes to the tower
-        public List<Ground> Ground { get; private set; } = new List<Ground>();          
+        public List<Ground> Ground { get; private set; } = new List<Ground>();
 
         public Waves Waves { get; private set; }
-        private GameControl GameControl { get; set; }
+        private GameControl GameControl { get; }
         public int X { get; set; } = 20;
         public int Y { get; set; } = 15;
         public int Health { get; set; }

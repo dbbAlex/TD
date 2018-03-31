@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using TD_WPF.Game.GameObjects.DynamicGameObjects;
+using TD_WPF.Game.Objects.DynamicGameObjects;
 
-namespace TD_WPF.Game.RoundObjects
+namespace TD_WPF.Game.Objects.RoundObjects
 {
     public class Wave
     {
         public Wave(float interval)
         {
-            Interval = 1000*interval;
+            Interval = 1000 * interval;
         }
 
         private float Interval { get; }
@@ -36,7 +35,8 @@ namespace TD_WPF.Game.RoundObjects
                 Enemies[EnemyIndex].Start(gameControl);
                 EnemyIndex++;
                 LastInterval = currentInterval;
-            }else if (EnemyIndex == Enemies.Count && findAll.Count == 0)
+            }
+            else if (EnemyIndex == Enemies.Count && findAll.Count == 0)
             {
                 Active = false;
                 LastInterval = currentInterval;

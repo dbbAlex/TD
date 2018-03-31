@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using TD_WPF.Game.GameObjects;
-using TD_WPF.Game.GameObjects.DynamicGameObjects;
-using TD_WPF.Game.GameObjects.StaticGameObjects;
-using TD_WPF.Game.GameUtils;
+using TD_WPF.Game.Manager;
+using TD_WPF.Game.Objects;
+using TD_WPF.Game.Objects.DynamicGameObjects;
+using TD_WPF.Game.Objects.StaticGameObjects;
+using TD_WPF.Game.Utils;
 
 namespace TD_WPF.Game
 {
-    /// <summary>
-    ///     Interaktionslogik für GameControl.xaml
-    /// </summary>
     public partial class GameControl : UserControl
     {
         public GameControl()
@@ -34,7 +33,7 @@ namespace TD_WPF.Game
             GameCreator.InitilizeRandomGame();
             CreateRowsForControls();
             CreateControls();
-            
+
             Dispatcher.InvokeAsync(() => GameManager.Run(this));
         }
 
@@ -49,7 +48,7 @@ namespace TD_WPF.Game
         private Control SelectedControl { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
-        private bool IsEditor { get; set; } = false;
+        private bool IsEditor { get; } = false;
 
         #endregion
 
@@ -75,44 +74,58 @@ namespace TD_WPF.Game
 
         private void CreateControls()
         {
-            // info Panel
-            var infoPanel = ControlUtils.CreateInoPanel(this);
+            // info panel
+            var infoPanel = ControlUtils.CreateInfoPanel(this);
             Grid.SetRow(infoPanel, 0);
-            Grid.SetColumnSpan(infoPanel, 2);
+            Grid.SetColumnSpan(infoPanel, ControlGrid.ColumnDefinitions.Count);
             ControlGrid.Children.Add(infoPanel);
             ControlGrid.RegisterName(infoPanel.Name, infoPanel);
-            
+
             // controls
             var controls = IsEditor
                 ? ControlUtils.CreatEditorConrtols(this)
                 : ControlUtils.CreateGameControls(this);
-            var current = controls.First;
+            int rows = Convert.ToInt32(Math.Ceiling((decimal) (controls.Count / 2)));
+            int index = 0;
 
             void AddControls()
             {
-                for (var row = 1; row < ControlGrid.RowDefinitions.Count; row++)
+                for (var row = 1; row <= rows; row++)
                 for (var column = 0; column < ControlGrid.ColumnDefinitions.Count; column++)
                 {
-                    Grid.SetRow(current.Value, row);
-                    Grid.SetColumn(current.Value, column);
-                    ControlGrid.Children.Add(current.Value);
-                    if (current.Next == null) return;
-                    current = current.Next;
+                    Grid.SetRow(controls[index], row);
+                    Grid.SetColumn(controls[index], column);
+                    ControlGrid.Children.Add(controls[index]);
+                    index++;
+                    if (index == controls.Count) return;
                 }
             }
-
             AddControls();
+            rows++;
+
+            // object info panel
+            var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
+            Grid.SetRow(objectInfoPanel, rows);
+            Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
+            ControlGrid.Children.Add(objectInfoPanel);
+            ControlGrid.RegisterName(objectInfoPanel.Name, objectInfoPanel);
         }
 
         #endregion
 
         #region control event handling
 
+        public void HandleObjectInfoEvent(object sender, EventArgs a)
+        {
+            // TODO: implement
+        }
+
         public void HandleControlEvent(object sender, EventArgs a)
         {
             SelectedControl = (Button) sender;
             RemoveHintMarks();
             CreateHintMarks();
+            InfoManager.UpdateObjectInfoPanelByControl(this, SelectedControl);
         }
 
         #region hint methods
@@ -131,10 +144,10 @@ namespace TD_WPF.Game
         {
             if (IsEditor)
             {
-                if ((!SelectedControl.Name.Equals("weg") && !SelectedControl.Name.Equals("ziel")) ||
+                if (!SelectedControl.Name.Equals("weg") && !SelectedControl.Name.Equals("ziel") ||
                     GameCreator.Paths.Count <= 0 ||
                     GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() == typeof(Base)) return;
-                var list = GameUtils.GameUtils.PossiblePaths(GameUtils.GameUtils.NextPaths(GameCreator.X,
+                var list = GameUtils.PossiblePaths(GameUtils.NextPaths(GameCreator.X,
                         GameCreator.Y,
                         (float) Canvas.ActualWidth / GameCreator.X, (float) Canvas.ActualHeight / GameCreator.Y,
                         GameCreator.Paths[GameCreator.Paths.Count - 1].X,
@@ -153,7 +166,6 @@ namespace TD_WPF.Game
             {
                 if (SelectedControl.Name.Equals("ground") || GameCreator.Ground.Count <= 0) return;
                 if (SelectedControl.Name.Equals("Tower") && Tower.Money <= GameCreator.Money)
-                {
                     foreach (var item in GameCreator.Ground)
                         if (item.Tower == null)
                         {
@@ -162,13 +174,11 @@ namespace TD_WPF.Game
                             mark.Start(this);
                             Marks.Add(mark);
                         }
-                }
-
             }
         }
 
         #endregion
-
+        
         #endregion
 
         #region mouse event handling
@@ -303,6 +313,7 @@ namespace TD_WPF.Game
                     GameCreator.Ground.Add(ground);
                 }
             }
+            // TODO: update object info panel if tower or ground were clicked
             else if (!IsEditor && SelectedControl != null)
             {
                 if (SelectedControl.Name.Equals("ground") && isEmptySpace && Ground.Money <= GameCreator.Money)
@@ -312,10 +323,7 @@ namespace TD_WPF.Game
                 else if (hint != null)
                 {
                     var ground = GameCreator.Ground.First(g => g.X == hint.X && g.Y == hint.Y);
-                    if (ground != null)
-                    {
-                        MoneyManager.BuildTower(ground, SelectedControl.Name, this);
-                    }
+                    if (ground != null) MoneyManager.BuildTower(ground, SelectedControl.Name, this);
                 }
             }
         }

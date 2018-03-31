@@ -57,30 +57,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Game\Enumerations\TargetCondition.cs" />
+    <Compile Include="Game\Enumerations\TowerUpdateSelection.cs" />
     <Compile Include="Game\GameControl.xaml.cs">
       <DependentUpon>GameControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\GameObjects\RoundObjects\Wave.cs" />
-    <Compile Include="Game\GameObjects\RoundObjects\Waves.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Mark.cs" />
-    <Compile Include="Game\GameUtils\ControlUtils.cs" />
-    <Compile Include="Game\GameUtils\DamageManager.cs" />
-    <Compile Include="Game\GameUtils\InfoManager.cs" />
-    <Compile Include="Game\GameUtils\MoneyManager.cs" />
-    <Compile Include="Game\GameUtils\TargetCondition.cs" />
-    <Compile Include="Game\GameUtils\GameCreator.cs" />
-    <Compile Include="Game\GameUtils\GameManager.cs" />
-    <Compile Include="Game\GameObjects\DynamicGameObject.cs" />
-    <Compile Include="Game\GameObjects\DynamicGameObjects\Enemy.cs" />
-    <Compile Include="Game\GameObjects\DynamicGameObjects\Shot.cs" />
-    <Compile Include="Game\GameObjects\GameObject.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Base.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Ground.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Path.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Spawn.cs" />
-    <Compile Include="Game\GameObjects\StaticGameObjects\Tower.cs" />
-    <Compile Include="Game\GameUtils\GameUtils.cs" />
-    <Compile Include="Game\GameUtils\TowerUpdateSelection.cs" />
+    <Compile Include="Game\Manager\DamageManager.cs" />
+    <Compile Include="Game\Manager\InfoManager.cs" />
+    <Compile Include="Game\Manager\MoneyManager.cs" />
+    <Compile Include="Game\Manager\ObjectInfoManager.cs" />
+    <Compile Include="Game\Objects\RoundObjects\Wave.cs" />
+    <Compile Include="Game\Objects\RoundObjects\Waves.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Mark.cs" />
+    <Compile Include="Game\Utils\ControlUtils.cs" />
+    <Compile Include="Game\Utils\GameCreator.cs" />
+    <Compile Include="Game\Utils\GameManager.cs" />
+    <Compile Include="Game\Objects\DynamicGameObject.cs" />
+    <Compile Include="Game\Objects\DynamicGameObjects\Enemy.cs" />
+    <Compile Include="Game\Objects\DynamicGameObjects\Shot.cs" />
+    <Compile Include="Game\Objects\GameObject.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Base.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Ground.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Path.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Spawn.cs" />
+    <Compile Include="Game\Objects\StaticGameObjects\Tower.cs" />
+    <Compile Include="Game\Utils\GameUtils.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

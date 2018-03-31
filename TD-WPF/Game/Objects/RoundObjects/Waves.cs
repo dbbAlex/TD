@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace TD_WPF.Game.RoundObjects
+namespace TD_WPF.Game.Objects.RoundObjects
 {
     public class Waves
     {
         public Waves(float intervall)
         {
-            Intervall = 1000*intervall;
+            Intervall = 1000 * intervall;
         }
 
         private float Intervall { get; }
@@ -24,9 +24,12 @@ namespace TD_WPF.Game.RoundObjects
         public void Update(GameControl gameControl, float currentInterval)
         {
             if (!Active) return;
-            Wave wave = WaveList[WaveIndex-1];
-            if (wave.Active) wave.Update(gameControl, currentInterval);
-            else if(WaveIndex < WaveList.Count && currentInterval - wave.LastInterval >= Intervall)
+            var wave = WaveList[WaveIndex - 1];
+            if (wave.Active)
+            {
+                wave.Update(gameControl, currentInterval);
+            }
+            else if (WaveIndex < WaveList.Count && currentInterval - wave.LastInterval >= Intervall)
             {
                 WaveList[WaveIndex].Start(gameControl, currentInterval);
                 WaveIndex++;

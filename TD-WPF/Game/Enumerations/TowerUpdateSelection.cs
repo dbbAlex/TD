@@ -1,4 +1,4 @@
-﻿namespace TD_WPF.Game.GameUtils
+﻿namespace TD_WPF.Game.Enumerations
 {
     public enum TowerUpdateSelection
     {

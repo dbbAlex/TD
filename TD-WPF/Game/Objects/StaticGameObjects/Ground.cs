@@ -4,26 +4,27 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using TD_WPF.Game.GameUtils;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
-namespace TD_WPF.Game.GameObjects.StaticGameObjects
+namespace TD_WPF.Game.Objects.StaticGameObjects
 {
     public class Ground : Path
     {
+        public const string Name = "Ground";
+        public const int Money = 5;
+
         public Ground(float x, float y, float width, float height, int index) : base(x, y, width, height, index)
         {
             Image = ImageTool.ResizeImage(new Bitmap(Resource.ground),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()));
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions()));
         }
 
         public Tower Tower { get; set; } = null;
-        public const int Money = 5;
 
         public void Update(GameControl gameControl, float currentInterval)
         {

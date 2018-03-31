@@ -1,32 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Interop;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using TD_WPF.Game.GameObjects.DynamicGameObjects;
-using TD_WPF.Game.GameUtils;
-using TD_WPF.Game.RoundObjects;
+using TD_WPF.Game.Enumerations;
+using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
-namespace TD_WPF.Game.GameObjects.StaticGameObjects
+namespace TD_WPF.Game.Objects.StaticGameObjects
 {
     public class Tower : GameObject
     {
+        public const string Name = "Tower";
+        public const int Money = 10;
+        public const int Damage = 5;
+        public const float ShotRange = 2;
 
-        public Tower(float x, float y, float width, float height, float shotIntervall, float shotSpeed, int shotDamage,
-            float range) : base(x, y, width, height)
+        public Tower(float x, float y, float width, float height, float shotIntervall, float shotSpeed)
+            : base(x, y, width, height)
         {
-            Range = range;
             ShotIntervall = 1000 * shotIntervall;
             ShotSpeed = shotSpeed;
-            ShotDamage = shotDamage;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
@@ -34,17 +31,15 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions()));
         }
+        
 
         public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
-        private float ShotIntervall { get; set; }
-        private float ShotSpeed { get; set; }
-        private int ShotDamage { get; set; }
-        private float Range { get; set; }
+        private int ShotDamage { get; } = Damage;
+        private float Range { get; } = ShotRange;
+        
+        private float ShotIntervall { get; }
+        private float ShotSpeed { get; }
         private float LastInterval { get; set; }
-        public const int Money = 10;
-
-        private float LastShot { get; set; }
-        private List<Shot> Shots { get; set; }
 
         public void Start(GameControl gameControl, float currentinterval)
         {
@@ -58,14 +53,13 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
             base.Update(gameControl);
             if (currentInterval - LastInterval >= ShotIntervall)
             {
-                Enemy target = NextEnemy(ActiveEnemies((gameControl)));
+                var target = NextEnemy(ActiveEnemies(gameControl));
                 if (target == null) return;
-                Shot shot = new Shot(X, Y, Width, Height, ShotSpeed, ShotDamage, target);
+                var shot = new Shot(X, Y, Width, Height, ShotSpeed, ShotDamage, target);
                 shot.Start(gameControl);
                 gameControl.Shots.Add(shot);
                 LastInterval = currentInterval;
             }
-            
         }
 
         private Enemy NextEnemy(List<Enemy> enemies)
@@ -75,7 +69,7 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
             switch (Condition)
             {
                 case TargetCondition.Nearest:
-                    foreach (Enemy enemy in enemies)
+                    foreach (var enemy in enemies)
                     {
                         var distance = DistanceToObject(enemy);
                         if (property == 0 || property > distance)
@@ -84,26 +78,25 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
                             property = distance;
                         }
                     }
+
                     break;
                 case TargetCondition.Healthiest:
-                    foreach (Enemy enemy in enemies)
-                    {
+                    foreach (var enemy in enemies)
                         if (property == 0 || property < enemy.Health)
                         {
                             current = enemy;
                             property = enemy.Health;
                         }
-                    } 
+
                     break;
                 case TargetCondition.Strongest:
-                    foreach (Enemy enemy in enemies)
-                    {
+                    foreach (var enemy in enemies)
                         if (property == 0 || property < enemy.Damage)
                         {
                             current = enemy;
                             property = enemy.Damage;
                         }
-                    }
+
                     break;
             }
 
@@ -112,25 +105,21 @@ namespace TD_WPF.Game.GameObjects.StaticGameObjects
 
         private List<Enemy> ActiveEnemies(GameControl gameControl)
         {
-            List<Enemy> enemies = new List<Enemy>();
+            var enemies = new List<Enemy>();
 
-            Waves waves = gameControl.GameCreator.Waves;
-            List<Wave> waveList = waves.WaveList.FindAll(w => w.Active);
-            foreach (Wave wave in waveList)
-            {
-                enemies.AddRange(EnemiesInRange(wave.Enemies.FindAll(e => e.Active)));
-            }
+            var waves = gameControl.GameCreator.Waves;
+            var waveList = waves.WaveList.FindAll(w => w.Active);
+            foreach (var wave in waveList) enemies.AddRange(EnemiesInRange(wave.Enemies.FindAll(e => e.Active)));
 
             return enemies;
         }
 
         private List<Enemy> EnemiesInRange(List<Enemy> enemies)
         {
-            List<Enemy> inRange = new List<Enemy>();
-            foreach (Enemy enemy in enemies)
-            {
-                if (DistanceToObject(enemy) <= Range) inRange.Add(enemy);
-            }
+            var inRange = new List<Enemy>();
+            foreach (var enemy in enemies)
+                if (DistanceToObject(enemy) <= Range * Width)
+                    inRange.Add(enemy);
 
             return inRange;
         }

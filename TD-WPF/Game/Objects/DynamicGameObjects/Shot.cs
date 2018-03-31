@@ -6,11 +6,11 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using TD_WPF.Game.GameUtils;
+using TD_WPF.Game.Manager;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
-namespace TD_WPF.Game.GameObjects.DynamicGameObjects
+namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Shot : DynamicGameObject
     {
@@ -38,8 +38,8 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
-            Canvas.SetLeft(Shape, X * Width + (Width / 3) / 2);
-            Canvas.SetTop(Shape, Y * Height + (Height / 3) / 2);
+            Canvas.SetLeft(Shape, X * Width + Width / 3 / 2);
+            Canvas.SetTop(Shape, Y * Height + Height / 3 / 2);
             gameControl.Canvas.Children.Add(Shape);
             Active = true;
         }
@@ -76,12 +76,12 @@ namespace TD_WPF.Game.GameObjects.DynamicGameObjects
 
         public override void Render(GameControl gameControl)
         {
-            if(!Active) return;
+            if (!Active) return;
             Shape.Width = Width / 3;
             Shape.Height = Height / 3;
-            Canvas.SetLeft(Shape, X * Width + (Width / 3) / 2);
-            Canvas.SetTop(Shape, Y * Height + (Height / 3) / 2);
-            
+            Canvas.SetLeft(Shape, X * Width + Width / 3 / 2);
+            Canvas.SetTop(Shape, Y * Height + Height / 3 / 2);
+
             // check for collision TODO: maybe chek collision with other enemies
             var intersectionDetail = Shape.RenderedGeometry.FillContainsWithDetail(Enemy.Shape.RenderedGeometry);
             if (intersectionDetail == IntersectionDetail.Intersects)

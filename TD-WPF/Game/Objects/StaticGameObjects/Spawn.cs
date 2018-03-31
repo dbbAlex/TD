@@ -7,18 +7,18 @@ using System.Windows.Media.Imaging;
 using TD_WPF.Properties;
 using TD_WPF.Tools;
 
-namespace TD_WPF.Game.GameObjects.StaticGameObjects
+namespace TD_WPF.Game.Objects.StaticGameObjects
 {
-    public class Base : Path
+    public class Spawn : Path
     {
-        public Base(float x, float y, float width, float height, int index) : base(x, y, width, height, index)
+        public Spawn(float x, float y, float width, float height, int index) : base(x, y, width, height, index)
         {
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.ziel),
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.spawn),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()));
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions()));
         }
     }
 }

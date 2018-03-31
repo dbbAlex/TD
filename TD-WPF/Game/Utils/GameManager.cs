@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace TD_WPF.Game.GameUtils
+namespace TD_WPF.Game.Utils
 {
     public class GameManager
     {
         private const float Fps = 60f;
         private const float MaxLoopTime = 1000 / Fps;
 
-        private bool Running { get; set; } = true;
+        private bool Running { get; } = true;
 
         public async void Run(GameControl gameControl)
         {
