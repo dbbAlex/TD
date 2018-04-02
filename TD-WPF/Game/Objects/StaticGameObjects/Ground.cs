@@ -25,6 +25,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         }
 
         public Tower Tower { get; set; } = null;
+        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling((double) (Money / 2)));
 
         public void Update(GameControl gameControl, float currentInterval)
         {
@@ -43,6 +44,12 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             base.Deaktivate();
             Tower?.Deaktivate();
+        }
+
+        public override void Destroy(GameControl gameControl)
+        {
+            base.Destroy(gameControl);
+            gameControl.GameCreator.Ground.Remove(this);
         }
     }
 }

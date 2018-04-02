@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -34,8 +35,11 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         
 
         public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
-        private int ShotDamage { get; } = Damage;
-        private float Range { get; } = ShotRange;
+        public int ShotDamage { get; set; } = Damage;
+        public float Range { get; set; } = ShotRange;
+        public int DamageUpdate { get; set; } = 0;
+        public int RangeUpdate { get; set; } = 0;
+        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling((double) (Money / 2)));
         
         private float ShotIntervall { get; }
         private float ShotSpeed { get; }
@@ -62,6 +66,12 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             }
         }
 
+        public override void Destroy(GameControl gameControl)
+        {
+            base.Destroy(gameControl);
+            gameControl.GameCreator.Ground.Find(g => g.Tower == this).Tower = null;
+        }
+
         private Enemy NextEnemy(List<Enemy> enemies)
         {
             Enemy current = null;
@@ -72,11 +82,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                     foreach (var enemy in enemies)
                     {
                         var distance = DistanceToObject(enemy);
-                        if (property == 0 || property > distance)
-                        {
-                            current = enemy;
-                            property = distance;
-                        }
+                        if (property != 0 && !(property > distance)) continue;
+                        current = enemy;
+                        property = distance;
                     }
 
                     break;

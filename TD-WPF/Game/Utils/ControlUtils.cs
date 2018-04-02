@@ -81,7 +81,8 @@ namespace TD_WPF.Game.Utils
             //Name:      Tower
             //Damage:    5     ^5
             //Range:     2     ^5
-            //Money:     10    x5        
+            //Money:     10    x5
+            // TODO: add dropDown for target condistion -> Atk [Closest]
 
             for (var i = 0; i < 3; i++)
             {
@@ -102,6 +103,7 @@ namespace TD_WPF.Game.Utils
                             Name = i == 1 ? DamageButton : i == 2 ? RangeButton : ObjectMoneyButton,
                             FontFamily = new FontFamily(Font),
                             Foreground = Brushes.White,
+                            Background = Brushes.Transparent,
                             Content = "",
                             Visibility = Visibility.Hidden
                         };

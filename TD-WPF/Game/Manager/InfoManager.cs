@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +25,7 @@ namespace TD_WPF.Game.Manager
         public static void UpdateMoney(GameControl gameControl)
         {
             var label = (Label) gameControl.FindName(ControlUtils.MoneyValue);
-            if (label != null) label.Content = gameControl.GameCreator.Money;
+            if (label != null) label.Content = gameControl.GameCreator.Money + " (฿)";
         }
 
         public static void UpdateObjectInfoPanelByControl(GameControl gameControl, Control control)
@@ -51,14 +52,40 @@ namespace TD_WPF.Game.Manager
         public static void UpdateObjectInfoPanelByGameObject(GameControl gameControl, GameObject gameObject)
         {
             UpdateObjectinfoPanelByType(gameControl, gameObject.GetType());
-            
-            // TODO: enabel update buttons
+            if (gameObject is Tower tower)
+            {
+                UpdateObjectInfoPanleNonConstValue(gameControl, tower.ShotDamage.ToString(),
+                    tower.Range.ToString(CultureInfo.InvariantCulture));
+                
+                Button damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
+                Button rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
+                Button moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
+                if (damageButton != null && tower.DamageUpdate < 2)
+                {
+                    damageButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
+                    damageButton.Visibility = Visibility.Visible;
+                }
+                else if (damageButton != null) damageButton.Visibility = Visibility.Hidden;
+                
+                if (rangeButton != null && tower.RangeUpdate < 2)
+                {
+                    rangeButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
+                    rangeButton.Visibility = Visibility.Visible;
+                }
+                else if (rangeButton != null) rangeButton.Visibility = Visibility.Hidden;
+
+                if (moneyButton != null)
+                {
+                    moneyButton.Content = "sell (" + tower.UpdateSellMoney +"฿)";
+                    moneyButton.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private static void UpdateObjectinfoPanelByType(GameControl gameControl, Type type)
         {
             var fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Static |
-                                                            BindingFlags.FlattenHierarchy)
+                                            BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
 
             var nameValue = fieldInfos.Exists(f => f.Name.Equals("Name"))
@@ -74,15 +101,29 @@ namespace TD_WPF.Game.Manager
                 ? (string) fieldInfos.First(f => f.Name.Equals("Money")).GetRawConstantValue().ToString()
                 : "";
 
+            UpdateObjectInfoPanel(gameControl, nameValue, damageValue, rangeValue, moneyValue);
+        }
+
+        private static void UpdateObjectInfoPanel(GameControl gameControl, string nameValue, string damageValue,
+            string rangeValue, string moneyValue)
+        {
             Label name = (Label) gameControl.FindName(ControlUtils.NameValue);
-            Label damage = (Label) gameControl.FindName(ControlUtils.DamageValue);
-            Label range = (Label) gameControl.FindName(ControlUtils.RangeValue);
             Label money = (Label) gameControl.FindName(ControlUtils.ObjectMoneyValue);
 
             if (name != null) name.Content = nameValue;
+            if (money != null) money.Content = moneyValue;
+
+            UpdateObjectInfoPanleNonConstValue(gameControl, damageValue, rangeValue);
+        }
+
+        private static void UpdateObjectInfoPanleNonConstValue(GameControl gameControl, string damageValue,
+            string rangeValue)
+        {
+            Label damage = (Label) gameControl.FindName(ControlUtils.DamageValue);
+            Label range = (Label) gameControl.FindName(ControlUtils.RangeValue);
+
             if (damage != null) damage.Content = damageValue;
             if (range != null) range.Content = rangeValue;
-            if (money != null) money.Content = moneyValue;
         }
     }
 }

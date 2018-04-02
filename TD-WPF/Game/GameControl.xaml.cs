@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Manager;
 using TD_WPF.Game.Objects;
 using TD_WPF.Game.Objects.DynamicGameObjects;
@@ -47,6 +48,7 @@ namespace TD_WPF.Game
         public GameCreator GameCreator { get; private set; }
         public GameManager GameManager { get; set; }
         private Control SelectedControl { get; set; }
+        private Ground SelectedObject { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
         private bool IsEditor { get; } = false;
@@ -119,7 +121,19 @@ namespace TD_WPF.Game
 
         public void HandleObjectInfoEvent(object sender, EventArgs a)
         {
-            // TODO: implement
+            if (!(sender is Button button)) return;
+            switch (button.Name)
+            {
+                case ControlUtils.DamageButton:
+                    MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Damage, this);
+                    break;
+                case ControlUtils.RangeButton:
+                    MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Range, this);
+                    break;
+                case ControlUtils.ObjectMoneyButton:
+                    MoneyManager.SellObject(this, SelectedObject);
+                    break;
+            }
         }
 
         public void HandleControlEvent(object sender, EventArgs a)
@@ -313,6 +327,7 @@ namespace TD_WPF.Game
                     {
                         InfoManager.UpdateObjectInfoPanelByGameObject(this,
                             item.Tower != null ? (GameObject) item.Tower : item);
+                        SelectedObject = item;
                     }
                 }
             }

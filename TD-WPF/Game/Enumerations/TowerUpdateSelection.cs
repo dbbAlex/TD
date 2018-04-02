@@ -3,7 +3,6 @@
     public enum TowerUpdateSelection
     {
         Damage,
-        ShotInterval,
         Range
     }
 }
