@@ -31,6 +31,7 @@ namespace TD_WPF.Game.Manager
 
         public static void BuildGround(GameControl gameControl, float x, float y)
         {
+            if (Ground.Money > gameControl.GameCreator.Money) return;
             gameControl.GameCreator.Money -= Ground.Money;
             var ground = new Ground(x, y, (float) gameControl.Canvas.ActualWidth / gameControl.GameCreator.X,
                 (float) gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y,

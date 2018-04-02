@@ -25,6 +25,7 @@ namespace TD_WPF.Game
         #region constants
 
         private const string Hint = "hint";
+        private const string Info = "info";
 
         private void Initialize(object sender, RoutedEventArgs e)
         {
@@ -100,6 +101,7 @@ namespace TD_WPF.Game
                     if (index == controls.Count) return;
                 }
             }
+
             AddControls();
             rows++;
 
@@ -133,7 +135,7 @@ namespace TD_WPF.Game
         public void RemoveHintMarks()
         {
             for (var i = Marks.Count - 1; i >= 0; i--)
-                if (Marks[i].Code.Equals(Hint))
+                if (Marks[i].Code.Equals(Hint) || Marks[i].Code.Equals(Info))
                 {
                     Canvas.Children.Remove(Marks[i].Shape);
                     Marks.RemoveAt(i);
@@ -164,7 +166,18 @@ namespace TD_WPF.Game
             }
             else
             {
-                if (SelectedControl.Name.Equals("ground") || GameCreator.Ground.Count <= 0) return;
+                if (GameCreator.Ground.Count <= 0) return;
+                if (SelectedControl.Name.Equals("ground"))
+                {
+                    foreach (var item in GameCreator.Ground)
+                    {
+                        var mark = new Mark(item.X, item.Y, item.Width, item.Height,
+                            Color.FromArgb(57, 247, 255, 16), Info);
+                        mark.Start(this);
+                        Marks.Add(mark);
+                    }
+                }
+
                 if (SelectedControl.Name.Equals("Tower") && Tower.Money <= GameCreator.Money)
                     foreach (var item in GameCreator.Ground)
                         if (item.Tower == null)
@@ -174,11 +187,18 @@ namespace TD_WPF.Game
                             mark.Start(this);
                             Marks.Add(mark);
                         }
+                        else
+                        {
+                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
+                                Color.FromArgb(57, 247, 255, 16), Info);
+                            mark.Start(this);
+                            Marks.Add(mark);
+                        }
             }
         }
 
         #endregion
-        
+
         #endregion
 
         #region mouse event handling
@@ -190,7 +210,8 @@ namespace TD_WPF.Game
                                                                                            "ground") ||
                                        IsEditor && SelectedControl != null
                                                 && SelectedControl.Name.Equals("spawn") && GameCreator.Paths.Count == 0
-                                       || !IsEditor && SelectedControl == null))
+                                       || !IsEditor && SelectedControl != null &&
+                                       SelectedControl.Name.Equals("ground")))
             {
                 var p = e.GetPosition(Canvas);
                 var x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
@@ -249,7 +270,7 @@ namespace TD_WPF.Game
 
             var isEmptySpace = true;
 
-            void Work()
+            void EvaluateIsEmptySpace()
             {
                 foreach (var list in new List<List<Path>>
                 {
@@ -264,15 +285,37 @@ namespace TD_WPF.Game
                     }
             }
 
-            Work();
+            EvaluateIsEmptySpace();
 
             GameObject hint = null;
+            GameObject info = null;
             foreach (var item in Marks)
-                if (item.Code.Equals(Hint) && x == item.X && y == item.Y)
+                if (x == item.X && y == item.Y)
                 {
-                    hint = item;
-                    break;
+                    if (item.Code.Equals(Hint))
+                    {
+                        hint = item;
+                        break;
+                    }
+
+                    if (item.Code.Equals(Info))
+                    {
+                        info = item;
+                        break;
+                    }
                 }
+
+            if (info != null)
+            {
+                foreach (var item in GameCreator.Ground)
+                {
+                    if (item.X == info.X && item.Y == info.Y)
+                    {
+                        InfoManager.UpdateObjectInfoPanelByGameObject(this,
+                            item.Tower != null ? (GameObject) item.Tower : item);
+                    }
+                }
+            }
 
             if (IsEditor && SelectedControl != null && isEmptySpace)
             {
@@ -313,10 +356,9 @@ namespace TD_WPF.Game
                     GameCreator.Ground.Add(ground);
                 }
             }
-            // TODO: update object info panel if tower or ground were clicked
             else if (!IsEditor && SelectedControl != null)
             {
-                if (SelectedControl.Name.Equals("ground") && isEmptySpace && Ground.Money <= GameCreator.Money)
+                if (SelectedControl.Name.Equals("ground") && isEmptySpace)
                 {
                     MoneyManager.BuildGround(this, x, y);
                 }
@@ -326,6 +368,8 @@ namespace TD_WPF.Game
                     if (ground != null) MoneyManager.BuildTower(ground, SelectedControl.Name, this);
                 }
             }
+            RemoveHintMarks();
+            CreateHintMarks();
         }
 
         #endregion
