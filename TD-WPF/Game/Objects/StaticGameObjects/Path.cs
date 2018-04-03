@@ -14,7 +14,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public Path(float x, float y, float width, float height, int index) : base(x, y, width, height)
         {
             Index = index;
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.weg),
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.path),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                 IntPtr.Zero,

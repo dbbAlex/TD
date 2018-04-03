@@ -121,14 +121,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b77a5c561934e089
         </value>
-    </resheader>
-    <assembly alias="System.Windows.Forms"
-              name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
-    <data name="gegner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\Grafik\Enemy\gegner.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b03f5f7f11d50a3a
-        </value>
-    </data>
+    </resheader>    
     <assembly alias="System.Drawing"
               name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"/>
     <data name="grass" type="System.Drawing.Bitmap, System.Drawing"
@@ -1715,39 +1708,13 @@
         </value>
     </data>
     <data name="ground" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\Grafik\Shared\ground.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
+        <value>..\Grafik\Shared\Ground.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>
-    <data name="spawn" type="System.Drawing.Bitmap, System.Drawing"
-          mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>
-            /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
-            AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
-            AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAqACoDASIAAhEBAxEB/8QA
-            HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
-            MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
-            V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
-            x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF
-            BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV
-            YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
-            hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq
-            8vP09fb3+Pn6/9oADAMBAAIRAxEAPwB37Sv7Svjr4OeOtJ8MeGNJ8J31hfeE7HXpptesNYurxby61jXt
-            Pkjjk0/XdLhFsIdLt2RGt3lErzM0zIyJH89f8N3fF3/oXPhx/wCCjxN/819H7d3/ACV3w5/2TjSP/Um8
-            X18VV/FfCXCXDeO4byfF4vJ8JXxNfCRnWrTjNzqTc5pylaaV7JdD/VThzhzI8XkeWYnE5Zhq1ethozq1
-            JxlzTlzSV3aSV7JdD7V/4bu+Lv8A0Lnw4/8ABR4m/wDmvo/4bu+Lv/QufDj/AMFHib/5r6+KqK+i/wBS
-            OE/+hFgf/AZ//Jnt/wCqfDn/AEKMJ/4DL/5M/QHwD+2h8UfFPjrwX4Y1DQfAMNh4j8WeHNBvprPS/EUd
-            5FZ6vrFnp9zJayT+KbiFLlIbh2gea3niWUK0kMqAo36b1+B3wd/5K78LP+yj+B//AFJtLr98a/GfE/J8
-            syfH5XSyzBUcFTrYStOrGimlOcayipSu3qo6H5fx9lmAyzGZfTwGFpYWFXDVZ1I0k0pSVVRTd29UtD8n
-            P27v+Su+HP8AsnGkf+pN4vr4qr7V/bu/5K74c/7JxpH/AKk3i+viqv2bgj/kk8i/7AYf+lzP1DhT/knM
-            o/7BI/8ApUwooor6o+hPR/g7/wAld+Fn/ZR/A/8A6k2l1++Nfgd8Hf8Akrvws/7KP4H/APUm0uv3xr8B
-            8Yv+Rlk3/YDX/wDUhH454m/79ln/AGCVv/TyPzI/bQ8BeOvFPxR0HUPDHgvxZ4jsIfAOl2c19oPhzWNX
-            s4ryPxF4pnktZLnT7O4hS5SG4t5ngZxKsU8MjKElQt8i/wDCnfi7/wBEr+I//hD+Jv8A5V1++NFebk/i
-            fj8nyzBZZSyvCVqeCoqjGrOtWjOaTb5pKKsnr0OHLOPsZlmAwuAp5fhqsMLSVKNSdWqpSSbd2krJ69D8
-            Dv8AhTvxd/6JX8R//CH8Tf8Ayro/4U78Xf8AolfxH/8ACH8Tf/Kuv3xor0v+IxZl/wBCbA/+D8R/kd3/
-            ABE3H/8AQswn/g6t/kfiZ8KfhT8UdO+KPw21DUPht4+sbCx8feDry+vrzwd4itbOzs7XxFp09zdXVzPp
-            yQ29tbwo8088zpFFEjSSMqKSP2zoor4jivivEcVYjCYjEYSjhHhKM6MY0Zzmpqc+dyk56pp6aHynEXEV
-            biGthq1bDUsO8PSnSiqUpzUlOfPd8+qaemh//9k=
+    <data name="spawn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Grafik\Map\Spawn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>
     <data name="tower" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -1755,25 +1722,13 @@
             PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>
-    <data name="weg" type="System.Drawing.Bitmap, System.Drawing"
-          mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>
-            /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcI
-            CQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwM
-            DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAAqACoDASIAAhEBAxEB/8QA
-            HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
-            MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
-            V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
-            x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF
-            BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV
-            YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
-            hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq
-            8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3Ciiiv5LP3ASloooAKTNLRQAUUUUAFFNkBaMhTg44NN+0XN0y
-            ebHbRCMbf3QPz+596BElFFFAwopDS0AFFFFABRRTCeaAP//Z
+    <data name="path" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Grafik\Map\Path.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>
-    <data name="ziel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-        <value>..\Grafik\Map\ziel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
+    <data name="end" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Grafik\Map\End.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>
@@ -1784,6 +1739,11 @@
     </data>
     <data name="shot" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\Grafik\Shot\Shot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b03f5f7f11d50a3a
+        </value>
+    </data>
+    <data name="remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\Grafik\Map\Remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral,
             PublicKeyToken=b03f5f7f11d50a3a
         </value>
     </data>

@@ -145,19 +145,10 @@
     <Resource Include="Grafik\General\grass.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Grafik\Map\weg.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\UI_Layout.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\weg.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Grafik\Map\spawn.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Grafik\Enemy\gegner.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\start.bmp" />
@@ -169,16 +160,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Grafik\Shared\ground.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Grafik\Map\ziel.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Grafik\Enemy\Enemy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Grafik\Items\Tower.png" />
+    <Content Include="Grafik\Map\End.png" />
+    <Content Include="Grafik\Map\Path.png" />
+    <Content Include="Grafik\Map\Remove.png" />
+    <Content Include="Grafik\Map\Spawn.png" />
+    <Content Include="Grafik\Shared\Ground.png" />
     <Content Include="Grafik\Shot\Shot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

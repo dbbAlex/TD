@@ -13,7 +13,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
     {
         public Base(float x, float y, float width, float height, int index) : base(x, y, width, height, index)
         {
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.ziel),
+            Image = ImageTool.ResizeImage(new Bitmap(Resource.end),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
                 IntPtr.Zero,

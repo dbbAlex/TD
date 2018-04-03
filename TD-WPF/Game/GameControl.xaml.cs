@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using TD_WPF.Game.Enumerations;
@@ -92,7 +93,7 @@ namespace TD_WPF.Game
             var controls = IsEditor
                 ? ControlUtils.CreatEditorConrtols(this)
                 : ControlUtils.CreateGameControls(this);
-            int rows = Convert.ToInt32(Math.Ceiling((decimal) (controls.Count / 2)));
+            int rows = Convert.ToInt32(Math.Ceiling(controls.Count / 2d));
             int index = 0;
 
             void AddControls()
@@ -167,28 +168,46 @@ namespace TD_WPF.Game
         {
             if (IsEditor)
             {
-                if (!SelectedControl.Name.Equals("weg") && !SelectedControl.Name.Equals("ziel") ||
-                    GameCreator.Paths.Count <= 0 ||
-                    GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() == typeof(Base)) return;
-                var list = GameUtils.PossiblePaths(GameUtils.NextPaths(GameCreator.X,
-                        GameCreator.Y,
-                        (float) Canvas.ActualWidth / GameCreator.X, (float) Canvas.ActualHeight / GameCreator.Y,
-                        GameCreator.Paths[GameCreator.Paths.Count - 1].X,
-                        GameCreator.Paths[GameCreator.Paths.Count - 1].Y, 0), null, GameCreator.Paths,
-                    new List<Path>(GameCreator.Ground));
-
-                foreach (var item in list)
+                if (SelectedControl == null) return;
+                if ((SelectedControl.Name.Equals("Path") || SelectedControl.Name.Equals("End")) &&
+                    GameCreator.Paths.Count > 0 &&
+                    GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() != typeof(Base))
                 {
-                    var mark = new Mark(item.X, item.Y, item.Width, item.Height, Color.FromArgb(150, 124, 252, 0),
-                        Hint);
-                    mark.Start(this);
-                    Marks.Add(mark);
+                    var list = GameUtils.PossiblePaths(GameUtils.NextPaths(GameCreator.X,
+                            GameCreator.Y,
+                            (float) Canvas.ActualWidth / GameCreator.X, (float) Canvas.ActualHeight / GameCreator.Y,
+                            GameCreator.Paths[GameCreator.Paths.Count - 1].X,
+                            GameCreator.Paths[GameCreator.Paths.Count - 1].Y, 0), null, GameCreator.Paths,
+                        new List<Path>(GameCreator.Ground));
+
+                    foreach (var item in list)
+                    {
+                        var mark = new Mark(item.X, item.Y, item.Width, item.Height, Color.FromArgb(150, 124, 252, 0),
+                            Hint);
+                        mark.Start(this);
+                        Marks.Add(mark);
+                    }
+                }
+                else if (SelectedControl.Name.Equals("Remove"))
+                {
+                    List<List<Path>> lists = new List<List<Path>> {GameCreator.Paths, new List<Path>(GameCreator.Ground)};
+                    foreach (var list in lists)
+                    {
+                        foreach (var item in list)
+                        {
+                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
+                                Color.FromArgb(150, 124, 252, 0),
+                                Hint);
+                            mark.Start(this);
+                            Marks.Add(mark);
+                        }
+                    }
                 }
             }
             else
             {
                 if (GameCreator.Ground.Count <= 0) return;
-                if (SelectedControl.Name.Equals("ground"))
+                if (SelectedControl.Name.Equals("Ground"))
                 {
                     foreach (var item in GameCreator.Ground)
                     {
@@ -235,20 +254,20 @@ namespace TD_WPF.Game
             if (textBox.Name.Equals(ControlUtils.HealthValue)) textBox.Text = "100";
             else if (textBox.Name.Equals(ControlUtils.MoneyValue)) textBox.Text = "50";
         }
-        
+
         #endregion
-        
+
         #region mouse event handling
 
         private void MouseMoveOverCanvas(object sender, MouseEventArgs e)
         {
             if (Canvas.IsMouseOver && (IsEditor && SelectedControl == null || IsEditor && SelectedControl != null
                                                                                        && SelectedControl.Name.Equals(
-                                                                                           "ground") ||
+                                                                                           "Ground") ||
                                        IsEditor && SelectedControl != null
-                                                && SelectedControl.Name.Equals("spawn") && GameCreator.Paths.Count == 0
+                                                && SelectedControl.Name.Equals("Spawn") && GameCreator.Paths.Count == 0
                                        || !IsEditor && SelectedControl != null &&
-                                       SelectedControl.Name.Equals("ground")))
+                                       SelectedControl.Name.Equals("Ground")))
             {
                 var p = e.GetPosition(Canvas);
                 var x = (float) Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
@@ -357,10 +376,10 @@ namespace TD_WPF.Game
 
             if (IsEditor && SelectedControl != null && isEmptySpace)
             {
-                if (SelectedControl.Name.Equals("weg") && GameCreator.Paths.Count > 0
-                                                       && !(GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() ==
-                                                            typeof(Base))
-                                                       && hint != null)
+                if (SelectedControl.Name.Equals("Path") && GameCreator.Paths.Count > 0
+                                                        && !(GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() ==
+                                                             typeof(Base))
+                                                        && hint != null)
                 {
                     var path = new Path(hint.X, hint.Y, hint.Width, hint.Height, GameCreator.Paths.Count);
                     path.Start(this);
@@ -368,7 +387,7 @@ namespace TD_WPF.Game
                     RemoveHintMarks();
                     CreateHintMarks();
                 }
-                else if (SelectedControl.Name.Equals("spawn")
+                else if (SelectedControl.Name.Equals("Spawn")
                          && GameCreator.Paths.Count == 0)
                 {
                     var spawn = new Spawn(x, y, (float) Canvas.ActualWidth / GameCreator.X,
@@ -376,17 +395,17 @@ namespace TD_WPF.Game
                     spawn.Start(this);
                     GameCreator.Paths.Add(spawn);
                 }
-                else if (SelectedControl.Name.Equals("ziel") && GameCreator.Paths.Count > 0
-                                                             && GameCreator.Paths[GameCreator.Paths.Count - 1]
-                                                                 .GetType() ==
-                                                             typeof(Path) && hint != null)
+                else if (SelectedControl.Name.Equals("End") && GameCreator.Paths.Count > 0
+                                                            && GameCreator.Paths[GameCreator.Paths.Count - 1]
+                                                                .GetType() ==
+                                                            typeof(Path) && hint != null)
                 {
                     var basePoint = new Base(hint.X, hint.Y, hint.Width, hint.Height, GameCreator.Paths.Count);
                     basePoint.Start(this);
                     GameCreator.Paths.Add(basePoint);
                     RemoveHintMarks();
                 }
-                else if (SelectedControl.Name.Equals("ground"))
+                else if (SelectedControl.Name.Equals("Ground"))
                 {
                     var ground = new Ground(x, y, (float) Canvas.ActualWidth / GameCreator.X,
                         (float) Canvas.ActualHeight / GameCreator.Y, GameCreator.Ground.Count);
@@ -394,9 +413,33 @@ namespace TD_WPF.Game
                     GameCreator.Ground.Add(ground);
                 }
             }
+            else if (IsEditor && SelectedControl != null && !isEmptySpace)
+            {
+                if (SelectedControl.Name.Equals("Remove") && hint != null)
+                {
+                    Path path = GameCreator.Paths.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
+                    Ground ground = GameCreator.Ground.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
+
+                    if (path != null && ground == null)
+                    {
+                        var indexOf = GameCreator.Paths.IndexOf(path);
+                        for (int i = GameCreator.Paths.Count-1; i >= indexOf; i--)
+                        {
+                            Path item = GameCreator.Paths[i];
+                            item.Destroy(this);
+                            GameCreator.Paths.Remove(item);
+                        }
+                    }
+                    else if (path == null & ground != null)
+                    {
+                        ground.Destroy(this);
+                        GameCreator.Ground.Remove(ground);
+                    }
+                }
+            }
             else if (!IsEditor && SelectedControl != null)
             {
-                if (SelectedControl.Name.Equals("ground") && isEmptySpace)
+                if (SelectedControl.Name.Equals("Ground") && isEmptySpace)
                 {
                     MoneyManager.BuildGround(this, x, y);
                 }
