@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,7 +33,8 @@ namespace TD_WPF.Game
         {
             GameCreator = new GameCreator(this);
             GameManager = new GameManager();
-            GameCreator.InitilizeRandomGame();
+            if (IsRandom)
+                GameCreator.InitilizeRandomGame();
             CreateRowsForControls();
             CreateControls();
 
@@ -51,7 +53,8 @@ namespace TD_WPF.Game
         private Ground SelectedObject { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
-        private bool IsEditor { get; } = false;
+        private bool IsEditor { get; } = !false;
+        private bool IsRandom { get; } = false;
 
         #endregion
 
@@ -78,7 +81,8 @@ namespace TD_WPF.Game
         private void CreateControls()
         {
             // info panel
-            var infoPanel = ControlUtils.CreateInfoPanel(this);
+            var infoPanel =
+                IsEditor ? ControlUtils.CreateEditorInfoPanel(this) : ControlUtils.CreateGameInfoPanel(this);
             Grid.SetRow(infoPanel, 0);
             Grid.SetColumnSpan(infoPanel, ControlGrid.ColumnDefinitions.Count);
             ControlGrid.Children.Add(infoPanel);
@@ -107,12 +111,15 @@ namespace TD_WPF.Game
             AddControls();
             rows++;
 
-            // object info panel
-            var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
-            Grid.SetRow(objectInfoPanel, rows);
-            Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
-            ControlGrid.Children.Add(objectInfoPanel);
-            ControlGrid.RegisterName(objectInfoPanel.Name, objectInfoPanel);
+            if (!IsEditor)
+            {
+                // object info panel
+                var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
+                Grid.SetRow(objectInfoPanel, rows);
+                Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
+                ControlGrid.Children.Add(objectInfoPanel);
+                ControlGrid.RegisterName(objectInfoPanel.Name, objectInfoPanel);
+            }
         }
 
         #endregion
@@ -192,7 +199,7 @@ namespace TD_WPF.Game
                     }
                 }
 
-                if (SelectedControl.Name.Equals("Tower") && Tower.Money <= GameCreator.Money)
+                if (SelectedControl.Name.Equals("Tower"))
                     foreach (var item in GameCreator.Ground)
                         if (item.Tower == null)
                         {
@@ -215,6 +222,22 @@ namespace TD_WPF.Game
 
         #endregion
 
+        #region editor control handling
+
+        public void ControlPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
+        }
+
+        public void ControlLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!(e.Source is TextBox textBox) || !string.IsNullOrWhiteSpace(textBox.Text)) return;
+            if (textBox.Name.Equals(ControlUtils.HealthValue)) textBox.Text = "100";
+            else if (textBox.Name.Equals(ControlUtils.MoneyValue)) textBox.Text = "50";
+        }
+        
+        #endregion
+        
         #region mouse event handling
 
         private void MouseMoveOverCanvas(object sender, MouseEventArgs e)
@@ -383,6 +406,7 @@ namespace TD_WPF.Game
                     if (ground != null) MoneyManager.BuildTower(ground, SelectedControl.Name, this);
                 }
             }
+
             RemoveHintMarks();
             CreateHintMarks();
         }

@@ -43,7 +43,7 @@ namespace TD_WPF.Game.Utils
             return CreateControls(folder, gameControl.HandleControlEvent, "game");
         }
 
-        public static Grid CreateInfoPanel(GameControl gameControl)
+        public static Grid CreateGameInfoPanel(GameControl gameControl)
         {
             var grid = new Grid {Name = InfoPanel};
             gameControl.RegisterName(grid.Name, grid);
@@ -73,15 +73,56 @@ namespace TD_WPF.Game.Utils
             return grid;
         }
 
+        public static Grid CreateEditorInfoPanel(GameControl gameControl)
+        {
+            Grid grid = new Grid{Name = InfoPanel};
+            gameControl.RegisterName(grid.Name, grid);
+            
+            for (var i = 0; i < 2; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
+                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(0.5, GridUnitType.Star)});
+            }
+
+            for (var i = 0; i < grid.RowDefinitions.Count; i++)
+            for (var j = 0; j < grid.ColumnDefinitions.Count; j++)
+            {
+                if (j == 0)
+                {
+                    var label = new Label
+                    {
+                        Name = i == 0 ? Health : Money,
+                        FontFamily = new FontFamily(Font),
+                        Foreground = Brushes.White,
+                        Content = i == 0 ? Health + ":" :
+                            Money + ":" ,
+                    };
+                    AddAndRegisterComponent(gameControl, label, i, j, grid);
+                }
+                else
+                {
+                    var textBox = new TextBox
+                    {
+                        Name = i == 0 ? HealthValue : MoneyValue,
+                        FontFamily = new FontFamily(Font),
+                        Foreground = Brushes.White,
+                        Background = Brushes.Transparent,
+                        Text = i == 0 ? "100" : "50"
+                    };
+                    textBox.PreviewTextInput += gameControl.ControlPreviewTextInput;
+                    textBox.LostKeyboardFocus += gameControl.ControlLostKeyboardFocus;
+                    AddAndRegisterComponent(gameControl, textBox, i, j, grid);
+                }
+            }
+            
+            return grid;
+        }
+
         public static Grid CreateObjectInfoPanel(GameControl gameControl)
         {
             var grid = new Grid {Name = ObjectInfoPanel};
             gameControl.RegisterName(grid.Name, grid);
 
-            //Name:      Tower
-            //Damage:    5     ^5
-            //Range:     2     ^5
-            //Money:     10    x5
             // TODO: add dropDown for target condistion -> Atk [Closest]
 
             for (var i = 0; i < 3; i++)
@@ -179,7 +220,7 @@ namespace TD_WPF.Game.Utils
             return list;
         }
 
-        private static void AddAndRegisterComponent(GameControl gameControl, ContentControl contentControl, int i,
+        private static void AddAndRegisterComponent(GameControl gameControl, Control contentControl, int i,
             int j, Grid grid)
         {
             Grid.SetRow(contentControl, i);

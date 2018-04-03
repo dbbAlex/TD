@@ -39,10 +39,14 @@ namespace TD_WPF.Game.Manager
             switch (towerName)
             {
                 case "Tower":
-                    gameControl.GameCreator.Money -= Tower.Money;
-                    var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.9f);
-                    tower.Start(gameControl);
-                    ground.Tower = tower;
+                    if (Tower.Money <= gameControl.GameCreator.Money)
+                    {
+                        gameControl.GameCreator.Money -= Tower.Money;
+                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.9f);
+                        tower.Start(gameControl);
+                        ground.Tower = tower;
+                    }
+
                     break;
             }
 
@@ -79,6 +83,7 @@ namespace TD_WPF.Game.Manager
             }
             
             InfoManager.UpdateMoney(gameControl);
+            // TODO: maybe update object info panel
             gameControl.RemoveHintMarks();
             gameControl.CreateHintMarks();
         }
