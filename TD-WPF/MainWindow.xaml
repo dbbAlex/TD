@@ -13,5 +13,8 @@
         Height="700"
         MinWidth="1024"
         MinHeight="700">
-    <game:GameControl />
+    <ContentControl Name="WindowContent">
+        <game:GameControl />
+    </ContentControl>
+    
 </Window>

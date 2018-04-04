@@ -112,7 +112,7 @@ namespace TD_WPF.Game.Utils
             var wave = new Wave(intervalBetweenEnemies);
 
             for (var i = random.Next(10) + 1; i > 0; i--)
-                wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10, 51),
+                wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.05f, random.Next(10, 51),
                     random.Next(10, 21), wave, random.Next(5, 26)));
 
             return wave;

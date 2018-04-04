@@ -6,7 +6,7 @@ namespace TD_WPF.Game.Objects.RoundObjects
     {
         public Waves(float intervall)
         {
-            Intervall = 1000 * intervall;
+            Intervall = intervall;
         }
 
         private float Intervall { get; }

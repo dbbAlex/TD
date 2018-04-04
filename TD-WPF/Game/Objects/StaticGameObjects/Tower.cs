@@ -42,6 +42,8 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         private float ShotIntervall { get; } = 1000 * 0.7f;
         private float ShotSpeed { get; } = 0.9f;
         private float LastInterval { get; set; }
+        private float BeforePauseInterval { get; set; }
+        private bool Pause { get; set; }
 
         public void Start(GameControl gameControl, float currentinterval)
         {
@@ -53,6 +55,22 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             if (!Active) return;
             base.Update(gameControl);
+            
+            if (gameControl.GameManager.Pause)
+            {
+                if (!Pause)
+                {
+                    Pause = true;
+                    BeforePauseInterval = currentInterval - LastInterval;
+                }
+                return;
+            }
+            if (Pause)
+            {
+                LastInterval = currentInterval - BeforePauseInterval;
+                Pause = false;
+            }
+            
             if (currentInterval - LastInterval >= ShotIntervall)
             {
                 var target = NextEnemy(ActiveEnemies(gameControl));

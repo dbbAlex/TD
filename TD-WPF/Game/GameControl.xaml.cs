@@ -54,8 +54,8 @@ namespace TD_WPF.Game
         private Ground SelectedObject { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
-        public bool IsEditor { get; set; } = false;
-        private bool IsRandom { get; set; } = !false;
+        public bool IsEditor { get; set; } = !false;
+        private bool IsRandom { get; set; } = false;
 
         #endregion
 
@@ -171,7 +171,8 @@ namespace TD_WPF.Game
                     // TODO: go back to menu
                     break;
                 case ControlUtils.Next:
-                    // TODO: create ContentControl for enemy creation
+                    ContentControl content = (ContentControl) this.Parent;
+                    content.Content = new WaveCreatorControl();
                     break;
             }
 
