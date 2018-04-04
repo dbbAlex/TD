@@ -47,28 +47,31 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         public override void Update(GameControl gameControl)
         {
             if (!Active) return;
-            // set x coordinate
-            if (X < Enemy.X)
+            if (!gameControl.GameManager.Pause)
             {
-                X += Speed;
-                if (X >= Enemy.X) X = Enemy.X;
-            }
-            else if (X > Enemy.X)
-            {
-                X -= Speed;
-                if (X <= Enemy.X) X = Enemy.X;
-            }
+                // set x coordinate
+                if (X < Enemy.X)
+                {
+                    X += Speed;
+                    if (X >= Enemy.X) X = Enemy.X;
+                }
+                else if (X > Enemy.X)
+                {
+                    X -= Speed;
+                    if (X <= Enemy.X) X = Enemy.X;
+                }
 
-            // set y coordinate
-            if (Y < Enemy.Y)
-            {
-                Y += Speed;
-                if (Y >= Enemy.Y) Y = Enemy.Y;
-            }
-            else if (Y > Enemy.Y)
-            {
-                Y -= Speed;
-                if (Y <= Enemy.Y) Y = Enemy.Y;
+                // set y coordinate
+                if (Y < Enemy.Y)
+                {
+                    Y += Speed;
+                    if (Y >= Enemy.Y) Y = Enemy.Y;
+                }
+                else if (Y > Enemy.Y)
+                {
+                    Y -= Speed;
+                    if (Y <= Enemy.Y) Y = Enemy.Y;
+                }
             }
 
             base.Update(gameControl);

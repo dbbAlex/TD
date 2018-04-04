@@ -36,13 +36,15 @@ namespace TD_WPF.Game.Manager
 
         public static void BuildTower(Ground ground, string towerName, GameControl gameControl)
         {
+            if(gameControl.GameManager.Pause) return;
+            // TODO: add more Tower
             switch (towerName)
             {
                 case "Tower":
                     if (Tower.Money <= gameControl.GameCreator.Money)
                     {
                         gameControl.GameCreator.Money -= Tower.Money;
-                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height, 0.7f, 0.9f);
+                        var tower = new Tower(ground.X, ground.Y, ground.Width, ground.Height);
                         tower.Start(gameControl);
                         ground.Tower = tower;
                     }
@@ -58,7 +60,7 @@ namespace TD_WPF.Game.Manager
 
         public static void BuildGround(GameControl gameControl, float x, float y)
         {
-            if (Ground.Money > gameControl.GameCreator.Money) return;
+            if (Ground.Money > gameControl.GameCreator.Money || gameControl.GameManager.Pause) return;
             gameControl.GameCreator.Money -= Ground.Money;
             var ground = new Ground(x, y, (float) gameControl.Canvas.ActualWidth / gameControl.GameCreator.X,
                 (float) gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y,
@@ -83,7 +85,7 @@ namespace TD_WPF.Game.Manager
             }
             
             InfoManager.UpdateMoney(gameControl);
-            // TODO: maybe update object info panel
+            InfoManager.UpdateObjectInfoPanelByControl(gameControl, gameControl.SelectedControl);
             gameControl.RemoveHintMarks();
             gameControl.CreateHintMarks();
         }

@@ -12,9 +12,11 @@ namespace TD_WPF.Game.Objects.RoundObjects
 
         private float Interval { get; }
         public float LastInterval { get; set; }
+        public float BeforePauseInterval { get; set; }
         public List<Enemy> Enemies { get; } = new List<Enemy>();
         private int EnemyIndex { get; set; }
         public bool Active { get; private set; }
+        public bool Pause { get; set; }
 
         public void Start(GameControl gameControl, float currentInterval)
         {
@@ -30,6 +32,21 @@ namespace TD_WPF.Game.Objects.RoundObjects
             var findAll = Enemies.FindAll(enemy => enemy.Active);
             foreach (var item in findAll) item.Update(gameControl);
 
+            if (gameControl.GameManager.Pause)
+            {
+                if (!Pause)
+                {
+                    Pause = true;
+                    BeforePauseInterval = currentInterval - LastInterval;
+                }
+                return;
+            }
+            if (Pause)
+            {
+                LastInterval = currentInterval - BeforePauseInterval;
+                Pause = false;
+            }
+            
             if (EnemyIndex < Enemies.Count && currentInterval - LastInterval >= Interval)
             {
                 Enemies[EnemyIndex].Start(gameControl);

@@ -16,16 +16,13 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave,
-            int pathPosition) :
+        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave, int money) :
             base(x, y, width, height, speed)
         {
             Wave = wave;
             Health = health;
-            // TODO: add money to constructor
-            Money = health;
+            Money = money;
             Damage = damage;
-            PathPosition = pathPosition;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.enemy),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape = new Ellipse
@@ -49,61 +46,63 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
-            // maybe window was resized so set width and height at start
-
+            Active = true;
+            base.Update(gameControl);
             Canvas.SetLeft(Shape, X * Width + Width / 2 / 2);
             Canvas.SetTop(Shape, Y * Height + Height / 2 / 2);
             gameControl.Canvas.Children.Add(Shape);
-            Active = true;
         }
 
         public override void Update(GameControl gameControl)
         {
             if (!Active) return;
-            var next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == PathPosition + 1);
-            if (next == null)
+            if (!gameControl.GameManager.Pause)
             {
-                // reached the end destroy and substract
-                DamageManager.ManageDamageFromEnemy(this, gameControl);
-                Destroy(gameControl);
-                Active = false;
-                return;
-            }
+                var next = gameControl.GameCreator.Paths.FirstOrDefault(p => p.Index == PathPosition + 1);
+                if (next == null)
+                {
+                    // reached the end destroy and substract
+                    DamageManager.ManageDamageFromEnemy(this, gameControl);
+                    Destroy(gameControl);
+                    Active = false;
+                    return;
+                }
 
-            if (X < next.X)
-            {
-                X += Speed;
-                if (X >= next.X)
+                if (X < next.X)
                 {
-                    X = next.X;
-                    PathPosition++;
+                    X += Speed;
+                    if (X >= next.X)
+                    {
+                        X = next.X;
+                        PathPosition++;
+                    }
                 }
-            }
-            else if (X > next.X)
-            {
-                X -= Speed;
-                if (X <= next.X)
+                else if (X > next.X)
                 {
-                    X = next.X;
-                    PathPosition++;
+                    X -= Speed;
+                    if (X <= next.X)
+                    {
+                        X = next.X;
+                        PathPosition++;
+                    }
                 }
-            }
-            else if (Y < next.Y)
-            {
-                Y += Speed;
-                if (Y >= next.Y)
+                else if (Y < next.Y)
                 {
-                    Y = next.Y;
-                    PathPosition++;
+                    Y += Speed;
+                    if (Y >= next.Y)
+                    {
+                        Y = next.Y;
+                        PathPosition++;
+                    }
                 }
-            }
-            else if (Y > next.Y)
-            {
-                Y -= Speed;
-                if (Y <= next.Y)
+                else if (Y > next.Y)
                 {
-                    Y = next.Y;
-                    PathPosition++;
+                    Y -= Speed;
+                    if (Y <= next.Y)
+                    {
+                        Y = next.Y;
+                        PathPosition++;
+                    }
                 }
             }
 

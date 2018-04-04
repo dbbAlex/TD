@@ -50,12 +50,12 @@ namespace TD_WPF.Game
 
         public GameCreator GameCreator { get; private set; }
         public GameManager GameManager { get; set; }
-        private Control SelectedControl { get; set; }
+        public Control SelectedControl { get; set; }
         private Ground SelectedObject { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
-        private bool IsEditor { get; } = !false;
-        private bool IsRandom { get; } = false;
+        public bool IsEditor { get; set; } = false;
+        private bool IsRandom { get; set; } = !false;
 
         #endregion
 
@@ -121,6 +121,12 @@ namespace TD_WPF.Game
                 ControlGrid.Children.Add(objectInfoPanel);
                 ControlGrid.RegisterName(objectInfoPanel.Name, objectInfoPanel);
             }
+
+            var buttonGrid = ControlUtils.CreateButtons(this);
+            Grid.SetRow(buttonGrid, ControlGrid.RowDefinitions.Count-1);
+            Grid.SetColumnSpan(buttonGrid, ControlGrid.ColumnDefinitions.Count);
+            ControlGrid.Children.Add(buttonGrid);
+            ControlGrid.RegisterName(buttonGrid.Name, buttonGrid);
         }
 
         #endregion
@@ -129,7 +135,7 @@ namespace TD_WPF.Game
 
         public void HandleObjectInfoEvent(object sender, EventArgs a)
         {
-            if (!(sender is Button button)) return;
+            if (!(sender is Button button) || GameManager.Pause) return;
             switch (button.Name)
             {
                 case ControlUtils.DamageButton:
@@ -152,6 +158,25 @@ namespace TD_WPF.Game
             InfoManager.UpdateObjectInfoPanelByControl(this, SelectedControl);
         }
 
+        public void HandleButtonEvent(object sender, EventArgs a)
+        {
+            if (!(sender is Button button)) return;
+            switch (button.Name)
+            {
+                case ControlUtils.Pause :
+                    if(!GameManager.End)
+                        GameManager.Pause = !GameManager.Pause;
+                    break;
+                case ControlUtils.Cancel :
+                    // TODO: go back to menu
+                    break;
+                case ControlUtils.Next:
+                    // TODO: create ContentControl for enemy creation
+                    break;
+            }
+
+        }
+        
         #region hint methods
 
         public void RemoveHintMarks()

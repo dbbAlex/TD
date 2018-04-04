@@ -20,11 +20,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public const int Damage = 5;
         public const float ShotRange = 2;
 
-        public Tower(float x, float y, float width, float height, float shotIntervall, float shotSpeed)
+        public Tower(float x, float y, float width, float height)
             : base(x, y, width, height)
         {
-            ShotIntervall = 1000 * shotIntervall;
-            ShotSpeed = shotSpeed;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
                 Convert.ToInt32(width), Convert.ToInt32(height));
             Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
@@ -40,9 +38,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public int DamageUpdate { get; set; } = 0;
         public int RangeUpdate { get; set; } = 0;
         public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling((double) (Money / 2)));
-        
-        private float ShotIntervall { get; }
-        private float ShotSpeed { get; }
+
+        private float ShotIntervall { get; } = 1000 * 0.7f;
+        private float ShotSpeed { get; } = 0.9f;
         private float LastInterval { get; set; }
 
         public void Start(GameControl gameControl, float currentinterval)

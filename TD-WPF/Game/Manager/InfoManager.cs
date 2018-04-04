@@ -35,7 +35,7 @@ namespace TD_WPF.Game.Manager
                 case "Tower":
                     UpdateObjectinfoPanelByType(gameControl, typeof(Tower));
                     break;
-                case "ground":
+                case "Ground":
                     UpdateObjectinfoPanelByType(gameControl, typeof(Ground));
                     break;
             }
@@ -59,7 +59,6 @@ namespace TD_WPF.Game.Manager
                 
                 Button damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
                 Button rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
-                Button moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
                 if (damageButton != null && tower.DamageUpdate < 2)
                 {
                     damageButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
@@ -73,12 +72,17 @@ namespace TD_WPF.Game.Manager
                     rangeButton.Visibility = Visibility.Visible;
                 }
                 else if (rangeButton != null) rangeButton.Visibility = Visibility.Hidden;
-
-                if (moneyButton != null)
-                {
-                    moneyButton.Content = "sell (" + tower.UpdateSellMoney +"฿)";
-                    moneyButton.Visibility = Visibility.Visible;
-                }
+            }
+            Button moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
+            
+            if (moneyButton != null)
+            {
+                if(gameObject is Tower t)
+                    moneyButton.Content = "sell (" + t.UpdateSellMoney +"฿)";
+                if(gameObject is Ground ground)
+                    moneyButton.Content = "sell (" + ground.UpdateSellMoney +"฿)";
+  
+                moneyButton.Visibility = Visibility.Visible;
             }
         }
 

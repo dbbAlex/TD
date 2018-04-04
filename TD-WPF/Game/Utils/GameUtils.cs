@@ -113,7 +113,7 @@ namespace TD_WPF.Game.Utils
 
             for (var i = random.Next(10) + 1; i > 0; i--)
                 wave.Enemies.Add(new Enemy(spawn.X, spawn.Y, spawn.Width, spawn.Height, 0.09f, random.Next(10, 51),
-                    random.Next(10, 21), wave, 0));
+                    random.Next(10, 21), wave, random.Next(5, 26)));
 
             return wave;
         }

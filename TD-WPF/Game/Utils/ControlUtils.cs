@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,10 @@ namespace TD_WPF.Game.Utils
         public const string ObjectMoneyValue = "ObjectmoneyValue";
         public const string ObjectMoneyButton = "ObjectMoneyButton";
         private const string Font = "Bauhaus 93";
+        public const string ButtonGrid = "ButtonGrid";
+        public const string Cancel = "Cancel";
+        public const string Pause = "Pause";
+        public const string Next = "Next";
 
 
         public static List<ContentControl> CreatEditorConrtols(GameControl gameControl)
@@ -65,7 +70,7 @@ namespace TD_WPF.Game.Utils
                     Content = j == 0 ? i == 0 ? Health + ":" :
                         Money + ":" :
                         i == 0 ? gameControl.GameCreator.Health.ToString() :
-                        gameControl.GameCreator.Money.ToString()
+                        gameControl.GameCreator.Money.ToString() + " (฿)"
                 };
                 AddAndRegisterComponent(gameControl, label, i, j, grid);
             }
@@ -189,6 +194,36 @@ namespace TD_WPF.Game.Utils
             return grid;
         }
 
+        public static Grid CreateButtons(GameControl gameControl)
+        {
+            Grid grid = new Grid{Name = ButtonGrid};
+
+            for (int i = 0; i < 2; i++)
+                grid.ColumnDefinitions.Add(new ColumnDefinition{Width = new GridLength(0.5, GridUnitType.Star)});
+
+            for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+            {
+                Button button = new Button
+                {
+                    Name = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel,
+                    FontFamily = new FontFamily(Font),
+                    Foreground = Brushes.White,
+                    Background = Brushes.Transparent,
+                    Content = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel,
+                };
+                button.Click += gameControl.HandleButtonEvent;
+                AddAndRegisterComponent(gameControl, button, 0, i, grid);
+            }
+            return grid;
+        }
+
+        public static Grid CreateEditorButtons(GameControl gameControl)
+        {
+            Grid grid = new Grid();
+
+            return grid;
+        }
+        
         private static List<ContentControl> CreateControls(List<string> folder, RoutedEventHandler handler,
             string group)
         {
@@ -220,11 +255,11 @@ namespace TD_WPF.Game.Utils
             return list;
         }
 
-        private static void AddAndRegisterComponent(GameControl gameControl, Control contentControl, int i,
-            int j, Grid grid)
+        private static void AddAndRegisterComponent(GameControl gameControl, Control contentControl, int row,
+            int column, Grid grid)
         {
-            Grid.SetRow(contentControl, i);
-            Grid.SetColumn(contentControl, j);
+            Grid.SetRow(contentControl, row);
+            Grid.SetColumn(contentControl, column);
             grid.Children.Add(contentControl);
             gameControl.RegisterName(contentControl.Name, contentControl);
         }

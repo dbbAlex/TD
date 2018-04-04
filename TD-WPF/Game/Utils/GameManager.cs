@@ -10,6 +10,8 @@ namespace TD_WPF.Game.Utils
         private const float MaxLoopTime = 1000 / Fps;
 
         private bool Running { get; } = true;
+        public bool Pause { get; set; }
+        public bool End { get; set; }
 
         public async void Run(GameControl gameControl)
         {
@@ -63,10 +65,8 @@ namespace TD_WPF.Game.Utils
 
         public void EndGame(GameControl gameControl)
         {
-            foreach (var item in gameControl.GameCreator.Paths) item.Deaktivate();
-            foreach (var item in gameControl.GameCreator.Ground) item.Deaktivate();
-            foreach (var item in gameControl.Shots) item.Deaktivate();
-            gameControl.GameCreator.Waves?.Deaktivate();
+            End = true;
+            Pause = true;
         }
     }
 }
