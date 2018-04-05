@@ -11,7 +11,7 @@ namespace TD_WPF.Game.Utils
     {
         #region generate methods
 
-        public static List<Path> GenerateRandomPath(float fieldWidth, float fieldHeight, int x, int y)
+        public static List<Path> GenerateRandomPath(double fieldWidth, double fieldHeight, int x, int y)
         {
             var random = new Random();
             var paths = new List<Path>(); // store the path
@@ -66,8 +66,8 @@ namespace TD_WPF.Game.Utils
             return paths;
         }
 
-        public static List<Ground> GenerateRandomGround(List<Path> paths, float fieldWidth,
-            float fieldHeight, int x, int y)
+        public static List<Ground> GenerateRandomGround(List<Path> paths, double fieldWidth,
+            double fieldHeight, int x, int y)
         {
             var random = new Random();
             var ground = new List<Ground>();
@@ -95,7 +95,7 @@ namespace TD_WPF.Game.Utils
             return ground;
         }
 
-        public static Waves GenerateRandomWaves(float intervalBetweenWaves, float intervalBetweenEnemies, Spawn spawn)
+        public static Waves GenerateRandomWaves(long intervalBetweenWaves, long intervalBetweenEnemies, Spawn spawn)
         {
             var random = new Random();
             var waves = new Waves(intervalBetweenWaves);
@@ -106,7 +106,7 @@ namespace TD_WPF.Game.Utils
             return waves;
         }
 
-        private static Wave GenerateRandomWave(float intervalBetweenEnemies, Spawn spawn)
+        private static Wave GenerateRandomWave(long intervalBetweenEnemies, Spawn spawn)
         {
             var random = new Random();
             var wave = new Wave(intervalBetweenEnemies);
@@ -122,7 +122,7 @@ namespace TD_WPF.Game.Utils
 
         #region other methods
 
-        public static List<Path> NextPaths(int x, int y, float width, float height, float _x, float _y, int index)
+        public static List<Path> NextPaths(int x, int y, double width, double height, double _x, double _y, int index)
         {
             var list = new List<Path>();
             //unten

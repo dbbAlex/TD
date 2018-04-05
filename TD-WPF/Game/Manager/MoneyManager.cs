@@ -58,12 +58,12 @@ namespace TD_WPF.Game.Manager
             gameControl.CreateHintMarks();
         }
 
-        public static void BuildGround(GameControl gameControl, float x, float y)
+        public static void BuildGround(GameControl gameControl, double x, double y)
         {
             if (Ground.Money > gameControl.GameCreator.Money || gameControl.GameManager.Pause) return;
             gameControl.GameCreator.Money -= Ground.Money;
-            var ground = new Ground(x, y, (float) gameControl.Canvas.ActualWidth / gameControl.GameCreator.X,
-                (float) gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y,
+            var ground = new Ground(x, y, gameControl.Canvas.ActualWidth / gameControl.GameCreator.X,
+                gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y,
                 gameControl.GameCreator.Ground.Count);
             ground.Start(gameControl);
             gameControl.GameCreator.Ground.Add(ground);

@@ -18,40 +18,36 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public const string Name = "Tower";
         public const int Money = 10;
         public const int Damage = 5;
-        public const float ShotRange = 2;
+        public const double ShotRange = 2;
 
-        public Tower(float x, float y, float width, float height)
+        public Tower(double x, double y, double width, double height)
             : base(x, y, width, height)
         {
             Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            Shape.Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions()));
         }
         
 
         public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
         public int ShotDamage { get; set; } = Damage;
-        public float Range { get; set; } = ShotRange;
+        public double Range { get; set; } = ShotRange;
         public int DamageUpdate { get; set; } = 0;
         public int RangeUpdate { get; set; } = 0;
-        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling((double) (Money / 2)));
+        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
 
-        private float ShotIntervall { get; } = 1000 * 0.7f;
-        private float ShotSpeed { get; } = 0.9f;
-        private float LastInterval { get; set; }
-        private float BeforePauseInterval { get; set; }
+        private double ShotIntervall { get; } = 1000 * 0.7;
+        private double ShotSpeed { get; } = 0.9;
+        private long LastInterval { get; set; }
+        private long BeforePauseInterval { get; set; }
         private bool Pause { get; set; }
 
-        public void Start(GameControl gameControl, float currentinterval)
+        public void Start(GameControl gameControl, long currentinterval)
         {
             base.Start(gameControl);
             LastInterval = currentinterval;
         }
 
-        public void Update(GameControl gameControl, float currentInterval)
+        public void Update(GameControl gameControl, long currentInterval)
         {
             if (!Active) return;
             base.Update(gameControl);
@@ -91,7 +87,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         private Enemy NextEnemy(List<Enemy> enemies)
         {
             Enemy current = null;
-            var property = 0f;
+            var property = 0d;
             switch (Condition)
             {
                 case TargetCondition.Nearest:
@@ -148,7 +144,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             return inRange;
         }
 
-        private float DistanceToObject(GameObject gameObject)
+        private double DistanceToObject(GameObject gameObject)
         {
             // our center
             var x = X * Width + Width / 2;
@@ -158,7 +154,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             var x2 = gameObject.X * gameObject.Width + gameObject.Width / 2;
             var y2 = gameObject.Y * gameObject.Height + gameObject.Height / 2;
 
-            return (float) Math.Abs(Math.Sqrt(Math.Pow(x2 - x, 2) + Math.Pow(y2 - y, 2)));
+            return Math.Abs(Math.Sqrt(Math.Pow(x2 - x, 2) + Math.Pow(y2 - y, 2)));
         }
     }
 }

@@ -16,7 +16,7 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(float x, float y, float width, float height, float speed, int health, int damage, Wave wave, int money) :
+        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, Wave wave, int money) :
             base(x, y, width, height, speed)
         {
             Wave = wave;
@@ -25,16 +25,6 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
             Damage = damage;
             Image = ImageTool.ResizeImage(new Bitmap(Resource.enemy),
                 Convert.ToInt32(width), Convert.ToInt32(height));
-            Shape = new Ellipse
-            {
-                Name = GetType().Name,
-                Width = width / 2,
-                Height = height / 2,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()))
-            };
         }
 
         public int Health { get; set; }
@@ -46,6 +36,16 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
+            Shape = new Ellipse
+            {
+                Name = GetType().Name,
+                Width = Width / 2,
+                Height = Height / 2,
+                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions()))
+            };
             Active = true;
             base.Update(gameControl);
             Canvas.SetLeft(Shape, X * Width + Width / 2 / 2);

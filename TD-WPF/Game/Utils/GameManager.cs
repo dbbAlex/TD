@@ -6,12 +6,12 @@ namespace TD_WPF.Game.Utils
 {
     public class GameManager
     {
-        private const float Fps = 60f;
-        private const float MaxLoopTime = 1000 / Fps;
+        private const int Fps = 60;
+        private const double MaxLoopTime = 1000d / Fps;
 
         private bool Running { get; } = true;
         public bool Pause { get; set; }
-        public bool End { get; set; }
+        public bool End { get; private set; }
 
         public async void Run(GameControl gameControl)
         {
@@ -22,11 +22,11 @@ namespace TD_WPF.Game.Utils
             while (Running)
             {
                 // get start time
-                float lastTime = timer.ElapsedMilliseconds;
+                long lastTime = timer.ElapsedMilliseconds;
                 // update all instances
                 Update(gameControl, lastTime);
                 // set time after update
-                float time = timer.ElapsedMilliseconds;
+                long time = timer.ElapsedMilliseconds;
                 // check if we are in time
                 if (time - lastTime > MaxLoopTime) continue;
                 // we are in time so we can render this frame
@@ -38,14 +38,14 @@ namespace TD_WPF.Game.Utils
             }
         }
 
-        private void Start(GameControl gameControl, float currentInterval)
+        private void Start(GameControl gameControl, long currentInterval)
         {
             foreach (var item in gameControl.GameCreator.Paths) item.Start(gameControl);
             foreach (var item in gameControl.GameCreator.Ground) item.Start(gameControl);
             gameControl.GameCreator.Waves?.Start(gameControl, currentInterval);
         }
 
-        private void Update(GameControl gameControl, float currentinterval)
+        private void Update(GameControl gameControl, long currentinterval)
         {
             foreach (var item in gameControl.GameCreator.Paths) item.Update(gameControl);
             foreach (var item in gameControl.GameCreator.Ground) item.Update(gameControl, currentinterval);

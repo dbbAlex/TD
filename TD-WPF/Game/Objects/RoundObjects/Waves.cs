@@ -4,24 +4,24 @@ namespace TD_WPF.Game.Objects.RoundObjects
 {
     public class Waves
     {
-        public Waves(float intervall)
+        public Waves(long interval)
         {
-            Intervall = intervall;
+            Interval = interval;
         }
 
-        private float Intervall { get; }
+        public long Interval { get; set; }
         public List<Wave> WaveList { get; } = new List<Wave>();
         private int WaveIndex { get; set; }
         private bool Active { get; set; }
 
-        public void Start(GameControl gameControl, float currentInterval)
+        public void Start(GameControl gameControl, long currentInterval)
         {
             WaveList[WaveIndex].Start(gameControl, currentInterval);
             WaveIndex++;
             Active = true;
         }
 
-        public void Update(GameControl gameControl, float currentInterval)
+        public void Update(GameControl gameControl, long currentInterval)
         {
             if (!Active) return;
             var wave = WaveList[WaveIndex - 1];
@@ -29,7 +29,7 @@ namespace TD_WPF.Game.Objects.RoundObjects
             {
                 wave.Update(gameControl, currentInterval);
             }
-            else if (WaveIndex < WaveList.Count && currentInterval - wave.LastInterval >= Intervall)
+            else if (WaveIndex < WaveList.Count && currentInterval - wave.LastInterval >= Interval)
             {
                 WaveList[WaveIndex].Start(gameControl, currentInterval);
                 WaveIndex++;

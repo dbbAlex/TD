@@ -5,20 +5,20 @@ namespace TD_WPF.Game.Objects.RoundObjects
 {
     public class Wave
     {
-        public Wave(float interval)
+        public Wave(long interval)
         {
             Interval = interval;
         }
 
-        private float Interval { get; }
-        public float LastInterval { get; set; }
-        public float BeforePauseInterval { get; set; }
+        public long Interval { get; set; }
+        public long LastInterval { get; private set; }
+        private long BeforePauseInterval { get; set; }
         public List<Enemy> Enemies { get; } = new List<Enemy>();
         private int EnemyIndex { get; set; }
         public bool Active { get; private set; }
-        public bool Pause { get; set; }
+        private bool Pause { get; set; }
 
-        public void Start(GameControl gameControl, float currentInterval)
+        public void Start(GameControl gameControl, long currentInterval)
         {
             Active = true;
             Enemies[EnemyIndex].Start(gameControl);
@@ -26,7 +26,7 @@ namespace TD_WPF.Game.Objects.RoundObjects
             LastInterval = currentInterval;
         }
 
-        public void Update(GameControl gameControl, float currentInterval)
+        public void Update(GameControl gameControl, long currentInterval)
         {
             if (!Active) return;
             var findAll = Enemies.FindAll(enemy => enemy.Active);
@@ -34,11 +34,9 @@ namespace TD_WPF.Game.Objects.RoundObjects
 
             if (gameControl.GameManager.Pause)
             {
-                if (!Pause)
-                {
-                    Pause = true;
-                    BeforePauseInterval = currentInterval - LastInterval;
-                }
+                if (Pause) return;
+                Pause = true;
+                BeforePauseInterval = currentInterval - LastInterval;
                 return;
             }
             if (Pause)

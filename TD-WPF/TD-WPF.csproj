@@ -69,6 +69,7 @@
     <Compile Include="Game\Objects\RoundObjects\Wave.cs" />
     <Compile Include="Game\Objects\RoundObjects\Waves.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Mark.cs" />
+    <Compile Include="Game\Save\SaveObject.cs" />
     <Compile Include="Game\Utils\ControlUtils.cs" />
     <Compile Include="Game\Utils\GameCreator.cs" />
     <Compile Include="Game\Utils\GameManager.cs" />
@@ -165,13 +166,21 @@
     <Resource Include="Grafik\Enemy\Enemy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Grafik\Items\Tower.png" />
-    <Content Include="Grafik\Map\End.png" />
-    <Content Include="Grafik\Map\Path.png" />
-    <Content Include="Grafik\Map\Remove.png" />
-    <Content Include="Grafik\Map\Spawn.png" />
-    <Content Include="Grafik\Shared\Ground.png" />
-    <Content Include="Grafik\Shot\Shot.png" />
+    <Resource Include="Grafik\Items\Tower.png" />
+    <Resource Include="Grafik\Map\End.png" />
+    <Resource Include="Grafik\Map\Path.png" />
+    <Resource Include="Grafik\Map\Remove.png" />
+    <Resource Include="Grafik\Map\Spawn.png" />
+    <Resource Include="Grafik\Menu\Add.png" />
+    <Resource Include="Grafik\Menu\Remove.png" />
+    <Resource Include="Grafik\Shared\Ground.png" />
+    <Resource Include="Grafik\Shot\Shot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Grafik\Menu\Done.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Grafik\Menu\Back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

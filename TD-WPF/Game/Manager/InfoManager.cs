@@ -18,14 +18,20 @@ namespace TD_WPF.Game.Manager
     {
         public static void UpdateHealth(GameControl gameControl)
         {
-            var label = (Label) gameControl.FindName(ControlUtils.HealthValue);
-            if (label != null) label.Content = gameControl.GameCreator.Health;
+            var control = gameControl.FindName(ControlUtils.HealthValue);
+            if(control != null && control is Label label)
+                label.Content = gameControl.GameCreator.Health;
+            else if (control != null && control is TextBox textBox)
+                textBox.Text = gameControl.GameCreator.Health.ToString();
         }
 
         public static void UpdateMoney(GameControl gameControl)
         {
-            var label = (Label) gameControl.FindName(ControlUtils.MoneyValue);
-            if (label != null) label.Content = gameControl.GameCreator.Money + " (฿)";
+            var control = gameControl.FindName(ControlUtils.MoneyValue);
+            if(control != null && control is Label label)
+                label.Content = gameControl.GameCreator.Money + " (฿)";
+            else if (control != null && control is TextBox textBox)
+                textBox.Text = gameControl.GameCreator.Money.ToString();
         }
 
         public static void UpdateObjectInfoPanelByControl(GameControl gameControl, Control control)
