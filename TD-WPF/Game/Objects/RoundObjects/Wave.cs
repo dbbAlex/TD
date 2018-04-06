@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Script.Serialization;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 
 namespace TD_WPF.Game.Objects.RoundObjects
@@ -10,12 +11,19 @@ namespace TD_WPF.Game.Objects.RoundObjects
             Interval = interval;
         }
 
+        public Wave(){}
+        
         public long Interval { get; set; }
+        [ScriptIgnore]
         public long LastInterval { get; private set; }
+        [ScriptIgnore]
         private long BeforePauseInterval { get; set; }
-        public List<Enemy> Enemies { get; } = new List<Enemy>();
+        public List<Enemy> Enemies { get; set; } = new List<Enemy>();
+        [ScriptIgnore]
         private int EnemyIndex { get; set; }
+        [ScriptIgnore]
         public bool Active { get; private set; }
+        [ScriptIgnore]
         private bool Pause { get; set; }
 
         public void Start(GameControl gameControl, long currentInterval)

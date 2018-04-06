@@ -6,14 +6,15 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" Background="Transparent">
     <Grid Name="MainGrid" MouseMove="MouseMoveOverCanvas">
-        <Grid.Background>
-            <ImageBrush ImageSource="/Grafik/General/grass.jpg" />
-        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.8*" />
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
-        <Canvas Name="Canvas" Grid.Column="0" Background="Transparent" MouseLeftButtonUp="MouseClickOnCanvas" />
+        <Canvas Name="Canvas" Grid.Column="0" MouseLeftButtonUp="MouseClickOnCanvas">
+            <Canvas.Background>
+                <ImageBrush ImageSource="/Grafik/General/grass.jpg" />
+            </Canvas.Background>
+        </Canvas>
         <Grid Name="ControlGrid" Grid.Column="1" Background="Black">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />

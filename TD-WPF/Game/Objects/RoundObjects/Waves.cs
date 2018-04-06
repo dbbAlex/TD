@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace TD_WPF.Game.Objects.RoundObjects
 {
@@ -8,10 +9,14 @@ namespace TD_WPF.Game.Objects.RoundObjects
         {
             Interval = interval;
         }
+        
+        public Waves(){}
 
         public long Interval { get; set; }
-        public List<Wave> WaveList { get; } = new List<Wave>();
+        public List<Wave> WaveList { get; set; } = new List<Wave>();
+        [ScriptIgnore]
         private int WaveIndex { get; set; }
+        [ScriptIgnore]
         private bool Active { get; set; }
 
         public void Start(GameControl gameControl, long currentInterval)

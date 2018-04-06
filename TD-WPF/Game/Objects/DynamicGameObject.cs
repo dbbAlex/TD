@@ -7,6 +7,8 @@
         {
             Speed = speed;
         }
+        
+        public DynamicGameObject(){}
 
         public double Speed { get; set; }
     }

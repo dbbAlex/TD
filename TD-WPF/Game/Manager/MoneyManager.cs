@@ -12,9 +12,9 @@ namespace TD_WPF.Game.Manager
             switch (updateSelection)
             {
                 case TowerUpdateSelection.Damage:
-                    if (tower.DamageUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
+                    if (tower.DamageUpdate < 2 && gameControl.GameCreator.Money >= Tower.UpdateSellMoney)
                     {
-                        gameControl.GameCreator.Money -= tower.UpdateSellMoney;
+                        gameControl.GameCreator.Money -= Tower.UpdateSellMoney;
                         tower.ShotDamage = Convert.ToInt32(Math.Ceiling(tower.ShotDamage * 1.35));
                         tower.DamageUpdate++;
                         InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
@@ -22,9 +22,9 @@ namespace TD_WPF.Game.Manager
 
                     break;
                 case TowerUpdateSelection.Range:
-                    if (tower.RangeUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
+                    if (tower.RangeUpdate < 2 && gameControl.GameCreator.Money >= Tower.UpdateSellMoney)
                     {
-                        gameControl.GameCreator.Money -= tower.UpdateSellMoney;
+                        gameControl.GameCreator.Money -= Tower.UpdateSellMoney;
                         tower.Range = Convert.ToSingle(tower.Range * 1.35);
                         tower.RangeUpdate++;
                         InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
@@ -77,12 +77,12 @@ namespace TD_WPF.Game.Manager
         {
             if (ground.Tower != null)
             {
-                gameControl.GameCreator.Money += ground.Tower.UpdateSellMoney;
+                gameControl.GameCreator.Money += Tower.UpdateSellMoney;
                 ground.Tower.Destroy(gameControl);
             }
             else
             {
-                gameControl.GameCreator.Money += ground.UpdateSellMoney;
+                gameControl.GameCreator.Money += Ground.UpdateSellMoney;
                 ground.Destroy(gameControl);
             }
 

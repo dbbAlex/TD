@@ -63,7 +63,7 @@ namespace TD_WPF.Game.Manager
                 var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
                 if (damageButton != null && tower.DamageUpdate < 2)
                 {
-                    damageButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
+                    damageButton.Content = "+35% (" + Tower.UpdateSellMoney + "฿)";
                     damageButton.Visibility = Visibility.Visible;
                 }
                 else if (damageButton != null)
@@ -73,7 +73,7 @@ namespace TD_WPF.Game.Manager
 
                 if (rangeButton != null && tower.RangeUpdate < 2)
                 {
-                    rangeButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
+                    rangeButton.Content = "+35% (" + Tower.UpdateSellMoney + "฿)";
                     rangeButton.Visibility = Visibility.Visible;
                 }
                 else if (rangeButton != null)
@@ -87,9 +87,9 @@ namespace TD_WPF.Game.Manager
             if (moneyButton != null)
             {
                 if (gameObject is Tower t)
-                    moneyButton.Content = "sell (" + t.UpdateSellMoney + "฿)";
+                    moneyButton.Content = "sell (" + Tower.UpdateSellMoney + "฿)";
                 if (gameObject is Ground ground)
-                    moneyButton.Content = "sell (" + ground.UpdateSellMoney + "฿)";
+                    moneyButton.Content = "sell (" + Ground.UpdateSellMoney + "฿)";
 
                 moneyButton.Visibility = Visibility.Visible;
             }

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Manager;
 using TD_WPF.Game.Objects;
@@ -14,12 +18,16 @@ using TD_WPF.Game.Objects.StaticGameObjects;
 using TD_WPF.Game.Save;
 using TD_WPF.Game.Utils;
 using TD_WPF.Menu;
+using TD_WPF.Properties;
+using Color = System.Windows.Media.Color;
+using Path = TD_WPF.Game.Objects.StaticGameObjects.Path;
+using Size = System.Windows.Size;
 
 namespace TD_WPF.Game
 {
     public partial class GameControl : UserControl
     {
-        public GameControl()
+        public GameControl() // Random Game
         {
             InitializeComponent();
             Loaded += Initialize;
@@ -27,12 +35,18 @@ namespace TD_WPF.Game
             IsRandom = true;
         }
 
-        public GameControl(SaveObject saveObject)
+        public GameControl(DbObject dbObject) : this() // Play Map
         {
-            InitializeComponent();
-            Loaded += Initialize;
-            SaveObject = saveObject;
+            DbObject = dbObject;
+            IsRandom = false;
+        }
+
+        public GameControl(DbObject dbObject, bool isModifying) : this() // Edit or Create Map
+        {
+            DbObject = dbObject;
             StartMode = false;
+            IsEditor = true;
+            IsRandom = false;
         }
 
         #region constants
@@ -53,53 +67,85 @@ namespace TD_WPF.Game
             LoadFromSaveObject();
         }
 
-        private SaveObject CreateOrUpdateSaveObject()
+        private DbObject CreateOrUpdateDbObject()
         {
-            if (SaveObject == null) SaveObject = new SaveObject();
+            if (DbObject == null)
+                DbObject = new DbObject
+                {
+                    SaveMetaData = new SaveMetaData(),
+                    SaveObject = new SaveObject()
+                };
 
             GameCreator.Paths.ForEach(path => path.Destroy(this));
-            SaveObject.Paths = GameCreator.Paths;
+            DbObject.SaveObject.Paths = GameCreator.Paths;
             GameCreator.Paths.ForEach(ground => ground.Destroy(this));
-            SaveObject.Ground = GameCreator.Ground;
-            // TODO: health and money is null
-            SaveObject.Health = GameCreator.Health;
-            SaveObject.Money = GameCreator.Money;
+            DbObject.SaveObject.Ground = GameCreator.Ground;
+            DbObject.SaveObject.Health = GameCreator.Health;
+            DbObject.SaveObject.Money = GameCreator.Money;
 
-            return SaveObject;
+            DbObject.SaveMetaData.Thumbnail = CreateThumbnailFromCanvas();
+
+            return DbObject;
+        }
+
+        private Bitmap CreateThumbnailFromCanvas()
+        {
+            var bmp = new Bitmap(Convert.ToInt32(Math.Ceiling(Canvas.ActualWidth)),
+                Convert.ToInt32(Math.Ceiling(Canvas.ActualHeight)));
+            var g = Graphics.FromImage(bmp);
+
+            // draw background
+            g.DrawImage(Resource.grass, 0, 0);
+
+
+            //Iterate through list and draw on bitmap
+            var lists = new List<List<Path>>() {new List<Path>(GameCreator.Ground), GameCreator.Paths};
+            foreach (var list in lists)
+            {
+                foreach (var item in list)
+                {
+                    var resizeImage = ImageUtil.ResizeImage(item.Image, Convert.ToInt32(Math.Ceiling(item.Width)),
+                        Convert.ToInt32(Math.Ceiling(item.Height)));
+                    g.DrawImage(resizeImage, Convert.ToInt32(item.X * item.Width),
+                        Convert.ToInt32(item.Y * item.Height));
+                }
+            }
+
+            return ImageUtil.ResizeImage(bmp, 200, 150);
         }
 
         private void LoadFromSaveObject()
         {
-            if (SaveObject == null) return;
+            if (DbObject == null) return;
 
-            GameCreator.Health = SaveObject.Health;
-            GameCreator.Money = SaveObject.Money;
+            GameCreator.Health = DbObject.SaveObject.Health;
+            GameCreator.Money = DbObject.SaveObject.Money;
             InfoManager.UpdateHealth(this);
             InfoManager.UpdateMoney(this);
 
-            if (SaveObject.Paths != null)
+            if (DbObject.SaveObject.Paths != null)
             {
                 GameCreator.Paths.Clear();
-                for (var i = 0; i < SaveObject.Paths.Count; i++)
+                for (var i = 0; i < DbObject.SaveObject.Paths.Count; i++)
                 {
-                    var path = SaveObject.Paths[i];
+                    var path = DbObject.SaveObject.Paths[i];
                     GameCreator.Paths.Add(path);
                     GameCreator.Paths[i].Start(this);
                 }
             }
 
-            if (SaveObject.Ground != null)
+            if (DbObject.SaveObject.Ground != null)
             {
                 GameCreator.Ground.Clear();
-                for (var i = 0; i < SaveObject.Ground.Count; i++)
+                for (var i = 0; i < DbObject.SaveObject.Ground.Count; i++)
                 {
-                    var ground = SaveObject.Ground[i];
+                    var ground = DbObject.SaveObject.Ground[i];
                     GameCreator.Ground.Add(ground);
                     GameCreator.Ground[i].Start(this);
                 }
             }
 
-            if (SaveObject.Waves != null && !IsEditor) GameCreator.Waves = SaveObject.Waves;
+            if (DbObject.SaveObject.Waves != null && !IsEditor) GameCreator.Waves = DbObject.SaveObject.Waves;
         }
 
         private const string MouseOver = "over";
@@ -108,7 +154,7 @@ namespace TD_WPF.Game
 
         #region attibutes
 
-        private SaveObject SaveObject { get; set; }
+        private DbObject DbObject { get; set; }
         public GameCreator GameCreator { get; private set; }
         public GameManager GameManager { get; set; }
         public Control SelectedControl { get; set; }
@@ -117,6 +163,7 @@ namespace TD_WPF.Game
         public List<Shot> Shots { get; } = new List<Shot>();
         public bool IsEditor { get; set; } = !false;
         private bool IsRandom { get; }
+        private bool IsModifying { get; set; } = false;
         private readonly bool StartMode = true;
 
         #endregion
@@ -230,18 +277,17 @@ namespace TD_WPF.Game
                         GameManager.Pause = !GameManager.Pause;
                     break;
                 case ControlUtils.Cancel:
-                    // TODO: go back to menu
                     if (StartMode && IsRandom)
                     {
                         ((ContentControl) Parent).Content = new GameMenu();
                     }
                     else if (StartMode && !IsRandom)
                     {
-                        // map chooser game 
+                        ((ContentControl) Parent).Content = new MapMenu(false);
                     }
                     else if (!StartMode && !IsEditor)
                     {
-                        // editor map chooser
+                        ((ContentControl) Parent).Content = new MapMenu(true);
                     }
                     else
                     {
@@ -252,7 +298,8 @@ namespace TD_WPF.Game
                 case ControlUtils.Next:
                     if (GameCreator.Paths.Count > 0 &&
                         GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() == typeof(Base))
-                        ((ContentControl) Parent).Content = new WaveCreatorControl(CreateOrUpdateSaveObject());
+                        ((ContentControl) Parent).Content =
+                            new WaveCreatorControl(CreateOrUpdateDbObject(), IsModifying);
                     break;
             }
         }

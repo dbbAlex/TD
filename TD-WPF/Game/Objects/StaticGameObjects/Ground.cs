@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Script.Serialization;
 using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
@@ -12,9 +13,13 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             Image = Resource.ground;
         }
+        
+        public Ground(){}
 
+        [ScriptIgnore]
         public Tower Tower { get; set; } = null;
-        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
+        [ScriptIgnore]
+        public static int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
 
         public void Update(GameControl gameControl, long currentInterval)
         {

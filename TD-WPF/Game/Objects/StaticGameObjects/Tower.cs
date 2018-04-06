@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Properties;
@@ -23,9 +24,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
         public int ShotDamage { get; set; } = Damage;
         public double Range { get; set; } = ShotRange;
-        public int DamageUpdate { get; set; } = 0;
-        public int RangeUpdate { get; set; } = 0;
-        public int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
+        public int DamageUpdate { get; set; }
+        public int RangeUpdate { get; set; }
+        public static int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
 
         private double ShotIntervall { get; } = 1000 * 0.7;
         private double ShotSpeed { get; } = 0.9;

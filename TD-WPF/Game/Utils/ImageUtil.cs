@@ -2,9 +2,9 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace TD_WPF.Tools
+namespace TD_WPF.Game.Utils
 {
-    internal class ImageTool
+    internal class ImageUtil
     {
         /// @Author mpen --> https://stackoverflow.com/questions/1922040/resize-an-image-c-sharp
         /// <summary>

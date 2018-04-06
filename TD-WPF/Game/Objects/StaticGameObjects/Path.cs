@@ -9,7 +9,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             Index = index;
             Image = Resource.path;
         }
+        
+        public Path(){}
 
-        public int Index { get; }
+        public int Index { get; set; }
     }
 }

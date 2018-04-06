@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -14,22 +15,21 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, Wave wave,
-            int money) :
-            base(x, y, width, height, speed)
+        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, int money) 
+            : base(x, y, width, height, speed)
         {
-            Wave = wave;
             Health = health;
             Money = money;
             Damage = damage;
             Image = Resource.enemy;
         }
+        
+        public Enemy(){}
 
         public int Health { get; set; }
         public int Money { get; set; }
         public int Damage { get; set; }
-        public Wave Wave { get; set; }
-        private int PathPosition { get; set; }
+        public int PathPosition { get; set; }
 
 
         public override void Start(GameControl gameControl)
