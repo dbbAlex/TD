@@ -84,6 +84,10 @@
     <Compile Include="Game\Objects\StaticGameObjects\Tower.cs" />
     <Compile Include="Game\Utils\GameUtils.cs" />
     <Compile Include="Game\WaveCreatorControl.xaml.cs" />
+    <Compile Include="Menu\EditorMenu.xaml.cs" />
+    <Compile Include="Menu\GameMenu.xaml.cs" />
+    <Compile Include="Menu\MainMenu.xaml.cs" />
+    <Compile Include="Menu\MapMenu.xaml.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -108,20 +112,12 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Menu\MenuMain.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Menu\MenuSpielStarten.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Page Include="Menu\EditorMenu.xaml" />
+    <Page Include="Menu\GameMenu.xaml" />
+    <Page Include="Menu\MainMenu.xaml" />
+    <Page Include="Menu\MapMenu.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Menu.cs" />
-    <Compile Include="Menu\MenuSpielStarten.xaml.cs">
-      <DependentUpon>MenuSpielStarten.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

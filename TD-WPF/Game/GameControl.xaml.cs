@@ -15,6 +15,7 @@ using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Game.Objects.StaticGameObjects;
 using TD_WPF.Game.Save;
 using TD_WPF.Game.Utils;
+using TD_WPF.Menu;
 
 namespace TD_WPF.Game
 {
@@ -24,6 +25,8 @@ namespace TD_WPF.Game
         {
             InitializeComponent();
             Loaded += Initialize;
+            IsEditor = false;
+            IsRandom = true;
         }
         
         public GameControl(SaveObject saveObject)
@@ -31,6 +34,7 @@ namespace TD_WPF.Game
             InitializeComponent();
             Loaded += Initialize;
             SaveObject = saveObject;
+            StartMode = false;
         }
 
         #region constants
@@ -119,6 +123,7 @@ namespace TD_WPF.Game
         public List<Shot> Shots { get; } = new List<Shot>();
         public bool IsEditor { get; set; } = !false;
         private bool IsRandom { get; set; } = false;
+        private bool StartMode = true;
 
         #endregion
 
@@ -232,6 +237,21 @@ namespace TD_WPF.Game
                     break;
                 case ControlUtils.Cancel:
                     // TODO: go back to menu
+                    if (StartMode && IsRandom)
+                        ((ContentControl) this.Parent).Content = new GameMenu();
+                    else if (StartMode && !IsRandom)
+                    {
+                        // map chooser game 
+                    }
+                    else if (!StartMode && !IsEditor)
+                    {
+                        // editor map chooser
+                    }
+                    else
+                    {
+                        ((ContentControl) this.Parent).Content = new EditorMenu();
+                    }
+
                     break;
                 case ControlUtils.Next:
                     if (GameCreator.Paths.Count > 0 &&
