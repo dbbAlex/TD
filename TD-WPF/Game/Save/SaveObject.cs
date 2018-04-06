@@ -6,7 +6,6 @@ namespace TD_WPF.Game.Save
 {
     public class SaveObject
     {
-        public string Identifier { get; set; } 
         public List<Path> Paths { get; set; }
         public List<Ground> Ground { get; set; }
         public Waves Waves { get; set; }

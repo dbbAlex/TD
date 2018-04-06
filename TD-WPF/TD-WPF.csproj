@@ -69,6 +69,7 @@
     <Compile Include="Game\Objects\RoundObjects\Wave.cs" />
     <Compile Include="Game\Objects\RoundObjects\Waves.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Mark.cs" />
+    <Compile Include="Game\Save\SaveMetaData.cs" />
     <Compile Include="Game\Save\SaveObject.cs" />
     <Compile Include="Game\Utils\ControlUtils.cs" />
     <Compile Include="Game\Utils\GameCreator.cs" />

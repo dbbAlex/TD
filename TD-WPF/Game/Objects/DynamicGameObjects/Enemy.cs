@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,21 +9,20 @@ using System.Windows.Shapes;
 using TD_WPF.Game.Manager;
 using TD_WPF.Game.Objects.RoundObjects;
 using TD_WPF.Properties;
-using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, Wave wave, int money) :
+        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, Wave wave,
+            int money) :
             base(x, y, width, height, speed)
         {
             Wave = wave;
             Health = health;
             Money = money;
             Damage = damage;
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.enemy),
-                Convert.ToInt32(width), Convert.ToInt32(height));
+            Image = Resource.enemy;
         }
 
         public int Health { get; set; }

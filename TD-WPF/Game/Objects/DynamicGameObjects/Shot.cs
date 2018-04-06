@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -8,7 +7,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TD_WPF.Game.Manager;
 using TD_WPF.Properties;
-using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
@@ -19,8 +17,7 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         {
             Damage = damage;
             Enemy = enemy;
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.shot),
-                Convert.ToInt32(width), Convert.ToInt32(height));
+            Image = Resource.shot;
         }
 
         public int Damage { get; }

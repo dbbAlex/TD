@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using TD_WPF.Game.Enumerations;
@@ -28,7 +26,7 @@ namespace TD_WPF.Game
             IsEditor = false;
             IsRandom = true;
         }
-        
+
         public GameControl(SaveObject saveObject)
         {
             InitializeComponent();
@@ -57,7 +55,7 @@ namespace TD_WPF.Game
 
         private SaveObject CreateOrUpdateSaveObject()
         {
-            if(SaveObject == null) SaveObject = new SaveObject();
+            if (SaveObject == null) SaveObject = new SaveObject();
 
             GameCreator.Paths.ForEach(path => path.Destroy(this));
             SaveObject.Paths = GameCreator.Paths;
@@ -66,7 +64,7 @@ namespace TD_WPF.Game
             // TODO: health and money is null
             SaveObject.Health = GameCreator.Health;
             SaveObject.Money = GameCreator.Money;
-            
+
             return SaveObject;
         }
 
@@ -101,13 +99,9 @@ namespace TD_WPF.Game
                 }
             }
 
-            if (SaveObject.Waves != null && !IsEditor)
-            {
-                GameCreator.Waves = SaveObject.Waves;
-            }
-
+            if (SaveObject.Waves != null && !IsEditor) GameCreator.Waves = SaveObject.Waves;
         }
-        
+
         private const string MouseOver = "over";
 
         #endregion
@@ -122,8 +116,8 @@ namespace TD_WPF.Game
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
         public bool IsEditor { get; set; } = !false;
-        private bool IsRandom { get; set; } = false;
-        private bool StartMode = true;
+        private bool IsRandom { get; }
+        private readonly bool StartMode = true;
 
         #endregion
 
@@ -161,8 +155,8 @@ namespace TD_WPF.Game
             var controls = IsEditor
                 ? ControlUtils.CreatEditorConrtols(this)
                 : ControlUtils.CreateGameControls(this);
-            int rows = Convert.ToInt32(Math.Ceiling(controls.Count / 2d));
-            int index = 0;
+            var rows = Convert.ToInt32(Math.Ceiling(controls.Count / 2d));
+            var index = 0;
 
             void AddControls()
             {
@@ -238,7 +232,9 @@ namespace TD_WPF.Game
                 case ControlUtils.Cancel:
                     // TODO: go back to menu
                     if (StartMode && IsRandom)
-                        ((ContentControl) this.Parent).Content = new GameMenu();
+                    {
+                        ((ContentControl) Parent).Content = new GameMenu();
+                    }
                     else if (StartMode && !IsRandom)
                     {
                         // map chooser game 
@@ -249,14 +245,14 @@ namespace TD_WPF.Game
                     }
                     else
                     {
-                        ((ContentControl) this.Parent).Content = new EditorMenu();
+                        ((ContentControl) Parent).Content = new EditorMenu();
                     }
 
                     break;
                 case ControlUtils.Next:
                     if (GameCreator.Paths.Count > 0 &&
                         GameCreator.Paths[GameCreator.Paths.Count - 1].GetType() == typeof(Base))
-                        ((ContentControl) this.Parent).Content = new WaveCreatorControl(CreateOrUpdateSaveObject());
+                        ((ContentControl) Parent).Content = new WaveCreatorControl(CreateOrUpdateSaveObject());
                     break;
             }
         }
@@ -299,18 +295,16 @@ namespace TD_WPF.Game
                 }
                 else if (SelectedControl.Name.Equals("Remove"))
                 {
-                    List<List<Path>> lists =
+                    var lists =
                         new List<List<Path>> {GameCreator.Paths, new List<Path>(GameCreator.Ground)};
                     foreach (var list in lists)
+                    foreach (var item in list)
                     {
-                        foreach (var item in list)
-                        {
-                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
-                                Color.FromArgb(150, 124, 252, 0),
-                                Hint);
-                            mark.Start(this);
-                            Marks.Add(mark);
-                        }
+                        var mark = new Mark(item.X, item.Y, item.Width, item.Height,
+                            Color.FromArgb(150, 124, 252, 0),
+                            Hint);
+                        mark.Start(this);
+                        Marks.Add(mark);
                     }
                 }
             }
@@ -318,7 +312,6 @@ namespace TD_WPF.Game
             {
                 if (GameCreator.Ground.Count <= 0) return;
                 if (SelectedControl.Name.Equals("Ground"))
-                {
                     foreach (var item in GameCreator.Ground)
                     {
                         var mark = new Mark(item.X, item.Y, item.Width, item.Height,
@@ -326,7 +319,6 @@ namespace TD_WPF.Game
                         mark.Start(this);
                         Marks.Add(mark);
                     }
-                }
 
                 if (SelectedControl.Name.Equals("Tower"))
                     foreach (var item in GameCreator.Ground)
@@ -497,17 +489,13 @@ namespace TD_WPF.Game
                 }
 
             if (info != null)
-            {
                 foreach (var item in GameCreator.Ground)
-                {
                     if (item.X == info.X && item.Y == info.Y)
                     {
                         InfoManager.UpdateObjectInfoPanelByGameObject(this,
                             item.Tower != null ? (GameObject) item.Tower : item);
                         SelectedObject = item;
                     }
-                }
-            }
 
             if (IsEditor && SelectedControl != null && isEmptySpace)
             {
@@ -552,20 +540,20 @@ namespace TD_WPF.Game
             {
                 if (SelectedControl.Name.Equals("Remove") && hint != null)
                 {
-                    Path path = GameCreator.Paths.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
-                    Ground ground = GameCreator.Ground.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
+                    var path = GameCreator.Paths.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
+                    var ground = GameCreator.Ground.FirstOrDefault(item => item.X == hint.X && item.Y == hint.Y);
 
                     if (path != null && ground == null)
                     {
                         var indexOf = GameCreator.Paths.IndexOf(path);
-                        for (int i = GameCreator.Paths.Count - 1; i >= indexOf; i--)
+                        for (var i = GameCreator.Paths.Count - 1; i >= indexOf; i--)
                         {
-                            Path item = GameCreator.Paths[i];
+                            var item = GameCreator.Paths[i];
                             item.Destroy(this);
                             GameCreator.Paths.Remove(item);
                         }
                     }
-                    else if (path == null & ground != null)
+                    else if ((path == null) & (ground != null))
                     {
                         ground.Destroy(this);
                         GameCreator.Ground.Remove(ground);

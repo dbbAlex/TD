@@ -39,12 +39,13 @@ namespace TD_WPF.Game.Objects.RoundObjects
                 BeforePauseInterval = currentInterval - LastInterval;
                 return;
             }
+
             if (Pause)
             {
                 LastInterval = currentInterval - BeforePauseInterval;
                 Pause = false;
             }
-            
+
             if (EnemyIndex < Enemies.Count && currentInterval - LastInterval >= Interval)
             {
                 Enemies[EnemyIndex].Start(gameControl);

@@ -22,11 +22,11 @@ namespace TD_WPF.Game.Utils
             while (Running)
             {
                 // get start time
-                long lastTime = timer.ElapsedMilliseconds;
+                var lastTime = timer.ElapsedMilliseconds;
                 // update all instances
                 Update(gameControl, lastTime);
                 // set time after update
-                long time = timer.ElapsedMilliseconds;
+                var time = timer.ElapsedMilliseconds;
                 // check if we are in time
                 if (time - lastTime > MaxLoopTime) continue;
                 // we are in time so we can render this frame

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -70,7 +69,7 @@ namespace TD_WPF.Game.Utils
                     Content = j == 0 ? i == 0 ? Health + ":" :
                         Money + ":" :
                         i == 0 ? gameControl.GameCreator.Health.ToString() :
-                        gameControl.GameCreator.Money.ToString() + " (฿)"
+                        gameControl.GameCreator.Money + " (฿)"
                 };
                 AddAndRegisterComponent(gameControl, label, i, j, grid);
             }
@@ -80,9 +79,9 @@ namespace TD_WPF.Game.Utils
 
         public static Grid CreateEditorInfoPanel(GameControl gameControl)
         {
-            Grid grid = new Grid{Name = InfoPanel};
+            var grid = new Grid {Name = InfoPanel};
             gameControl.RegisterName(grid.Name, grid);
-            
+
             for (var i = 0; i < 2; i++)
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
@@ -91,7 +90,6 @@ namespace TD_WPF.Game.Utils
 
             for (var i = 0; i < grid.RowDefinitions.Count; i++)
             for (var j = 0; j < grid.ColumnDefinitions.Count; j++)
-            {
                 if (j == 0)
                 {
                     var label = new Label
@@ -99,8 +97,7 @@ namespace TD_WPF.Game.Utils
                         Name = i == 0 ? Health : Money,
                         FontFamily = new FontFamily(Font),
                         Foreground = Brushes.White,
-                        Content = i == 0 ? Health + ":" :
-                            Money + ":" ,
+                        Content = i == 0 ? Health + ":" : Money + ":"
                     };
                     AddAndRegisterComponent(gameControl, label, i, j, grid);
                 }
@@ -118,8 +115,7 @@ namespace TD_WPF.Game.Utils
                     textBox.LostKeyboardFocus += gameControl.ControlLostKeyboardFocus;
                     AddAndRegisterComponent(gameControl, textBox, i, j, grid);
                 }
-            }
-            
+
             return grid;
         }
 
@@ -196,34 +192,35 @@ namespace TD_WPF.Game.Utils
 
         public static Grid CreateButtons(GameControl gameControl)
         {
-            Grid grid = new Grid{Name = ButtonGrid};
+            var grid = new Grid {Name = ButtonGrid};
 
-            for (int i = 0; i < 2; i++)
-                grid.ColumnDefinitions.Add(new ColumnDefinition{Width = new GridLength(0.5, GridUnitType.Star)});
+            for (var i = 0; i < 2; i++)
+                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
 
-            for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+            for (var i = 0; i < grid.ColumnDefinitions.Count; i++)
             {
-                Button button = new Button
+                var button = new Button
                 {
                     Name = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel,
                     FontFamily = new FontFamily(Font),
                     Foreground = Brushes.White,
                     Background = Brushes.Transparent,
-                    Content = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel,
+                    Content = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel
                 };
                 button.Click += gameControl.HandleButtonEvent;
                 AddAndRegisterComponent(gameControl, button, 0, i, grid);
             }
+
             return grid;
         }
 
         public static Grid CreateEditorButtons(GameControl gameControl)
         {
-            Grid grid = new Grid();
+            var grid = new Grid();
 
             return grid;
         }
-        
+
         private static List<ContentControl> CreateControls(List<string> folder, RoutedEventHandler handler,
             string group)
         {

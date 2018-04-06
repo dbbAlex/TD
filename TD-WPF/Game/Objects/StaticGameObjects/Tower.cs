@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Properties;
-using TD_WPF.Tools;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
 {
@@ -23,10 +16,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public Tower(double x, double y, double width, double height)
             : base(x, y, width, height)
         {
-            Image = ImageTool.ResizeImage(new Bitmap(Resource.tower),
-                Convert.ToInt32(width), Convert.ToInt32(height));
+            Image = Resource.tower;
         }
-        
+
 
         public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
         public int ShotDamage { get; set; } = Damage;
@@ -51,7 +43,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             if (!Active) return;
             base.Update(gameControl);
-            
+
             if (gameControl.GameManager.Pause)
             {
                 if (!Pause)
@@ -59,14 +51,16 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                     Pause = true;
                     BeforePauseInterval = currentInterval - LastInterval;
                 }
+
                 return;
             }
+
             if (Pause)
             {
                 LastInterval = currentInterval - BeforePauseInterval;
                 Pause = false;
             }
-            
+
             if (currentInterval - LastInterval >= ShotIntervall)
             {
                 var target = NextEnemy(ActiveEnemies(gameControl));

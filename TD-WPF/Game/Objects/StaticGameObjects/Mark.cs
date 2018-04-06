@@ -1,16 +1,13 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Interop;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Rectangle = System.Windows.Shapes.Rectangle;
+using System.Windows.Shapes;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
 {
     public class Mark : GameObject
     {
-        public Mark(double x, double y, double width, double height, Color color, string code) : base(x, y, width, height)
+        public Mark(double x, double y, double width, double height, Color color, string code) : base(x, y, width,
+            height)
         {
             Code = code;
             Color = color;

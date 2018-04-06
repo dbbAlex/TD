@@ -1,6 +1,5 @@
 ﻿using System;
 using TD_WPF.Game.Enumerations;
-using TD_WPF.Game.Objects;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Game.Objects.StaticGameObjects;
 
@@ -12,31 +11,34 @@ namespace TD_WPF.Game.Manager
         {
             switch (updateSelection)
             {
-                    case TowerUpdateSelection.Damage:
-                        if (tower.DamageUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
-                        {
-                            gameControl.GameCreator.Money -= tower.UpdateSellMoney;
-                            tower.ShotDamage = Convert.ToInt32(Math.Ceiling(tower.ShotDamage * 1.35));
-                            tower.DamageUpdate++;
-                            InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
-                        }
-                        break;
-                    case TowerUpdateSelection.Range:
-                        if (tower.RangeUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
-                        {
-                            gameControl.GameCreator.Money -= tower.UpdateSellMoney;
-                            tower.Range = Convert.ToSingle(tower.Range * 1.35);
-                            tower.RangeUpdate++;
-                            InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
-                        }
-                        break;
+                case TowerUpdateSelection.Damage:
+                    if (tower.DamageUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
+                    {
+                        gameControl.GameCreator.Money -= tower.UpdateSellMoney;
+                        tower.ShotDamage = Convert.ToInt32(Math.Ceiling(tower.ShotDamage * 1.35));
+                        tower.DamageUpdate++;
+                        InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
+                    }
+
+                    break;
+                case TowerUpdateSelection.Range:
+                    if (tower.RangeUpdate < 2 && gameControl.GameCreator.Money >= tower.UpdateSellMoney)
+                    {
+                        gameControl.GameCreator.Money -= tower.UpdateSellMoney;
+                        tower.Range = Convert.ToSingle(tower.Range * 1.35);
+                        tower.RangeUpdate++;
+                        InfoManager.UpdateObjectInfoPanelByGameObject(gameControl, tower);
+                    }
+
+                    break;
             }
+
             InfoManager.UpdateMoney(gameControl);
         }
 
         public static void BuildTower(Ground ground, string towerName, GameControl gameControl)
         {
-            if(gameControl.GameManager.Pause) return;
+            if (gameControl.GameManager.Pause) return;
             // TODO: add more Tower
             switch (towerName)
             {
@@ -83,7 +85,7 @@ namespace TD_WPF.Game.Manager
                 gameControl.GameCreator.Money += ground.UpdateSellMoney;
                 ground.Destroy(gameControl);
             }
-            
+
             InfoManager.UpdateMoney(gameControl);
             InfoManager.UpdateObjectInfoPanelByControl(gameControl, gameControl.SelectedControl);
             gameControl.RemoveHintMarks();
