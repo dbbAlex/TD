@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using TD_WPF.DataBase;
 
 namespace TD_WPF
 {
@@ -10,6 +11,12 @@ namespace TD_WPF
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += Initialize;
+        }
+
+        private void Initialize(object sender, RoutedEventArgs e)
+        {
+            DbManager.CreateDataBase();
         }
     }
 }
