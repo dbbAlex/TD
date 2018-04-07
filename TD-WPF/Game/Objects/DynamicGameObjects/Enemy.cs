@@ -21,7 +21,6 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
             Health = health;
             Money = money;
             Damage = damage;
-            Image = Resource.enemy;
         }
         
         public Enemy(){}
@@ -34,6 +33,8 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
+            if (Active) return;
+            Image = Resource.enemy;
             Shape = new Ellipse
             {
                 Name = GetType().Name,

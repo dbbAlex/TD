@@ -10,16 +10,20 @@
     <UserControl.Background>
         <ImageBrush ImageSource="/Grafik/General/grass.jpg" />
     </UserControl.Background>
-    <StackPanel Orientation="Vertical">
-        <Label Content="Edit Map" FontFamily="Bauhaus 93" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Edit Map" FontFamily="Bauhaus 93" HorizontalAlignment="Center" VerticalAlignment="Bottom"
                FontSize="100" Margin="0, 10, 0, 10" />
-        <ScrollViewer Background="Transparent" HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Disabled">
-            <StackPanel Name="MapPanel" Background="Transparent" />
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+            <StackPanel Name="MapPanel" Background="Transparent" HorizontalAlignment="Center"/>
         </ScrollViewer>
-        <tdWpf:CornerButton x:Name="Back" Content="Back" FontSize="50" HorizontalAlignment="Center"
+        <tdWpf:CornerButton Grid.Row="2" x:Name="Back" Content="Back" FontSize="50" HorizontalAlignment="Center"
                             Background="Transparent" BorderBrush="OrangeRed" Margin="0,0,0,35" FontFamily="Bauhaus 93"
                             CornerRadius="10" Style="{StaticResource RoundButton}" Padding="5,0,5,0"
                             Click="ControlClickHandler" />
-    </StackPanel>
+    </Grid>
 </UserControl>

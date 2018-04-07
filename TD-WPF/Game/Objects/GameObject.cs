@@ -45,6 +45,7 @@ namespace TD_WPF.Game.Objects
 
         public virtual void Start(GameControl gameControl)
         {
+            if (Active) return;
             Shape = new Rectangle
             {
                 Name = GetType().Name,

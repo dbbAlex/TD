@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Game.Objects.RoundObjects;
@@ -27,7 +28,7 @@ namespace TD_WPF.Game.Utils
             var height = fieldHeight / y;
 
             // get a random spawn 
-            paths.Add(new Spawn(random.Next(x), random.Next(y), width, height, 0));
+            paths.Add(new Path(random.Next(x), random.Next(y), width, height, 0, PathIdentifier.Spawn));
 
             // store current path object for further use
             GameObject current = paths[0];
@@ -43,16 +44,15 @@ namespace TD_WPF.Game.Utils
                     // restart generation
                     paths.Clear();
                     space.Clear();
-                    paths.Add(new Spawn(random.Next(x), random.Next(y), width, height, 0));
+                    paths.Add(new Path(random.Next(x), random.Next(y), width, height, 0, PathIdentifier.Spawn));
                     current = paths[0];
                     continue;
                 }
 
                 // get next possible path randomly
                 var index = random.Next(list.Count);
-                var next = paths.Count == maxPathObjects
-                    ? new Base(list[index].X, list[index].Y, width, height, list[index].Index)
-                    : list[index];
+                var next = list[index];
+                if (paths.Count == maxPathObjects) next.PathIdentifier = PathIdentifier.Base;
                 paths.Add(next);
 
                 // add other path to space
@@ -87,7 +87,8 @@ namespace TD_WPF.Game.Utils
                     continue;
 
                 randomIndex = random.Next(list.Count);
-                ground.Add(new Ground(list[randomIndex].X, list[randomIndex].Y, width, height, -1));
+                ground.Add(new Ground(list[randomIndex].X, list[randomIndex].Y, width, height, -1,
+                    PathIdentifier.Ground));
 
                 groundCount--;
             } while (groundCount != 0);
@@ -95,7 +96,7 @@ namespace TD_WPF.Game.Utils
             return ground;
         }
 
-        public static Waves GenerateRandomWaves(long intervalBetweenWaves, long intervalBetweenEnemies, Spawn spawn)
+        public static Waves GenerateRandomWaves(long intervalBetweenWaves, long intervalBetweenEnemies, Path spawn)
         {
             var random = new Random();
             var waves = new Waves(intervalBetweenWaves);
@@ -106,7 +107,7 @@ namespace TD_WPF.Game.Utils
             return waves;
         }
 
-        private static Wave GenerateRandomWave(long intervalBetweenEnemies, Spawn spawn)
+        private static Wave GenerateRandomWave(long intervalBetweenEnemies, GameObject spawn)
         {
             var random = new Random();
             var wave = new Wave(intervalBetweenEnemies);
@@ -127,19 +128,19 @@ namespace TD_WPF.Game.Utils
             var list = new List<Path>();
             //unten
             if (_y + 1 < y)
-                list.Add(new Path(_x, _y + 1, width, height, index));
+                list.Add(new Path(_x, _y + 1, width, height, index, PathIdentifier.Path));
 
             //oben
             if (_y - 1 >= 0)
-                list.Add(new Path(_x, _y - 1, width, height, index));
+                list.Add(new Path(_x, _y - 1, width, height, index, PathIdentifier.Path));
 
             //links
             if (_x - 1 >= 0)
-                list.Add(new Path(_x - 1, _y, width, height, index));
+                list.Add(new Path(_x - 1, _y, width, height, index, PathIdentifier.Path));
 
             //rechts
             if (_x + 1 < x)
-                list.Add(new Path(_x + 1, _y, width, height, index));
+                list.Add(new Path(_x + 1, _y, width, height, index, PathIdentifier.Path));
 
             return list;
         }

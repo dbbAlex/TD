@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Web.Script.Serialization;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using TD_WPF.Game.Enumerations;
 using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
@@ -9,13 +14,10 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public const string Name = "Ground";
         public const int Money = 5;
 
-        public Ground(double x, double y, double width, double height, int index) : base(x, y, width, height, index)
-        {
-            Image = Resource.ground;
-        }
-        
-        public Ground(){}
+        public Ground(double x, double y, double width, double height, int index, PathIdentifier pathIdentifier) : base(x, y, width, height, index, pathIdentifier){}
 
+        public Ground(){}
+        
         [ScriptIgnore]
         public Tower Tower { get; set; } = null;
         [ScriptIgnore]

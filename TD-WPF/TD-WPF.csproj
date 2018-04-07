@@ -62,6 +62,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataBase\DBManager.cs" />
+    <Compile Include="Game\Enumerations\PathIdentifier.cs" />
     <Compile Include="Game\Enumerations\TargetCondition.cs" />
     <Compile Include="Game\Enumerations\TowerUpdateSelection.cs" />
     <Compile Include="Game\GameControl.xaml.cs">
@@ -84,16 +85,15 @@
     <Compile Include="Game\Objects\DynamicGameObjects\Enemy.cs" />
     <Compile Include="Game\Objects\DynamicGameObjects\Shot.cs" />
     <Compile Include="Game\Objects\GameObject.cs" />
-    <Compile Include="Game\Objects\StaticGameObjects\Base.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Ground.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Path.cs" />
-    <Compile Include="Game\Objects\StaticGameObjects\Spawn.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Tower.cs" />
     <Compile Include="Game\Utils\GameUtils.cs" />
     <Compile Include="Game\Utils\ImageUtil.cs" />
     <Compile Include="Game\WaveCreatorControl.xaml.cs" />
     <Compile Include="Menu\EditorMenu.xaml.cs" />
     <Compile Include="Menu\GameMenu.xaml.cs" />
+    <Compile Include="Menu\Items\MapItem.xaml.cs" />
     <Compile Include="Menu\MainMenu.xaml.cs" />
     <Compile Include="Menu\MapMenu.xaml.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -121,6 +121,7 @@
     </Compile>
     <Page Include="Menu\EditorMenu.xaml" />
     <Page Include="Menu\GameMenu.xaml" />
+    <Page Include="Menu\Items\MapItem.xaml" />
     <Page Include="Menu\MainMenu.xaml" />
     <Page Include="Menu\MapMenu.xaml" />
   </ItemGroup>

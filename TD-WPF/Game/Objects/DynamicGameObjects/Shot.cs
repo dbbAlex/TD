@@ -25,6 +25,7 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
+            if(Active) return;
             Shape = new Ellipse
             {
                 Name = GetType().Name,

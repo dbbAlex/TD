@@ -56,8 +56,8 @@ namespace TD_WPF.Game.Manager
             UpdateObjectinfoPanelByType(gameControl, gameObject.GetType());
             if (gameObject is Tower tower)
             {
-                UpdateObjectInfoPanleNonConstValue(gameControl, tower.ShotDamage.ToString(),
-                    tower.Range.ToString(CultureInfo.InvariantCulture));
+                UpdateObjectInfoPanleNonConstValue(gameControl, Math.Round((double)tower.ShotDamage, 2).ToString(CultureInfo.InvariantCulture),
+                    Math.Round(tower.Range, 2).ToString(CultureInfo.InvariantCulture));
 
                 var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
                 var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
@@ -84,19 +84,23 @@ namespace TD_WPF.Game.Manager
 
             var moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
 
-            if (moneyButton != null)
+            if (moneyButton == null) return;
+            switch (gameObject)
             {
-                if (gameObject is Tower t)
+                case Tower t:
                     moneyButton.Content = "sell (" + Tower.UpdateSellMoney + "฿)";
-                if (gameObject is Ground ground)
+                    break;
+                case Ground ground:
                     moneyButton.Content = "sell (" + Ground.UpdateSellMoney + "฿)";
-
-                moneyButton.Visibility = Visibility.Visible;
+                    break;
             }
+
+            moneyButton.Visibility = Visibility.Visible;
         }
 
         private static void UpdateObjectinfoPanelByType(GameControl gameControl, Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
             var fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Static |
                                             BindingFlags.FlattenHierarchy)
                 .Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
@@ -105,10 +109,12 @@ namespace TD_WPF.Game.Manager
                 ? (string) fieldInfos.First(f => f.Name.Equals("Name")).GetRawConstantValue()
                 : "";
             var damageValue = fieldInfos.Exists(f => f.Name.Equals("Damage"))
-                ? fieldInfos.First(f => f.Name.Equals("Damage")).GetRawConstantValue().ToString()
+                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("Damage")).GetRawConstantValue()), 2)
+                    .ToString(CultureInfo.InvariantCulture)
                 : "";
             var rangeValue = fieldInfos.Exists(f => f.Name.Equals("ShotRange"))
-                ? fieldInfos.First(f => f.Name.Equals("ShotRange")).GetRawConstantValue().ToString()
+                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("ShotRange")).GetRawConstantValue()), 2)
+                    .ToString(CultureInfo.InvariantCulture)
                 : "";
             var moneyValue = fieldInfos.Exists(f => f.Name.Equals("Money"))
                 ? fieldInfos.First(f => f.Name.Equals("Money")).GetRawConstantValue().ToString()

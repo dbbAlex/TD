@@ -21,6 +21,7 @@ namespace TD_WPF.Game.Objects.RoundObjects
 
         public void Start(GameControl gameControl, long currentInterval)
         {
+            if (Active) return;
             WaveList[WaveIndex].Start(gameControl, currentInterval);
             WaveIndex++;
             Active = true;

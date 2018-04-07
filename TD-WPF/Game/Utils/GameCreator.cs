@@ -31,7 +31,7 @@ namespace TD_WPF.Game.Utils
 
         private void InitializeRandomWaves()
         {
-            Waves = GameUtils.GenerateRandomWaves(5000, 2000, (Spawn) Paths[0]);
+            Waves = GameUtils.GenerateRandomWaves(5000, 2000, Paths[0]);
         }
 
         #region attributes

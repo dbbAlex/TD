@@ -66,7 +66,7 @@ namespace TD_WPF.Game.Manager
             gameControl.GameCreator.Money -= Ground.Money;
             var ground = new Ground(x, y, gameControl.Canvas.ActualWidth / gameControl.GameCreator.X,
                 gameControl.Canvas.ActualHeight / gameControl.GameCreator.Y,
-                gameControl.GameCreator.Ground.Count);
+                gameControl.GameCreator.Ground.Count, PathIdentifier.Ground);
             ground.Start(gameControl);
             gameControl.GameCreator.Ground.Add(ground);
 

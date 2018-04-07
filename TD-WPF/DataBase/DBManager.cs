@@ -141,6 +141,18 @@ namespace TD_WPF.DataBase
             return list;
         }
 
+        public static void RemoveDbObject(DbObject dbObject)
+        {
+            var con = EstablishDbConnection();
+            var sql = $"DELETE FROM {DbTableName} WHERE {DbFiledGuid} = @{DbFiledGuid}";
+            var cmd = new SQLiteCommand(sql, con);
+            cmd.Parameters.Add($"{DbFiledGuid}", System.Data.DbType.String).Value =
+                dbObject.SaveMetaData.Guid.ToString();
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        
         private static SQLiteConnection EstablishDbConnection()
         {
             SQLiteConnection con = new SQLiteConnection($"Data Source = {DbName}; Version = 3;");

@@ -25,6 +25,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
 
         public override void Start(GameControl gameControl)
         {
+            if (Active) return;
             Shape = new Rectangle
             {
                 Name = GetType().Name,

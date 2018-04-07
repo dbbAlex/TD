@@ -11,7 +11,7 @@ namespace TD_WPF.Game.Manager
             if (gameControl.GameCreator.Health <= 0)
             {
                 gameControl.GameCreator.Health = 0;
-                gameControl.GameManager.EndGame(gameControl);
+                gameControl.GameManager.EndGame();
             }
 
             InfoManager.UpdateHealth(gameControl);

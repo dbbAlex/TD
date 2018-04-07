@@ -36,6 +36,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
 
         public void Start(GameControl gameControl, long currentinterval)
         {
+            if(Active) return;
             base.Start(gameControl);
             LastInterval = currentinterval;
         }
