@@ -89,15 +89,15 @@ namespace TD_WPF.DataBase
             var unixTimeModified =
                 Convert.ToInt32(dbObject.SaveMetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
-            string sql = $"UPADTE {DbTableName} SET {DbFieldSaveObject} = @{DbFieldSaveObject}, " +
+            string sql = $"UPDATE {DbTableName} SET {DbFieldSaveObject} = @{DbFieldSaveObject}, " +
                          $"{DbFieldThumbnail} = @{DbFieldThumbnail}, " +
-                         $"{DbFieldModified} = @{DbFieldModified}, " +
+                         $"{DbFieldModified} = @{DbFieldModified} " +
                          $"WHERE {DbFiledGuid} = @{DbFiledGuid}";
 
             var cmd = new SQLiteCommand(sql, con);
             cmd.Parameters.Add($"@{DbFieldSaveObject}", System.Data.DbType.String).Value = saveObjectJson;
             cmd.Parameters.Add($"@{DbFieldThumbnail}", System.Data.DbType.Binary).Value = thumbnailByteArray;
-            cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.String).Value = unixTimeModified;
+            cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.Int32).Value = unixTimeModified;
             cmd.Parameters.Add($"@{DbFiledGuid}", System.Data.DbType.String).Value =
                 dbObject.SaveMetaData.Guid.ToString();
 

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using TD_WPF.Game.Enumerations;
 
 namespace TD_WPF.Game.Utils
 {
@@ -201,11 +202,25 @@ namespace TD_WPF.Game.Utils
             {
                 var button = new Button
                 {
-                    Name = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel,
+                    Name = i == 0
+                        ?
+                        (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                         gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
+                        : (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                           gameControl.GameControlMode == GameControlMode.EditMap)
+                            ? Next
+                            : Cancel,
                     FontFamily = new FontFamily(Font),
                     Foreground = Brushes.White,
                     Background = Brushes.Transparent,
-                    Content = i == 0 ? gameControl.IsEditor ? Cancel : Pause : gameControl.IsEditor ? Next : Cancel
+                    Content = i == 0
+                        ?
+                        (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                         gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
+                        : (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                           gameControl.GameControlMode == GameControlMode.EditMap)
+                            ? Next
+                            : Cancel
                 };
                 button.Click += gameControl.HandleButtonEvent;
                 AddAndRegisterComponent(gameControl, button, 0, i, grid);

@@ -27,44 +27,92 @@ namespace TD_WPF.Game
 {
     public partial class GameControl : UserControl
     {
-        public GameControl() // Random Game
+        public GameControl(DbObject dbObject, GameControlMode gameControlMode)
         {
             InitializeComponent();
             Loaded += Initialize;
-            IsEditor = false;
-            IsRandom = true;
-        }
-
-        public GameControl(DbObject dbObject) : this() // Play Map
-        {
             DbObject = dbObject;
-            IsRandom = false;
-        }
-
-        public GameControl(DbObject dbObject, bool isModifying) : this() // Edit or Create Map
-        {
-            DbObject = dbObject;
-            StartMode = false;
-            IsEditor = true;
-            IsRandom = false;
+            GameControlMode = gameControlMode;
         }
 
         #region constants
 
         private const string Hint = "hint";
         private const string Info = "info";
+        private const string MouseOver = "over";
+
+        #endregion
+
+        #region attibutes
+
+        private DbObject DbObject { get; set; }
+        public GameCreator GameCreator { get; private set; }
+        public GameManager GameManager { get; set; }
+        public Control SelectedControl { get; set; }
+        private Ground SelectedObject { get; set; }
+        public List<Mark> Marks { get; } = new List<Mark>();
+        public List<Shot> Shots { get; } = new List<Shot>();
+        public GameControlMode GameControlMode { get; set; }
+
+        #endregion
 
         private void Initialize(object sender, RoutedEventArgs e)
         {
             GameCreator = new GameCreator(this);
             GameManager = new GameManager();
-            if (IsRandom)
-                GameCreator.InitilizeRandomGame();
+            switch (GameControlMode)
+            {
+                case GameControlMode.PlayRandom:
+                    GameCreator.InitilizeRandomGame();
+                    break;
+                case GameControlMode.PlayMap:
+                case GameControlMode.EditMap:
+                    LoadFromDbObject();
+                    break;
+            }
+
             CreateRowsForControls();
             CreateControls();
 
             Dispatcher.InvokeAsync(() => GameManager.Run(this));
-            LoadFromSaveObject();
+        }
+
+        #region DbObject methods
+
+        private void LoadFromDbObject()
+        {
+            if (DbObject == null) return;
+
+            GameCreator.Health = DbObject.SaveObject.Health;
+            GameCreator.Money = DbObject.SaveObject.Money;
+            InfoManager.UpdateHealth(this);
+            InfoManager.UpdateMoney(this);
+
+            if (DbObject.SaveObject.Paths != null)
+            {
+                GameCreator.Paths.Clear();
+                for (var i = 0; i < DbObject.SaveObject.Paths.Count; i++)
+                {
+                    var path = DbObject.SaveObject.Paths[i];
+                    GameCreator.Paths.Add(path);
+                    GameCreator.Paths[i].Start(this);
+                }
+            }
+
+            if (DbObject.SaveObject.Ground != null)
+            {
+                GameCreator.Ground.Clear();
+                for (var i = 0; i < DbObject.SaveObject.Ground.Count; i++)
+                {
+                    var ground = DbObject.SaveObject.Ground[i];
+                    GameCreator.Ground.Add(ground);
+                    GameCreator.Ground[i].Start(this);
+                }
+            }
+
+            if (DbObject.SaveObject.Waves == null || GameControlMode == GameControlMode.EditMap) return;
+            GameCreator.Waves = DbObject.SaveObject.Waves;
+            GameCreator.Waves.Start(this, GameManager.Timer.ElapsedMilliseconds);
         }
 
         private DbObject CreateOrUpdateDbObject()
@@ -114,59 +162,6 @@ namespace TD_WPF.Game
             return ImageUtil.ResizeImage(bmp, 200, 150);
         }
 
-        private void LoadFromSaveObject()
-        {
-            if (DbObject == null) return;
-
-            GameCreator.Health = DbObject.SaveObject.Health;
-            GameCreator.Money = DbObject.SaveObject.Money;
-            InfoManager.UpdateHealth(this);
-            InfoManager.UpdateMoney(this);
-
-            if (DbObject.SaveObject.Paths != null)
-            {
-                GameCreator.Paths.Clear();
-                for (var i = 0; i < DbObject.SaveObject.Paths.Count; i++)
-                {
-                    var path = DbObject.SaveObject.Paths[i];
-                    GameCreator.Paths.Add(path);
-                    GameCreator.Paths[i].Start(this);
-                }
-            }
-
-            if (DbObject.SaveObject.Ground != null)
-            {
-                GameCreator.Ground.Clear();
-                for (var i = 0; i < DbObject.SaveObject.Ground.Count; i++)
-                {
-                    var ground = DbObject.SaveObject.Ground[i];
-                    GameCreator.Ground.Add(ground);
-                    GameCreator.Ground[i].Start(this);
-                }
-            }
-
-            if (DbObject.SaveObject.Waves != null && !IsEditor) GameCreator.Waves = DbObject.SaveObject.Waves;
-            if (!IsEditor) GameCreator.Waves.Start(this, GameManager.Timer.ElapsedMilliseconds);
-        }
-
-        private const string MouseOver = "over";
-
-        #endregion
-
-        #region attibutes
-
-        private DbObject DbObject { get; set; }
-        public GameCreator GameCreator { get; private set; }
-        public GameManager GameManager { get; set; }
-        public Control SelectedControl { get; set; }
-        private Ground SelectedObject { get; set; }
-        public List<Mark> Marks { get; } = new List<Mark>();
-        public List<Shot> Shots { get; } = new List<Shot>();
-        public bool IsEditor { get; set; } = !false;
-        private bool IsRandom { get; }
-        private bool IsModifying { get; set; } = false;
-        private readonly bool StartMode = true;
-
         #endregion
 
         #region control creation
@@ -192,15 +187,16 @@ namespace TD_WPF.Game
         private void CreateControls()
         {
             // info panel
-            var infoPanel =
-                IsEditor ? ControlUtils.CreateEditorInfoPanel(this) : ControlUtils.CreateGameInfoPanel(this);
+            var infoPanel = GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap
+                ? ControlUtils.CreateEditorInfoPanel(this)
+                : ControlUtils.CreateGameInfoPanel(this);
             Grid.SetRow(infoPanel, 0);
             Grid.SetColumnSpan(infoPanel, ControlGrid.ColumnDefinitions.Count);
             ControlGrid.Children.Add(infoPanel);
             ControlGrid.RegisterName(infoPanel.Name, infoPanel);
 
             // controls
-            var controls = IsEditor
+            var controls = GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap
                 ? ControlUtils.CreatEditorConrtols(this)
                 : ControlUtils.CreateGameControls(this);
             var rows = Convert.ToInt32(Math.Ceiling(controls.Count / 2d));
@@ -222,9 +218,8 @@ namespace TD_WPF.Game
             AddControls();
             rows++;
 
-            if (!IsEditor)
+            if (GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap)
             {
-                // object info panel
                 var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
                 Grid.SetRow(objectInfoPanel, rows);
                 Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
@@ -278,21 +273,18 @@ namespace TD_WPF.Game
                         GameManager.Pause = !GameManager.Pause;
                     break;
                 case ControlUtils.Cancel:
-                    if (StartMode && IsRandom)
+                    switch (GameControlMode)
                     {
-                        ((ContentControl) Parent).Content = new GameMenu();
-                    }
-                    else if (StartMode && !IsRandom)
-                    {
-                        ((ContentControl) Parent).Content = new MapMenu(false);
-                    }
-                    else if (!StartMode && !IsEditor)
-                    {
-                        ((ContentControl) Parent).Content = new MapMenu(true);
-                    }
-                    else
-                    {
-                        ((ContentControl) Parent).Content = new EditorMenu();
+                        case GameControlMode.CreateMap:
+                            ((ContentControl) Parent).Content = new EditorMenu();
+                            break;
+                        case GameControlMode.PlayRandom:
+                            ((ContentControl) Parent).Content = new GameMenu();
+                            break;
+                        case GameControlMode.EditMap:
+                        case GameControlMode.PlayMap:
+                            ((ContentControl) Parent).Content = new MapMenu(GameControlMode);
+                            break;
                     }
 
                     GameManager.EndLoop();
@@ -301,7 +293,7 @@ namespace TD_WPF.Game
                     if (GameCreator.Paths.Count > 0 &&
                         GameCreator.Paths[GameCreator.Paths.Count - 1].PathIdentifier == PathIdentifier.Base)
                         ((ContentControl) Parent).Content =
-                            new WaveCreatorControl(CreateOrUpdateDbObject(), IsModifying);
+                            new WaveCreatorControl(CreateOrUpdateDbObject(), GameControlMode);
                     GameManager.EndLoop();
                     break;
             }
@@ -321,7 +313,7 @@ namespace TD_WPF.Game
 
         public void CreateHintMarks()
         {
-            if (IsEditor)
+            if (GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap)
             {
                 if (SelectedControl == null) return;
                 if ((SelectedControl.Name.Equals("Path") || SelectedControl.Name.Equals("End")) &&
@@ -438,13 +430,11 @@ namespace TD_WPF.Game
 
         private void MouseMoveOverCanvas(object sender, MouseEventArgs e)
         {
-            if (Canvas.IsMouseOver && (IsEditor && SelectedControl == null || IsEditor && SelectedControl != null
-                                                                                       && SelectedControl.Name.Equals(
-                                                                                           "Ground") ||
-                                       IsEditor && SelectedControl != null
-                                                && SelectedControl.Name.Equals("Spawn") && GameCreator.Paths.Count == 0
-                                       || !IsEditor && SelectedControl != null &&
-                                       SelectedControl.Name.Equals("Ground")))
+            if (Canvas.IsMouseOver &&
+                ((GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap)
+                 && SelectedControl != null && SelectedControl.Name.Equals("Spawn") && GameCreator.Paths.Count == 0)
+                || (SelectedControl != null && SelectedControl.Name.Equals("Ground"))
+                || SelectedControl == null)
             {
                 var p = e.GetPosition(Canvas);
                 var x = Math.Floor(p.X / (Canvas.ActualWidth / GameCreator.X));
@@ -531,11 +521,9 @@ namespace TD_WPF.Game
                         break;
                     }
 
-                    if (item.Code.Equals(Info))
-                    {
-                        info = item;
-                        break;
-                    }
+                    if (!item.Code.Equals(Info)) continue;
+                    info = item;
+                    break;
                 }
 
             if (info != null)
@@ -547,7 +535,8 @@ namespace TD_WPF.Game
                         SelectedObject = item;
                     }
 
-            if (IsEditor && SelectedControl != null && isEmptySpace)
+            if ((GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap) &&
+                SelectedControl != null && isEmptySpace)
             {
                 if (SelectedControl.Name.Equals("Path") && GameCreator.Paths.Count > 0
                                                         && GameCreator.Paths[GameCreator.Paths.Count - 1]
@@ -588,7 +577,8 @@ namespace TD_WPF.Game
                     GameCreator.Ground.Add(ground);
                 }
             }
-            else if (IsEditor && SelectedControl != null && !isEmptySpace)
+            else if ((GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap) &&
+                     SelectedControl != null && !isEmptySpace)
             {
                 if (SelectedControl.Name.Equals("Remove") && hint != null)
                 {
@@ -612,7 +602,7 @@ namespace TD_WPF.Game
                     }
                 }
             }
-            else if (!IsEditor && SelectedControl != null)
+            else if ((GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap) && SelectedControl != null)
             {
                 if (SelectedControl.Name.Equals("Ground") && isEmptySpace)
                 {
