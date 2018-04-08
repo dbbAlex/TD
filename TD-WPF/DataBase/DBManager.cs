@@ -49,15 +49,15 @@ namespace TD_WPF.DataBase
             var con = EstablishDbConnection();
 
             var serializer = new JavaScriptSerializer();
-            var saveObjectJson = serializer.Serialize(dbObject.SaveObject);
+            var saveObjectJson = serializer.Serialize(dbObject.GameData);
 
             var converter = new ImageConverter();
-            var thumbnailByteArray = converter.ConvertTo(dbObject.SaveMetaData.Thumbnail, typeof(byte[]));
+            var thumbnailByteArray = converter.ConvertTo(dbObject.MetaData.Thumbnail, typeof(byte[]));
 
             var unixTimeCreated =
-                Convert.ToInt32(dbObject.SaveMetaData.CreationDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                Convert.ToInt32(dbObject.MetaData.CreationDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
             var unixTimeModified =
-                Convert.ToInt32(dbObject.SaveMetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                Convert.ToInt32(dbObject.MetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
             string sql = $"INSERT INTO {DbTableName}({DbFieldSaveObject}, {DbFieldThumbnail}, {DbFieldCreated}, " +
                          $"{DbFieldModified}, {DbFiledGuid}) " +
@@ -70,7 +70,7 @@ namespace TD_WPF.DataBase
             cmd.Parameters.Add($"@{DbFieldCreated}", System.Data.DbType.Int32).Value = unixTimeCreated;
             cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.Int32).Value = unixTimeModified;
             cmd.Parameters.Add($"@{DbFiledGuid}", System.Data.DbType.String).Value =
-                dbObject.SaveMetaData.Guid.ToString();
+                dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
             con.Close();
@@ -81,13 +81,13 @@ namespace TD_WPF.DataBase
             var con = EstablishDbConnection();
 
             var serializer = new JavaScriptSerializer();
-            var saveObjectJson = serializer.Serialize(dbObject.SaveObject);
+            var saveObjectJson = serializer.Serialize(dbObject.GameData);
 
             var converter = new ImageConverter();
-            var thumbnailByteArray = converter.ConvertTo(dbObject.SaveMetaData.Thumbnail, typeof(byte[]));
+            var thumbnailByteArray = converter.ConvertTo(dbObject.MetaData.Thumbnail, typeof(byte[]));
 
             var unixTimeModified =
-                Convert.ToInt32(dbObject.SaveMetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                Convert.ToInt32(dbObject.MetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
             string sql = $"UPDATE {DbTableName} SET {DbFieldSaveObject} = @{DbFieldSaveObject}, " +
                          $"{DbFieldThumbnail} = @{DbFieldThumbnail}, " +
@@ -99,7 +99,7 @@ namespace TD_WPF.DataBase
             cmd.Parameters.Add($"@{DbFieldThumbnail}", System.Data.DbType.Binary).Value = thumbnailByteArray;
             cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.Int32).Value = unixTimeModified;
             cmd.Parameters.Add($"@{DbFiledGuid}", System.Data.DbType.String).Value =
-                dbObject.SaveMetaData.Guid.ToString();
+                dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
             con.Close();
@@ -117,9 +117,9 @@ namespace TD_WPF.DataBase
             while (sqLiteDataReader.Read())
             {
                 var dbObject = new DbObject();
-                var saveMetaData = new SaveMetaData();
+                var saveMetaData = new MetaData();
                 var saveObject =
-                    javaScriptSerializer.Deserialize<SaveObject>((string) sqLiteDataReader[DbFieldSaveObject]);
+                    javaScriptSerializer.Deserialize<GameData>((string) sqLiteDataReader[DbFieldSaveObject]);
                 saveMetaData.CreationDate =
                     new DateTime(1970, 1, 1).AddSeconds(int.Parse(sqLiteDataReader[DbFieldCreated].ToString()));
                 saveMetaData.ModifiedDate =
@@ -131,8 +131,8 @@ namespace TD_WPF.DataBase
                     saveMetaData.Thumbnail = new Bitmap(ms);
                 }
 
-                dbObject.SaveObject = saveObject;
-                dbObject.SaveMetaData = saveMetaData;
+                dbObject.GameData = saveObject;
+                dbObject.MetaData = saveMetaData;
                 list.Add(dbObject);
             }
             
@@ -147,7 +147,7 @@ namespace TD_WPF.DataBase
             var sql = $"DELETE FROM {DbTableName} WHERE {DbFiledGuid} = @{DbFiledGuid}";
             var cmd = new SQLiteCommand(sql, con);
             cmd.Parameters.Add($"{DbFiledGuid}", System.Data.DbType.String).Value =
-                dbObject.SaveMetaData.Guid.ToString();
+                dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
             con.Close();

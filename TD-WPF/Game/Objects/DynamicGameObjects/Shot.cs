@@ -83,13 +83,11 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
             Canvas.SetLeft(Shape, X * Width + Width / 3 / 2);
             Canvas.SetTop(Shape, Y * Height + Height / 3 / 2);
 
-            // check for collision TODO: maybe chek collision with other enemies
+            // TODO: maybe chek collision with other enemies
             var intersectionDetail = Shape.RenderedGeometry.FillContainsWithDetail(Enemy.Shape.RenderedGeometry);
-            if (intersectionDetail == IntersectionDetail.Intersects)
-            {
-                DamageManager.ManageDamageFromShot(this, Enemy, gameControl);
-                Destroy(gameControl);
-            }
+            if (intersectionDetail != IntersectionDetail.Intersects) return;
+            DamageManager.ManageDamageFromShot(this, Enemy, gameControl);
+            Destroy(gameControl);
         }
     }
 }

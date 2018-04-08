@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Script.Serialization;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
@@ -11,8 +12,8 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
     {
         public const string Name = "Tower";
         public const int Money = 10;
-        public const int Damage = 5;
-        public const double ShotRange = 2;
+        private const int Damage = 5;
+        private const double ShotRange = 2;
 
         public Tower(double x, double y, double width, double height)
             : base(x, y, width, height)
@@ -21,7 +22,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         }
 
 
-        public TargetCondition Condition { get; set; } = TargetCondition.Nearest;
+        public TargetCondition Condition { get; set; } = TargetCondition.Closest;
         public int ShotDamage { get; set; } = Damage;
         public double Range { get; set; } = ShotRange;
         public int DamageUpdate { get; set; }
@@ -48,12 +49,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
 
             if (gameControl.GameManager.Pause)
             {
-                if (!Pause)
-                {
-                    Pause = true;
-                    BeforePauseInterval = currentInterval - LastInterval;
-                }
-
+                if (Pause) return;
+                Pause = true;
+                BeforePauseInterval = currentInterval - LastInterval;
                 return;
             }
 
@@ -63,15 +61,13 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                 Pause = false;
             }
 
-            if (currentInterval - LastInterval >= ShotIntervall)
-            {
-                var target = NextEnemy(ActiveEnemies(gameControl));
-                if (target == null) return;
-                var shot = new Shot(X, Y, Width, Height, ShotSpeed, ShotDamage, target);
-                shot.Start(gameControl);
-                gameControl.Shots.Add(shot);
-                LastInterval = currentInterval;
-            }
+            if (!(currentInterval - LastInterval >= ShotIntervall)) return;
+            var target = NextEnemy(ActiveEnemies(gameControl));
+            if (target == null) return;
+            var shot = new Shot(X, Y, Width, Height, ShotSpeed, ShotDamage, target);
+            shot.Start(gameControl);
+            gameControl.Shots.Add(shot);
+            LastInterval = currentInterval;
         }
 
         public override void Destroy(GameControl gameControl)
@@ -80,13 +76,13 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             gameControl.GameCreator.Ground.Find(g => g.Tower == this).Tower = null;
         }
 
-        private Enemy NextEnemy(List<Enemy> enemies)
+        private Enemy NextEnemy(IEnumerable<Enemy> enemies)
         {
             Enemy current = null;
             var property = 0d;
             switch (Condition)
             {
-                case TargetCondition.Nearest:
+                case TargetCondition.Closest:
                     foreach (var enemy in enemies)
                     {
                         var distance = DistanceToObject(enemy);
@@ -114,12 +110,24 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                         }
 
                     break;
+                case TargetCondition.Farthest:
+                    break;
+                case TargetCondition.Wakest:
+                    break;
+                case TargetCondition.Unhealthiest:
+                    break;
+                case TargetCondition.Fastest:
+                    break;
+                case TargetCondition.Slowest:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return current;
         }
 
-        private List<Enemy> ActiveEnemies(GameControl gameControl)
+        private IEnumerable<Enemy> ActiveEnemies(GameControl gameControl)
         {
             var enemies = new List<Enemy>();
 
@@ -130,14 +138,9 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             return enemies;
         }
 
-        private List<Enemy> EnemiesInRange(List<Enemy> enemies)
+        private IEnumerable<Enemy> EnemiesInRange(IEnumerable<Enemy> enemies)
         {
-            var inRange = new List<Enemy>();
-            foreach (var enemy in enemies)
-                if (DistanceToObject(enemy) <= Range * Width)
-                    inRange.Add(enemy);
-
-            return inRange;
+            return enemies.Where(enemy => DistanceToObject(enemy) <= Range * Width).ToList();
         }
 
         private double DistanceToObject(GameObject gameObject)

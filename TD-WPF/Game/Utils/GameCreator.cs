@@ -36,14 +36,10 @@ namespace TD_WPF.Game.Utils
 
         #region attributes
 
-        // base and spawn will be stored in paths too
-        public List<Path> Paths { get; private set; } = new List<Path>();
-
-        // we dont need towers because we will get them by iterationg the ground which referes to the tower
-        public List<Ground> Ground { get; private set; } = new List<Ground>();
-
-        public Waves Waves { get; set; }
         private GameControl GameControl { get; }
+        public Waves Waves { get; set; }
+        public List<Path> Paths { get; private set; } = new List<Path>();
+        public List<Ground> Ground { get; private set; } = new List<Ground>();
         public int X { get; set; } = 20;
         public int Y { get; set; } = 15;
         public int Health { get; set; } = 100;

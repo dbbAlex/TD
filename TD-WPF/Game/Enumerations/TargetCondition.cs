@@ -2,8 +2,13 @@
 {
     public enum TargetCondition
     {
-        Nearest,
+        Closest,
+        Farthest,
         Strongest,
-        Healthiest
+        Wakest,
+        Healthiest,
+        Unhealthiest,
+        Fastest,
+        Slowest
     }
 }

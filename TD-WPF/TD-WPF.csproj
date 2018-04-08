@@ -62,6 +62,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataBase\DBManager.cs" />
+    <Compile Include="DataBase\Save\DbObject.cs" />
+    <Compile Include="DataBase\Save\GameData.cs" />
+    <Compile Include="DataBase\Save\MetaData.cs" />
     <Compile Include="Game\Enumerations\GameControlMode.cs" />
     <Compile Include="Game\Enumerations\PathIdentifier.cs" />
     <Compile Include="Game\Enumerations\TargetCondition.cs" />
@@ -73,13 +76,9 @@
     <Compile Include="Game\Manager\GameManager.cs" />
     <Compile Include="Game\Manager\InfoManager.cs" />
     <Compile Include="Game\Manager\MoneyManager.cs" />
-    <Compile Include="Game\Manager\ObjectInfoManager.cs" />
     <Compile Include="Game\Objects\RoundObjects\Wave.cs" />
     <Compile Include="Game\Objects\RoundObjects\Waves.cs" />
     <Compile Include="Game\Objects\StaticGameObjects\Mark.cs" />
-    <Compile Include="Game\Save\DbObject.cs" />
-    <Compile Include="Game\Save\SaveMetaData.cs" />
-    <Compile Include="Game\Save\SaveObject.cs" />
     <Compile Include="Game\Utils\ControlUtils.cs" />
     <Compile Include="Game\Utils\GameCreator.cs" />
     <Compile Include="Game\Objects\DynamicGameObject.cs" />

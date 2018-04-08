@@ -83,35 +83,35 @@ namespace TD_WPF.Game
         {
             if (DbObject == null) return;
 
-            GameCreator.Health = DbObject.SaveObject.Health;
-            GameCreator.Money = DbObject.SaveObject.Money;
+            GameCreator.Health = DbObject.GameData.Health;
+            GameCreator.Money = DbObject.GameData.Money;
             InfoManager.UpdateHealth(this);
             InfoManager.UpdateMoney(this);
 
-            if (DbObject.SaveObject.Paths != null)
+            if (DbObject.GameData.Paths != null)
             {
                 GameCreator.Paths.Clear();
-                for (var i = 0; i < DbObject.SaveObject.Paths.Count; i++)
+                for (var i = 0; i < DbObject.GameData.Paths.Count; i++)
                 {
-                    var path = DbObject.SaveObject.Paths[i];
+                    var path = DbObject.GameData.Paths[i];
                     GameCreator.Paths.Add(path);
                     GameCreator.Paths[i].Start(this);
                 }
             }
 
-            if (DbObject.SaveObject.Ground != null)
+            if (DbObject.GameData.Ground != null)
             {
                 GameCreator.Ground.Clear();
-                for (var i = 0; i < DbObject.SaveObject.Ground.Count; i++)
+                for (var i = 0; i < DbObject.GameData.Ground.Count; i++)
                 {
-                    var ground = DbObject.SaveObject.Ground[i];
+                    var ground = DbObject.GameData.Ground[i];
                     GameCreator.Ground.Add(ground);
                     GameCreator.Ground[i].Start(this);
                 }
             }
 
-            if (DbObject.SaveObject.Waves == null || GameControlMode == GameControlMode.EditMap) return;
-            GameCreator.Waves = DbObject.SaveObject.Waves;
+            if (DbObject.GameData.Waves == null || GameControlMode == GameControlMode.EditMap) return;
+            GameCreator.Waves = DbObject.GameData.Waves;
             GameCreator.Waves.Start(this, GameManager.Timer.ElapsedMilliseconds);
         }
 
@@ -120,18 +120,18 @@ namespace TD_WPF.Game
             if (DbObject == null)
                 DbObject = new DbObject
                 {
-                    SaveMetaData = new SaveMetaData(),
-                    SaveObject = new SaveObject()
+                    MetaData = new MetaData(),
+                    GameData = new GameData()
                 };
 
             GameCreator.Paths.ForEach(path => path.Destroy(this));
-            DbObject.SaveObject.Paths = GameCreator.Paths;
+            DbObject.GameData.Paths = GameCreator.Paths;
             GameCreator.Paths.ForEach(ground => ground.Destroy(this));
-            DbObject.SaveObject.Ground = GameCreator.Ground;
-            DbObject.SaveObject.Health = GameCreator.Health;
-            DbObject.SaveObject.Money = GameCreator.Money;
+            DbObject.GameData.Ground = GameCreator.Ground;
+            DbObject.GameData.Health = GameCreator.Health;
+            DbObject.GameData.Money = GameCreator.Money;
 
-            DbObject.SaveMetaData.Thumbnail = CreateThumbnailFromCanvas();
+            DbObject.MetaData.Thumbnail = CreateThumbnailFromCanvas();
 
             return DbObject;
         }
@@ -196,9 +196,7 @@ namespace TD_WPF.Game
             ControlGrid.RegisterName(infoPanel.Name, infoPanel);
 
             // controls
-            var controls = GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap
-                ? ControlUtils.CreatEditorConrtols(this)
-                : ControlUtils.CreateGameControls(this);
+            var controls = ControlUtils.CreateControls(this);
             var rows = Convert.ToInt32(Math.Ceiling(controls.Count / 2d));
             var index = 0;
 

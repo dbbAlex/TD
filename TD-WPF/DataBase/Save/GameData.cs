@@ -4,7 +4,7 @@ using TD_WPF.Game.Objects.StaticGameObjects;
 
 namespace TD_WPF.Game.Save
 {
-    public class SaveObject
+    public class GameData
     {
         public List<Path> Paths { get; set; }
         public List<Ground> Ground { get; set; }

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:tdWpf="clr-namespace:TD_WPF"
              mc:Ignorable="d">
     <Grid>
         <Grid.Background>
@@ -42,7 +43,8 @@
                    HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" FontSize="25px" FontFamily="Bauhaus 93"
                    Margin="0 5 0 5" />
 
-        <GroupBox Grid.Column="4" Grid.ColumnSpan="9" Grid.Row="1" Grid.RowSpan="2" BorderThickness="1">
+        <GroupBox Grid.Column="4" Grid.ColumnSpan="9" Grid.Row="1" Grid.RowSpan="2" BorderThickness="1"
+                  BorderBrush="OrangeRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -64,7 +66,8 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="8" BorderThickness="1">
+        <GroupBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="8" BorderThickness="1"
+                  BorderBrush="OrangeRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -81,22 +84,25 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="7"
+                              VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
                               Background="Transparent" Margin="0 10 0 0">
                     <StackPanel Name="WavePanel" Background="Transparent" />
                 </ScrollViewer>
-                <Button Name="AddWave" Grid.Column="0" Grid.Row="7" Click="ControlClick">
-                    <Button.Background>
+                <tdWpf:CornerButton Grid.Column="0" Grid.Row="7" x:Name="AddWave" BorderBrush="OrangeRed"
+                                    CornerRadius="10" Style="{StaticResource RoundButton}" Click="ControlClick">
+                    <tdWpf:CornerButton.Background>
                         <ImageBrush ImageSource="/Grafik/Menu/Add.png" />
-                    </Button.Background>
-                </Button>
-                <Button Name="RemoveWave" Grid.Column="1" Grid.Row="7" Click="ControlClick">
-                    <Button.Background>
+                    </tdWpf:CornerButton.Background>
+                </tdWpf:CornerButton>
+                <tdWpf:CornerButton Grid.Column="1" Grid.Row="7" x:Name="RemoveWave" BorderBrush="OrangeRed"
+                                    CornerRadius="10" Style="{StaticResource RoundButton}" Click="ControlClick">
+                    <tdWpf:CornerButton.Background>
                         <ImageBrush ImageSource="/Grafik/Menu/Remove.png" />
-                    </Button.Background>
-                </Button>
+                    </tdWpf:CornerButton.Background>
+                </tdWpf:CornerButton>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="4" Grid.ColumnSpan="9" Grid.Row="8">
+        <GroupBox Grid.Column="4" Grid.ColumnSpan="9" Grid.Row="8" BorderThickness="1" BorderBrush="OrangeRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -109,20 +115,21 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Column="0" Grid.ColumnSpan="8" HorizontalScrollBarVisibility="Visible"
-                              VerticalScrollBarVisibility="Hidden" Background="Transparent" BorderThickness="1"
-                              Margin="0 5 0 0">
+                <ScrollViewer Grid.Column="0" Grid.ColumnSpan="8" HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Hidden" Background="Transparent" Margin="0 5 0 0">
                     <StackPanel Name="EnemyPanel" Background="Transparent" Orientation="Horizontal" />
                 </ScrollViewer>
-                <Button Name="AddEnemy" Grid.Column="8" Click="ControlClick" Margin="0 5 0 0">
-                    <Button.Background>
+                <tdWpf:CornerButton Grid.Column="8" x:Name="AddEnemy" BorderBrush="OrangeRed"
+                                    Margin="0 5 0 0" CornerRadius="10" Style="{StaticResource RoundButton}"
+                                    Click="ControlClick">
+                    <tdWpf:CornerButton.Background>
                         <ImageBrush ImageSource="/Grafik/Menu/Add.png" />
-                    </Button.Background>
-                </Button>
+                    </tdWpf:CornerButton.Background>
+                </tdWpf:CornerButton>
             </Grid>
         </GroupBox>
         <GroupBox Name="GroupBoxWave" Grid.ColumnSpan="9" Grid.Column="4" Grid.Row="3" Grid.RowSpan="2"
-                  BorderThickness="1">
+                  BorderThickness="1" BorderBrush="OrangeRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -145,7 +152,7 @@
             </Grid>
         </GroupBox>
         <GroupBox Name="GroupBoxEnemy" Grid.ColumnSpan="9" Grid.Column="4" Grid.Row="5" Grid.RowSpan="2"
-                  BorderThickness="1">
+                  BorderThickness="1" BorderBrush="OrangeRed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -182,24 +189,27 @@
                         TickFrequency="0.01" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                         AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2"
                         LostKeyboardFocus="ControlLostKeyboardFocus" Margin="0 10 0 0" />
-                <Button Name="RemoveEnemy" Grid.Column="3" Grid.Row="2" FontFamily="Bauhaus 93" FontSize="25"
-                        Click="ControlClick" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}"
-                        HorizontalAlignment="Right">
-                    <Button.Background>
+                <tdWpf:CornerButton Grid.Column="3" Grid.Row="2" x:Name="RemoveEnemy" BorderBrush="OrangeRed"
+                                    Margin="0 5 0 0" CornerRadius="10" Style="{StaticResource RoundButton}"
+                                    Click="ControlClick" HorizontalAlignment="Right"
+                                    Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}">
+                    <tdWpf:CornerButton.Background>
                         <ImageBrush ImageSource="/Grafik/Menu/Remove.png" />
-                    </Button.Background>
-                </Button>
+                    </tdWpf:CornerButton.Background>
+                </tdWpf:CornerButton>
             </Grid>
         </GroupBox>
-        <Button Name="Back" Grid.Column="14" Grid.Row="9" Click="ControlClick">
-            <Button.Background>
-                <ImageBrush ImageSource="/Grafik/Menu/Back.png" />
-            </Button.Background>
-        </Button>
-        <Button Name="Done" Grid.Column="15" Grid.Row="9" Click="ControlClick">
-            <Button.Background>
+        <tdWpf:CornerButton Grid.Column="14" Grid.Row="9" x:Name="Back" CornerRadius="10" Style="{StaticResource RoundButton}"
+                            Click="ControlClick">
+           <tdWpf:CornerButton.Background>
+               <ImageBrush ImageSource="/Grafik/Menu/Back.png" />
+           </tdWpf:CornerButton.Background> 
+        </tdWpf:CornerButton>
+        <tdWpf:CornerButton Grid.Column="15" Grid.Row="9" x:Name="Done" CornerRadius="10" Style="{StaticResource RoundButton}"
+                            Click="ControlClick">
+            <tdWpf:CornerButton.Background>
                 <ImageBrush ImageSource="/Grafik/Menu/Done.png" />
-            </Button.Background>
-        </Button>
+            </tdWpf:CornerButton.Background> 
+        </tdWpf:CornerButton>
     </Grid>
 </UserControl>

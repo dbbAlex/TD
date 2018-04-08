@@ -12,6 +12,8 @@ namespace TD_WPF.Game.Utils
 {
     internal static class ControlUtils
     {
+        #region constants
+
         private const string InfoPanel = "InfoPanel";
         private const string Health = "Health";
         public const string HealthValue = "HealthValue";
@@ -30,22 +32,25 @@ namespace TD_WPF.Game.Utils
         public const string ObjectMoneyValue = "ObjectmoneyValue";
         public const string ObjectMoneyButton = "ObjectMoneyButton";
         private const string Font = "Bauhaus 93";
-        public const string ButtonGrid = "ButtonGrid";
+        private const string ButtonGrid = "ButtonGrid";
         public const string Cancel = "Cancel";
         public const string Pause = "Pause";
         public const string Next = "Next";
 
+        #endregion
 
-        public static List<ContentControl> CreatEditorConrtols(GameControl gameControl)
+        public static List<ContentControl> CreateControls(GameControl gameControl)
         {
-            var folder = new List<string> {"Map", "Shared"};
-            return CreateControls(folder, gameControl.HandleControlEvent, "editor");
-        }
+            var folder = new List<string>
+            {
+                "Shared",
+                gameControl.GameControlMode == GameControlMode.CreateMap ||
+                gameControl.GameControlMode == GameControlMode.EditMap
+                    ? "Map"
+                    : "Items"
+            };
 
-        public static List<ContentControl> CreateGameControls(GameControl gameControl)
-        {
-            var folder = new List<string> {"Items", "Shared"};
-            return CreateControls(folder, gameControl.HandleControlEvent, "game");
+            return CreateControls(folder, gameControl.HandleControlEvent);
         }
 
         public static Grid CreateGameInfoPanel(GameControl gameControl)
@@ -139,20 +144,18 @@ namespace TD_WPF.Game.Utils
             for (var j = 0; j < grid.ColumnDefinitions.Count; j++)
                 if (j == grid.ColumnDefinitions.Count - 1)
                 {
-                    if (i != 0)
+                    if (i == 0) continue;
+                    var button = new Button
                     {
-                        var button = new Button
-                        {
-                            Name = i == 1 ? DamageButton : i == 2 ? RangeButton : ObjectMoneyButton,
-                            FontFamily = new FontFamily(Font),
-                            Foreground = Brushes.White,
-                            Background = Brushes.Transparent,
-                            Content = "",
-                            Visibility = Visibility.Hidden
-                        };
-                        button.Click += gameControl.HandleObjectInfoEvent;
-                        AddAndRegisterComponent(gameControl, button, i, j, grid);
-                    }
+                        Name = i == 1 ? DamageButton : i == 2 ? RangeButton : ObjectMoneyButton,
+                        FontFamily = new FontFamily(Font),
+                        Foreground = Brushes.White,
+                        Background = Brushes.Transparent,
+                        Content = "",
+                        Visibility = Visibility.Hidden
+                    };
+                    button.Click += gameControl.HandleObjectInfoEvent;
+                    AddAndRegisterComponent(gameControl, button, i, j, grid);
                 }
                 else
                 {
@@ -203,9 +206,8 @@ namespace TD_WPF.Game.Utils
                 var button = new Button
                 {
                     Name = i == 0
-                        ?
-                        (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                         gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
+                        ? (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                           gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
                         : (gameControl.GameControlMode == GameControlMode.CreateMap ||
                            gameControl.GameControlMode == GameControlMode.EditMap)
                             ? Next
@@ -214,9 +216,8 @@ namespace TD_WPF.Game.Utils
                     Foreground = Brushes.White,
                     Background = Brushes.Transparent,
                     Content = i == 0
-                        ?
-                        (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                         gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
+                        ? (gameControl.GameControlMode == GameControlMode.CreateMap ||
+                           gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
                         : (gameControl.GameControlMode == GameControlMode.CreateMap ||
                            gameControl.GameControlMode == GameControlMode.EditMap)
                             ? Next
@@ -229,15 +230,7 @@ namespace TD_WPF.Game.Utils
             return grid;
         }
 
-        public static Grid CreateEditorButtons(GameControl gameControl)
-        {
-            var grid = new Grid();
-
-            return grid;
-        }
-
-        private static List<ContentControl> CreateControls(List<string> folder, RoutedEventHandler handler,
-            string group)
+        private static List<ContentControl> CreateControls(ICollection<string> folder, RoutedEventHandler handler)
         {
             var list = new List<ContentControl>();
 
@@ -267,9 +260,10 @@ namespace TD_WPF.Game.Utils
             return list;
         }
 
-        private static void AddAndRegisterComponent(GameControl gameControl, Control contentControl, int row,
-            int column, Grid grid)
+        private static void AddAndRegisterComponent(FrameworkElement gameControl, Control contentControl, int row,
+            int column, Panel grid)
         {
+            if (contentControl == null) throw new ArgumentNullException(nameof(contentControl));
             Grid.SetRow(contentControl, row);
             Grid.SetColumn(contentControl, column);
             grid.Children.Add(contentControl);
