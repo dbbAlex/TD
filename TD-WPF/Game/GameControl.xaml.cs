@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Manager;
 using TD_WPF.Game.Objects;
@@ -21,7 +17,6 @@ using TD_WPF.Menu;
 using TD_WPF.Properties;
 using Color = System.Windows.Media.Color;
 using Path = TD_WPF.Game.Objects.StaticGameObjects.Path;
-using Size = System.Windows.Size;
 
 namespace TD_WPF.Game
 {
@@ -47,12 +42,12 @@ namespace TD_WPF.Game
 
         private DbObject DbObject { get; set; }
         public GameCreator GameCreator { get; private set; }
-        public GameManager GameManager { get; set; }
-        public Control SelectedControl { get; set; }
-        private Ground SelectedObject { get; set; }
+        public GameManager GameManager { get; private set; }
+        public Control SelectedControl { get; private set; }
+        public Ground SelectedObject { get; set; }
         public List<Mark> Marks { get; } = new List<Mark>();
         public List<Shot> Shots { get; } = new List<Shot>();
-        public GameControlMode GameControlMode { get; set; }
+        public GameControlMode GameControlMode { get; }
 
         #endregion
 
@@ -219,6 +214,8 @@ namespace TD_WPF.Game
             if (GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap)
             {
                 var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
+                var increasedHeight = (ControlGrid.ActualWidth / 2 / ControlGrid.ActualHeight) * 1.3;
+                ControlGrid.RowDefinitions[rows].Height = new GridLength(increasedHeight, GridUnitType.Star);
                 Grid.SetRow(objectInfoPanel, rows);
                 Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
                 ControlGrid.Children.Add(objectInfoPanel);
@@ -236,19 +233,29 @@ namespace TD_WPF.Game
 
         #region control event handling
 
-        public void HandleObjectInfoEvent(object sender, EventArgs a)
+        public void HandleObjectInfoEvent(object sender, EventArgs e)
         {
-            if (!(sender is Button button) || GameManager.Pause) return;
-            switch (button.Name)
+            if (GameManager.Pause) return;
+            switch (sender)
             {
-                case ControlUtils.DamageButton:
-                    MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Damage, this);
+                case Button button:
+                    switch (button.Name)
+                    {
+                        case ControlUtils.DamageButton:
+                            MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Damage, this);
+                            break;
+                        case ControlUtils.RangeButton:
+                            MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Range, this);
+                            break;
+                        case ControlUtils.ObjectMoneyButton:
+                            MoneyManager.SellObject(this, SelectedObject);
+                            break;
+                    }
+
                     break;
-                case ControlUtils.RangeButton:
-                    MoneyManager.UpdateTower(SelectedObject.Tower, TowerUpdateSelection.Range, this);
-                    break;
-                case ControlUtils.ObjectMoneyButton:
-                    MoneyManager.SellObject(this, SelectedObject);
+                case ComboBox comboBox:
+                    if (SelectedObject == null || SelectedObject.Tower == null) return;
+                    SelectedObject.Tower.Condition = (TargetCondition) comboBox.SelectedItem;
                     break;
             }
         }
@@ -256,6 +263,17 @@ namespace TD_WPF.Game
         public void HandleControlEvent(object sender, EventArgs a)
         {
             SelectedControl = (Button) sender;
+            SelectedObject = null;
+            var label = (Label) FindName(ControlUtils.Target);
+            var comboBox = (ComboBox) FindName(ControlUtils.TargetValue);
+            if (label != null)
+                label.Visibility = SelectedControl.Name.Equals("Ground") ? Visibility.Collapsed : Visibility.Visible;
+            if (comboBox != null)
+            {
+                comboBox.Visibility = SelectedControl.Name.Equals("Ground") ? Visibility.Collapsed : Visibility.Visible;
+                comboBox.SelectedIndex = 0;
+            }
+
             RemoveHintMarks();
             CreateHintMarks();
             InfoManager.UpdateObjectInfoPanelByControl(this, SelectedControl);
@@ -350,32 +368,25 @@ namespace TD_WPF.Game
             }
             else
             {
-                if (GameCreator.Ground.Count <= 0 || SelectedControl == null) return;
-                if (SelectedControl.Name.Equals("Ground"))
-                    foreach (var item in GameCreator.Ground)
+                if (SelectedObject != null)
+                {
+                    var mark = new Mark(SelectedObject.X, SelectedObject.Y, SelectedObject.Width, SelectedObject.Height,
+                        Color.FromArgb(150, 124, 252, 0),
+                        Info);
+                    mark.Start(this);
+                    Marks.Add(mark);
+                }
+
+                if (GameCreator.Ground.Count <= 0 || SelectedControl == null ||
+                    SelectedControl.Name.Equals("Ground")) return;
+                foreach (var item in GameCreator.Ground)
+                    if (item.Tower == null)
                     {
                         var mark = new Mark(item.X, item.Y, item.Width, item.Height,
-                            Color.FromArgb(57, 247, 255, 16), Info);
+                            Color.FromArgb(150, 124, 252, 0), Hint);
                         mark.Start(this);
                         Marks.Add(mark);
                     }
-
-                if (SelectedControl.Name.Equals("Tower"))
-                    foreach (var item in GameCreator.Ground)
-                        if (item.Tower == null)
-                        {
-                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
-                                Color.FromArgb(150, 124, 252, 0), Hint);
-                            mark.Start(this);
-                            Marks.Add(mark);
-                        }
-                        else
-                        {
-                            var mark = new Mark(item.X, item.Y, item.Width, item.Height,
-                                Color.FromArgb(57, 247, 255, 16), Info);
-                            mark.Start(this);
-                            Marks.Add(mark);
-                        }
             }
         }
 
@@ -501,6 +512,13 @@ namespace TD_WPF.Game
                 foreach (var item in list)
                     if (x == item.X && y == item.Y)
                     {
+                        if (item is Ground ground)
+                        {
+                            InfoManager.UpdateObjectInfoPanelByGameObject(this,
+                                ground.Tower != null ? (GameObject) ground.Tower : ground);
+                            SelectedObject = ground;
+                        }
+
                         isEmptySpace = false;
                         return;
                     }
@@ -509,29 +527,13 @@ namespace TD_WPF.Game
             EvaluateIsEmptySpace();
 
             GameObject hint = null;
-            GameObject info = null;
             foreach (var item in Marks)
                 if (x == item.X && y == item.Y)
                 {
-                    if (item.Code.Equals(Hint))
-                    {
-                        hint = item;
-                        break;
-                    }
-
-                    if (!item.Code.Equals(Info)) continue;
-                    info = item;
+                    if (!item.Code.Equals(Hint)) continue;
+                    hint = item;
                     break;
                 }
-
-            if (info != null)
-                foreach (var item in GameCreator.Ground)
-                    if (item.X == info.X && item.Y == info.Y)
-                    {
-                        InfoManager.UpdateObjectInfoPanelByGameObject(this,
-                            item.Tower != null ? (GameObject) item.Tower : item);
-                        SelectedObject = item;
-                    }
 
             if ((GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap) &&
                 SelectedControl != null && isEmptySpace)
@@ -600,7 +602,8 @@ namespace TD_WPF.Game
                     }
                 }
             }
-            else if ((GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap) && SelectedControl != null)
+            else if ((GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap) &&
+                     SelectedControl != null)
             {
                 if (SelectedControl.Name.Equals("Ground") && isEmptySpace)
                 {

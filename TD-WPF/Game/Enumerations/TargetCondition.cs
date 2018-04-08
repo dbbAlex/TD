@@ -5,7 +5,7 @@
         Closest,
         Farthest,
         Strongest,
-        Wakest,
+        Weakest,
         Healthiest,
         Unhealthiest,
         Fastest,

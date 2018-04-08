@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Script.Serialization;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Properties;
@@ -15,14 +14,16 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         private const int Damage = 5;
         private const double ShotRange = 2;
 
-        public Tower(double x, double y, double width, double height)
+        public Tower(double x, double y, double width, double height,
+            TargetCondition targetCondition = TargetCondition.Closest)
             : base(x, y, width, height)
         {
+            Condition = targetCondition;
             Image = Resource.tower;
         }
 
 
-        public TargetCondition Condition { get; set; } = TargetCondition.Closest;
+        public TargetCondition Condition { get; set; }
         public int ShotDamage { get; set; } = Damage;
         public double Range { get; set; } = ShotRange;
         public int DamageUpdate { get; set; }
@@ -37,7 +38,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
 
         public void Start(GameControl gameControl, long currentinterval)
         {
-            if(Active) return;
+            if (Active) return;
             base.Start(gameControl);
             LastInterval = currentinterval;
         }
@@ -80,48 +81,66 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             Enemy current = null;
             var property = 0d;
-            switch (Condition)
+
+            foreach (var enemy in enemies)
             {
-                case TargetCondition.Closest:
-                    foreach (var enemy in enemies)
-                    {
-                        var distance = DistanceToObject(enemy);
+                var distance = DistanceToObject(enemy);
+                switch (Condition)
+                {
+                    case TargetCondition.Closest:
+                        
                         if (property != 0 && !(property > distance)) continue;
                         current = enemy;
                         property = distance;
-                    }
-
-                    break;
-                case TargetCondition.Healthiest:
-                    foreach (var enemy in enemies)
-                        if (property == 0 || property < enemy.Health)
-                        {
-                            current = enemy;
-                            property = enemy.Health;
-                        }
-
-                    break;
-                case TargetCondition.Strongest:
-                    foreach (var enemy in enemies)
+                        break;
+                    case TargetCondition.Farthest:
+                        if (property != 0 && !(property < distance)) continue;
+                        current = enemy;
+                        property = distance;
+                        break;
+                    case TargetCondition.Strongest:
                         if (property == 0 || property < enemy.Damage)
                         {
                             current = enemy;
                             property = enemy.Damage;
                         }
-
-                    break;
-                case TargetCondition.Farthest:
-                    break;
-                case TargetCondition.Wakest:
-                    break;
-                case TargetCondition.Unhealthiest:
-                    break;
-                case TargetCondition.Fastest:
-                    break;
-                case TargetCondition.Slowest:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                        break;
+                    case TargetCondition.Weakest:
+                        if (property == 0 || property > enemy.Damage)
+                        {
+                            current = enemy;
+                            property = enemy.Damage;
+                        }
+                        break;
+                    case TargetCondition.Healthiest:
+                        if (property == 0 || property < enemy.Health)
+                        {
+                            current = enemy;
+                            property = enemy.Health;
+                        }
+                        break;
+                    case TargetCondition.Unhealthiest:
+                        if (property == 0 || property > enemy.Health)
+                        {
+                            current = enemy;
+                            property = enemy.Health;
+                        }
+                        break;
+                    case TargetCondition.Fastest:
+                        if (property == 0 || property < enemy.Speed)
+                        {
+                            current = enemy;
+                            property = enemy.Speed;
+                        }
+                        break;
+                    case TargetCondition.Slowest:
+                        if (property == 0 || property > enemy.Speed)
+                        {
+                            current = enemy;
+                            property = enemy.Speed;
+                        }
+                        break;
+                }
             }
 
             return current;

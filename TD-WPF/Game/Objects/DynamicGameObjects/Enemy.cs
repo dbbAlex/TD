@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -8,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TD_WPF.Game.Manager;
-using TD_WPF.Game.Objects.RoundObjects;
 using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.DynamicGameObjects

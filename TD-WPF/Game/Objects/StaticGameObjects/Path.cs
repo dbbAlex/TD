@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using TD_WPF.Game.Enumerations;
+﻿using TD_WPF.Game.Enumerations;
 using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects

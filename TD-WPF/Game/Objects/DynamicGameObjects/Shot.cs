@@ -78,6 +78,11 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         public override void Render(GameControl gameControl)
         {
             if (!Active) return;
+            if (!Enemy.Active)
+            {
+                Destroy(gameControl);
+                return;
+            }
             Shape.Width = Width / 3;
             Shape.Height = Height / 3;
             Canvas.SetLeft(Shape, X * Width + Width / 3 / 2);

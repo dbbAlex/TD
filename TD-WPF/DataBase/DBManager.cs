@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms.VisualStyles;
 using TD_WPF.Game.Save;
 using System.Web.Script.Serialization;
 

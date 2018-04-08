@@ -32,11 +32,18 @@ namespace TD_WPF.Game.Manager
 
         public static void UpdateObjectInfoPanelByControl(GameControl gameControl, Control control)
         {
-            if (control.Name == "Tower")
-                UpdateObjectinfoPanelByType(gameControl, typeof(Tower));
-            else if (control.Name == "Ground")
+            if (control.Name == "Ground")
             {
                 UpdateObjectinfoPanelByType(gameControl, typeof(Ground));
+            }
+            else
+            {
+                switch (control.Name)
+                {
+                    case "Tower":
+                        UpdateObjectinfoPanelByType(gameControl, typeof(Tower));
+                        break;
+                }
             }
 
             var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
@@ -53,11 +60,14 @@ namespace TD_WPF.Game.Manager
             UpdateObjectinfoPanelByType(gameControl, gameObject.GetType());
             if (gameObject is Tower tower)
             {
-                UpdateObjectInfoPanleNonConstValue(gameControl, Math.Round((double)tower.ShotDamage, 2).ToString(CultureInfo.InvariantCulture),
+                UpdateObjectInfoPanleNonConstValue(gameControl,
+                    Math.Round((double) tower.ShotDamage, 2).ToString(CultureInfo.InvariantCulture),
                     Math.Round(tower.Range, 2).ToString(CultureInfo.InvariantCulture));
 
                 var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
                 var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
+                var comboBox = (ComboBox) gameControl.FindName(ControlUtils.TargetValue);
+                if (comboBox != null) comboBox.SelectedItem = tower.Condition;
                 if (damageButton != null && tower.DamageUpdate < 2)
                 {
                     damageButton.Content = "+35% (" + Tower.UpdateSellMoney + "฿)";
@@ -95,7 +105,7 @@ namespace TD_WPF.Game.Manager
             moneyButton.Visibility = Visibility.Visible;
         }
 
-        private static void UpdateObjectinfoPanelByType(GameControl gameControl, Type type)
+        private static void UpdateObjectinfoPanelByType(FrameworkElement gameControl, Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             var fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.Static |
@@ -110,7 +120,8 @@ namespace TD_WPF.Game.Manager
                     .ToString(CultureInfo.InvariantCulture)
                 : "";
             var rangeValue = fieldInfos.Exists(f => f.Name.Equals("ShotRange"))
-                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("ShotRange")).GetRawConstantValue()), 2)
+                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("ShotRange")).GetRawConstantValue()),
+                        2)
                     .ToString(CultureInfo.InvariantCulture)
                 : "";
             var moneyValue = fieldInfos.Exists(f => f.Name.Equals("Money"))
@@ -120,7 +131,7 @@ namespace TD_WPF.Game.Manager
             UpdateObjectInfoPanel(gameControl, nameValue, damageValue, rangeValue, moneyValue);
         }
 
-        private static void UpdateObjectInfoPanel(GameControl gameControl, string nameValue, string damageValue,
+        private static void UpdateObjectInfoPanel(FrameworkElement gameControl, string nameValue, string damageValue,
             string rangeValue, string moneyValue)
         {
             var name = (Label) gameControl.FindName(ControlUtils.NameValue);
@@ -132,7 +143,7 @@ namespace TD_WPF.Game.Manager
             UpdateObjectInfoPanleNonConstValue(gameControl, damageValue, rangeValue);
         }
 
-        private static void UpdateObjectInfoPanleNonConstValue(GameControl gameControl, string damageValue,
+        private static void UpdateObjectInfoPanleNonConstValue(FrameworkElement gameControl, string damageValue,
             string rangeValue)
         {
             var damage = (Label) gameControl.FindName(ControlUtils.DamageValue);

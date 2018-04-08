@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Web.Script.Serialization;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
-using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
 {

@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
+using Binding = System.Windows.Data.Binding;
+using Button = System.Windows.Controls.Button;
+using ComboBox = System.Windows.Controls.ComboBox;
+using Control = System.Windows.Controls.Control;
+using Label = System.Windows.Controls.Label;
+using Panel = System.Windows.Controls.Panel;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace TD_WPF.Game.Utils
 {
@@ -31,6 +37,8 @@ namespace TD_WPF.Game.Utils
         private const string ObjectMoney = "ObjectMoney";
         public const string ObjectMoneyValue = "ObjectmoneyValue";
         public const string ObjectMoneyButton = "ObjectMoneyButton";
+        public const string Target = "Target";
+        public const string TargetValue = "TargetValue";
         private const string Font = "Bauhaus 93";
         private const string ButtonGrid = "ButtonGrid";
         public const string Cancel = "Cancel";
@@ -133,18 +141,15 @@ namespace TD_WPF.Game.Utils
             // TODO: add dropDown for target condistion -> Atk [Closest]
 
             for (var i = 0; i < 3; i++)
-            {
                 grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
+            for(var i = 0; i < 5; i++) 
                 grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(0.5, GridUnitType.Star)});
-            }
-
-            grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(0.5, GridUnitType.Star)});
 
             for (var i = 0; i < grid.RowDefinitions.Count; i++)
             for (var j = 0; j < grid.ColumnDefinitions.Count; j++)
                 if (j == grid.ColumnDefinitions.Count - 1)
                 {
-                    if (i == 0) continue;
+                    if (i == 0 || i == grid.RowDefinitions.Count-1) continue;
                     var button = new Button
                     {
                         Name = i == 1 ? DamageButton : i == 2 ? RangeButton : ObjectMoneyButton,
@@ -156,6 +161,21 @@ namespace TD_WPF.Game.Utils
                     };
                     button.Click += gameControl.HandleObjectInfoEvent;
                     AddAndRegisterComponent(gameControl, button, i, j, grid);
+                }
+                else if(i == grid.RowDefinitions.Count -1 && j == 1)
+                {
+                    var comboBox = new ComboBox
+                    {
+                        Name = TargetValue,
+                        FontFamily = new FontFamily(Font),
+                        Background = Brushes.Transparent,
+                        ItemsSource = Enum.GetValues(typeof(TargetCondition)),
+                        Visibility = Visibility.Collapsed,
+                        SelectedIndex = 0
+                    };
+                    comboBox.DropDownClosed += gameControl.HandleObjectInfoEvent;
+                    Grid.SetColumnSpan(comboBox, 2);
+                    AddAndRegisterComponent(gameControl, comboBox, i, j, grid);
                 }
                 else
                 {
@@ -175,12 +195,19 @@ namespace TD_WPF.Game.Utils
                             name = j == 0 ? Range : RangeValue;
                             content = j == 0 ? Range + ":" : "";
                             break;
-                        default:
+                        case 3:
                             name = j == 0 ? ObjectMoney : ObjectMoneyValue;
                             content = j == 0 ? Money + ":" : "";
                             break;
+                        default:
+                            if (j < 1)
+                            {
+                                name = Target;
+                                content = Target;
+                            }
+                            break;
                     }
-
+                    if(i == 4 && j > 0) continue;
                     var label = new Label
                     {
                         Name = name,
@@ -188,6 +215,7 @@ namespace TD_WPF.Game.Utils
                         Foreground = Brushes.White,
                         Content = content
                     };
+                    if (i == 4) label.Visibility = Visibility.Collapsed;
                     AddAndRegisterComponent(gameControl, label, i, j, grid);
                 }
 
