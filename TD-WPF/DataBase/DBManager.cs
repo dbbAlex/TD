@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
-using TD_WPF.Game.Save;
 using System.Web.Script.Serialization;
+using TD_WPF.Game.Save;
 
 namespace TD_WPF.DataBase
 {
@@ -20,15 +21,12 @@ namespace TD_WPF.DataBase
 
         public static void CreateDataBase()
         {
-            if (!File.Exists(DbName))
-            {
-                SQLiteConnection.CreateFile(DbName);
-            }
+            if (!File.Exists(DbName)) SQLiteConnection.CreateFile(DbName);
 
             var con = EstablishDbConnection();
 
-            string sql = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{DbTableName}'";
-            SQLiteCommand cmd = new SQLiteCommand(sql, con);
+            var sql = $"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='{DbTableName}'";
+            var cmd = new SQLiteCommand(sql, con);
             var scalar = cmd.ExecuteScalar();
             if ((long) scalar == 0)
             {
@@ -57,17 +55,17 @@ namespace TD_WPF.DataBase
             var unixTimeModified =
                 Convert.ToInt32(dbObject.MetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
-            string sql = $"INSERT INTO {DbTableName}({DbFieldSaveObject}, {DbFieldThumbnail}, {DbFieldCreated}, " +
-                         $"{DbFieldModified}, {DbFiledGuid}) " +
-                         $"VALUES(@{DbFieldSaveObject}, @{DbFieldThumbnail}, " +
-                         $"@{DbFieldCreated}, @{DbFieldModified}, @{DbFiledGuid})";
+            var sql = $"INSERT INTO {DbTableName}({DbFieldSaveObject}, {DbFieldThumbnail}, {DbFieldCreated}, " +
+                      $"{DbFieldModified}, {DbFiledGuid}) " +
+                      $"VALUES(@{DbFieldSaveObject}, @{DbFieldThumbnail}, " +
+                      $"@{DbFieldCreated}, @{DbFieldModified}, @{DbFiledGuid})";
 
-            SQLiteCommand cmd = new SQLiteCommand(sql, con);
-            cmd.Parameters.Add($"@{DbFieldSaveObject}", System.Data.DbType.String).Value = saveObjectJson;
-            cmd.Parameters.Add($"@{DbFieldThumbnail}", System.Data.DbType.Binary).Value = thumbnailByteArray;
-            cmd.Parameters.Add($"@{DbFieldCreated}", System.Data.DbType.Int32).Value = unixTimeCreated;
-            cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.Int32).Value = unixTimeModified;
-            cmd.Parameters.Add($"@{DbFiledGuid}", System.Data.DbType.String).Value =
+            var cmd = new SQLiteCommand(sql, con);
+            cmd.Parameters.Add($"@{DbFieldSaveObject}", DbType.String).Value = saveObjectJson;
+            cmd.Parameters.Add($"@{DbFieldThumbnail}", DbType.Binary).Value = thumbnailByteArray;
+            cmd.Parameters.Add($"@{DbFieldCreated}", DbType.Int32).Value = unixTimeCreated;
+            cmd.Parameters.Add($"@{DbFieldModified}", DbType.Int32).Value = unixTimeModified;
+            cmd.Parameters.Add($"@{DbFiledGuid}", DbType.String).Value =
                 dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
@@ -87,16 +85,16 @@ namespace TD_WPF.DataBase
             var unixTimeModified =
                 Convert.ToInt32(dbObject.MetaData.ModifiedDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
-            string sql = $"UPDATE {DbTableName} SET {DbFieldSaveObject} = @{DbFieldSaveObject}, " +
-                         $"{DbFieldThumbnail} = @{DbFieldThumbnail}, " +
-                         $"{DbFieldModified} = @{DbFieldModified} " +
-                         $"WHERE {DbFiledGuid} = @{DbFiledGuid}";
+            var sql = $"UPDATE {DbTableName} SET {DbFieldSaveObject} = @{DbFieldSaveObject}, " +
+                      $"{DbFieldThumbnail} = @{DbFieldThumbnail}, " +
+                      $"{DbFieldModified} = @{DbFieldModified} " +
+                      $"WHERE {DbFiledGuid} = @{DbFiledGuid}";
 
             var cmd = new SQLiteCommand(sql, con);
-            cmd.Parameters.Add($"@{DbFieldSaveObject}", System.Data.DbType.String).Value = saveObjectJson;
-            cmd.Parameters.Add($"@{DbFieldThumbnail}", System.Data.DbType.Binary).Value = thumbnailByteArray;
-            cmd.Parameters.Add($"@{DbFieldModified}", System.Data.DbType.Int32).Value = unixTimeModified;
-            cmd.Parameters.Add($"@{DbFiledGuid}", System.Data.DbType.String).Value =
+            cmd.Parameters.Add($"@{DbFieldSaveObject}", DbType.String).Value = saveObjectJson;
+            cmd.Parameters.Add($"@{DbFieldThumbnail}", DbType.Binary).Value = thumbnailByteArray;
+            cmd.Parameters.Add($"@{DbFieldModified}", DbType.Int32).Value = unixTimeModified;
+            cmd.Parameters.Add($"@{DbFiledGuid}", DbType.String).Value =
                 dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
@@ -133,9 +131,9 @@ namespace TD_WPF.DataBase
                 dbObject.MetaData = saveMetaData;
                 list.Add(dbObject);
             }
-            
+
             con.Close();
-            
+
             return list;
         }
 
@@ -144,16 +142,16 @@ namespace TD_WPF.DataBase
             var con = EstablishDbConnection();
             var sql = $"DELETE FROM {DbTableName} WHERE {DbFiledGuid} = @{DbFiledGuid}";
             var cmd = new SQLiteCommand(sql, con);
-            cmd.Parameters.Add($"{DbFiledGuid}", System.Data.DbType.String).Value =
+            cmd.Parameters.Add($"{DbFiledGuid}", DbType.String).Value =
                 dbObject.MetaData.Guid.ToString();
 
             cmd.ExecuteNonQuery();
             con.Close();
         }
-        
+
         private static SQLiteConnection EstablishDbConnection()
         {
-            SQLiteConnection con = new SQLiteConnection($"Data Source = {DbName}; Version = 3;");
+            var con = new SQLiteConnection($"Data Source = {DbName}; Version = 3;");
             con.Open();
             return con;
         }

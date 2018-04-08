@@ -15,18 +15,20 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 {
     public class Enemy : DynamicGameObject
     {
-        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, int money) 
+        public Enemy(double x, double y, double width, double height, double speed, int health, int damage, int money)
             : base(x, y, width, height, speed)
         {
             Health = health;
             Money = money;
             Damage = damage;
         }
-        
-        public Enemy(){}
 
-        [ScriptIgnore]
-        public override Bitmap Image { get; } = Resource.enemy;
+        public Enemy()
+        {
+        }
+
+        [ScriptIgnore] public override Bitmap Image { get; } = Resource.enemy;
+
         public int Health { get; set; }
         public int Money { get; set; }
         public int Damage { get; set; }

@@ -12,7 +12,7 @@ namespace TD_WPF.Game.Utils
         private bool Running { get; set; } = true;
         public bool Pause { get; set; }
         public bool End { get; private set; }
-        public Stopwatch Timer { get; }= new Stopwatch();
+        public Stopwatch Timer { get; } = new Stopwatch();
 
         public async void Run(GameControl gameControl)
         {

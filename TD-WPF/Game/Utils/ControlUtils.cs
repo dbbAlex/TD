@@ -3,50 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TD_WPF.Game.Enumerations;
-using Binding = System.Windows.Data.Binding;
-using Button = System.Windows.Controls.Button;
-using ComboBox = System.Windows.Controls.ComboBox;
-using Control = System.Windows.Controls.Control;
-using Label = System.Windows.Controls.Label;
-using Panel = System.Windows.Controls.Panel;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace TD_WPF.Game.Utils
 {
     internal static class ControlUtils
     {
-        #region constants
-
-        private const string InfoPanel = "InfoPanel";
-        private const string Health = "Health";
-        public const string HealthValue = "HealthValue";
-        private const string Money = "Money";
-        public const string MoneyValue = "MoneyValue";
-        private const string ObjectInfoPanel = "TowerPanel";
-        private const string Name = "Name";
-        public const string NameValue = "NameValue";
-        private const string Damage = "Damage";
-        public const string DamageValue = "DamageValue";
-        public const string DamageButton = "DamageButton";
-        private const string Range = "Range";
-        public const string RangeValue = "RangeValue";
-        public const string RangeButton = "RangeButton";
-        private const string ObjectMoney = "ObjectMoney";
-        public const string ObjectMoneyValue = "ObjectmoneyValue";
-        public const string ObjectMoneyButton = "ObjectMoneyButton";
-        public const string Target = "Target";
-        public const string TargetValue = "TargetValue";
-        private const string Font = "Bauhaus 93";
-        private const string ButtonGrid = "ButtonGrid";
-        public const string Cancel = "Cancel";
-        public const string Pause = "Pause";
-        public const string Next = "Next";
-
-        #endregion
-
         public static List<ContentControl> CreateControls(GameControl gameControl)
         {
             var folder = new List<string>
@@ -142,14 +107,14 @@ namespace TD_WPF.Game.Utils
 
             for (var i = 0; i < 3; i++)
                 grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(0.5, GridUnitType.Star)});
-            for(var i = 0; i < 5; i++) 
+            for (var i = 0; i < 5; i++)
                 grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(0.5, GridUnitType.Star)});
 
             for (var i = 0; i < grid.RowDefinitions.Count; i++)
             for (var j = 0; j < grid.ColumnDefinitions.Count; j++)
                 if (j == grid.ColumnDefinitions.Count - 1)
                 {
-                    if (i == 0 || i == grid.RowDefinitions.Count-1) continue;
+                    if (i == 0 || i == grid.RowDefinitions.Count - 1) continue;
                     var button = new Button
                     {
                         Name = i == 1 ? DamageButton : i == 2 ? RangeButton : ObjectMoneyButton,
@@ -162,7 +127,7 @@ namespace TD_WPF.Game.Utils
                     button.Click += gameControl.HandleObjectInfoEvent;
                     AddAndRegisterComponent(gameControl, button, i, j, grid);
                 }
-                else if(i == grid.RowDefinitions.Count -1 && j == 1)
+                else if (i == grid.RowDefinitions.Count - 1 && j == 1)
                 {
                     var comboBox = new ComboBox
                     {
@@ -205,9 +170,11 @@ namespace TD_WPF.Game.Utils
                                 name = Target;
                                 content = Target;
                             }
+
                             break;
                     }
-                    if(i == 4 && j > 0) continue;
+
+                    if (i == 4 && j > 0) continue;
                     var label = new Label
                     {
                         Name = name,
@@ -234,20 +201,20 @@ namespace TD_WPF.Game.Utils
                 var button = new Button
                 {
                     Name = i == 0
-                        ? (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                           gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
-                        : (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                           gameControl.GameControlMode == GameControlMode.EditMap)
+                        ? gameControl.GameControlMode == GameControlMode.CreateMap ||
+                          gameControl.GameControlMode == GameControlMode.EditMap ? Cancel : Pause
+                        : gameControl.GameControlMode == GameControlMode.CreateMap ||
+                          gameControl.GameControlMode == GameControlMode.EditMap
                             ? Next
                             : Cancel,
                     FontFamily = new FontFamily(Font),
                     Foreground = Brushes.White,
                     Background = Brushes.Transparent,
                     Content = i == 0
-                        ? (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                           gameControl.GameControlMode == GameControlMode.EditMap) ? Cancel : Pause
-                        : (gameControl.GameControlMode == GameControlMode.CreateMap ||
-                           gameControl.GameControlMode == GameControlMode.EditMap)
+                        ? gameControl.GameControlMode == GameControlMode.CreateMap ||
+                          gameControl.GameControlMode == GameControlMode.EditMap ? Cancel : Pause
+                        : gameControl.GameControlMode == GameControlMode.CreateMap ||
+                          gameControl.GameControlMode == GameControlMode.EditMap
                             ? Next
                             : Cancel
                 };
@@ -297,5 +264,34 @@ namespace TD_WPF.Game.Utils
             grid.Children.Add(contentControl);
             gameControl.RegisterName(contentControl.Name, contentControl);
         }
+
+        #region constants
+
+        private const string InfoPanel = "InfoPanel";
+        private const string Health = "Health";
+        public const string HealthValue = "HealthValue";
+        private const string Money = "Money";
+        public const string MoneyValue = "MoneyValue";
+        private const string ObjectInfoPanel = "TowerPanel";
+        private const string Name = "Name";
+        public const string NameValue = "NameValue";
+        private const string Damage = "Damage";
+        public const string DamageValue = "DamageValue";
+        public const string DamageButton = "DamageButton";
+        private const string Range = "Range";
+        public const string RangeValue = "RangeValue";
+        public const string RangeButton = "RangeButton";
+        private const string ObjectMoney = "ObjectMoney";
+        public const string ObjectMoneyValue = "ObjectmoneyValue";
+        public const string ObjectMoneyButton = "ObjectMoneyButton";
+        public const string Target = "Target";
+        public const string TargetValue = "TargetValue";
+        private const string Font = "Bauhaus 93";
+        private const string ButtonGrid = "ButtonGrid";
+        public const string Cancel = "Cancel";
+        public const string Pause = "Pause";
+        public const string Next = "Next";
+
+        #endregion
     }
 }

@@ -33,18 +33,14 @@ namespace TD_WPF.Game.Manager
         public static void UpdateObjectInfoPanelByControl(GameControl gameControl, Control control)
         {
             if (control.Name == "Ground")
-            {
                 UpdateObjectinfoPanelByType(gameControl, typeof(Ground));
-            }
             else
-            {
                 switch (control.Name)
                 {
                     case "Tower":
                         UpdateObjectinfoPanelByType(gameControl, typeof(Tower));
                         break;
                 }
-            }
 
             var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
             var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);

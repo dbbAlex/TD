@@ -34,7 +34,7 @@ namespace TD_WPF.Game
         private DbObject DbObject { get; }
         private int SelectedWaveIndex { get; set; }
         private int SelectedEnemyIndex { get; set; }
-        private GameControlMode GameControlMode { get; set; }
+        private GameControlMode GameControlMode { get; }
 
         private void Initialize(object sender, RoutedEventArgs e)
         {
@@ -69,9 +69,9 @@ namespace TD_WPF.Game
                 DbObject.MetaData.CreationDate = DateTime.Now;
                 DbObject.MetaData.Guid = Guid.NewGuid();
             }
-            
+
             DbObject.MetaData.ModifiedDate = DateTime.Now;
-            
+
 
             if (GameControlMode == GameControlMode.EditMap)
             {
@@ -83,8 +83,6 @@ namespace TD_WPF.Game
                 DbManager.SaveMapToDataBase(DbObject);
                 ((ContentControl) Parent).Content = new EditorMenu();
             }
-            
-            
         }
 
         #region selection event
@@ -103,6 +101,24 @@ namespace TD_WPF.Game
                 SelectedEnemyIndex =
                     int.Parse(label.Name.Substring("Enemy".Length, label.Name.Length - "Enemy".Length));
                 LoadEnemyContent();
+            }
+        }
+
+        #endregion
+
+        #region update methods
+
+        private void UpdateEnemyPosition()
+        {
+            var spawn = DbObject.GameData.Paths[0];
+            foreach (var wave in DbObject.GameData.Waves.WaveList)
+            {
+                var enemies = wave.Enemies.FindAll(enemy => enemy.X != spawn.X && enemy.Y != spawn.Y);
+                foreach (var enemy in enemies)
+                {
+                    enemy.X = spawn.X;
+                    enemy.Y = spawn.Y;
+                }
             }
         }
 
@@ -186,7 +202,8 @@ namespace TD_WPF.Game
             }
 
             DbObject.GameData.Waves.WaveList[SelectedWaveIndex].Enemies.RemoveAt(SelectedEnemyIndex);
-            if (SelectedEnemyIndex == DbObject.GameData.Waves.WaveList[SelectedWaveIndex].Enemies.Count) SelectedEnemyIndex--;
+            if (SelectedEnemyIndex == DbObject.GameData.Waves.WaveList[SelectedWaveIndex].Enemies.Count)
+                SelectedEnemyIndex--;
             if (DbObject.GameData.Waves.WaveList[SelectedWaveIndex].Enemies.Count <= 0)
             {
                 CreateNewEnemy();
@@ -200,24 +217,6 @@ namespace TD_WPF.Game
 
         #endregion
 
-        #region update methods
-
-        private void UpdateEnemyPosition()
-        {
-            var spawn = DbObject.GameData.Paths[0];
-            foreach (var wave in DbObject.GameData.Waves.WaveList)
-            {
-                var enemies = wave.Enemies.FindAll(enemy => enemy.X != spawn.X && enemy.Y != spawn.Y);
-                foreach (var enemy in enemies)
-                {
-                    enemy.X = spawn.X;
-                    enemy.Y = spawn.Y;
-                }
-            }
-        }
-
-        #endregion
-        
         #region load content
 
         private void LoadFromSaveObject()

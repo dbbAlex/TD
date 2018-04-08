@@ -13,15 +13,17 @@ namespace TD_WPF.Game.Objects.RoundObjects
         {
             Interval = interval;
         }
-        
-        public Waves(){}
+
+        public Waves()
+        {
+        }
 
         public long Interval { get; set; }
         public List<Wave> WaveList { get; set; } = new List<Wave>();
-        [ScriptIgnore]
-        private int WaveIndex { get; set; }
-        [ScriptIgnore]
-        private bool Active { get; set; }
+
+        [ScriptIgnore] private int WaveIndex { get; set; }
+
+        [ScriptIgnore] private bool Active { get; set; }
 
         public void Start(GameControl gameControl, long currentInterval)
         {
@@ -49,9 +51,11 @@ namespace TD_WPF.Game.Objects.RoundObjects
                         ((ContentControl) gameControl.Parent).Content = new MapMenu(gameControl.GameControlMode);
                         break;
                 }
+
                 gameControl.GameManager.EndLoop();
                 return;
             }
+
             var wave = WaveList[WaveIndex - 1];
             if (wave.Active)
             {

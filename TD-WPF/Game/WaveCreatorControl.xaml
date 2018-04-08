@@ -199,17 +199,19 @@
                 </tdWpf:CornerButton>
             </Grid>
         </GroupBox>
-        <tdWpf:CornerButton Grid.Column="14" Grid.Row="9" x:Name="Back" CornerRadius="10" Style="{StaticResource RoundButton}"
+        <tdWpf:CornerButton Grid.Column="14" Grid.Row="9" x:Name="Back" CornerRadius="10"
+                            Style="{StaticResource RoundButton}"
                             Click="ControlClick">
-           <tdWpf:CornerButton.Background>
-               <ImageBrush ImageSource="/Grafik/Menu/Back.png" />
-           </tdWpf:CornerButton.Background> 
+            <tdWpf:CornerButton.Background>
+                <ImageBrush ImageSource="/Grafik/Menu/Back.png" />
+            </tdWpf:CornerButton.Background>
         </tdWpf:CornerButton>
-        <tdWpf:CornerButton Grid.Column="15" Grid.Row="9" x:Name="Done" CornerRadius="10" Style="{StaticResource RoundButton}"
+        <tdWpf:CornerButton Grid.Column="15" Grid.Row="9" x:Name="Done" CornerRadius="10"
+                            Style="{StaticResource RoundButton}"
                             Click="ControlClick">
             <tdWpf:CornerButton.Background>
                 <ImageBrush ImageSource="/Grafik/Menu/Done.png" />
-            </tdWpf:CornerButton.Background> 
+            </tdWpf:CornerButton.Background>
         </tdWpf:CornerButton>
     </Grid>
 </UserControl>

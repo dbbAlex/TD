@@ -58,6 +58,7 @@ namespace TD_WPF.Game.Manager
                         tower.Start(gameControl);
                         ground.Tower = tower;
                     }
+
                     break;
             }
 

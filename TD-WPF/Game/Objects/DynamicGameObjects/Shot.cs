@@ -26,7 +26,7 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
 
         public override void Start(GameControl gameControl)
         {
-            if(Active) return;
+            if (Active) return;
             Shape = new Ellipse
             {
                 Name = GetType().Name,
@@ -84,6 +84,7 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
                 Destroy(gameControl);
                 return;
             }
+
             Shape.Width = Width / 3;
             Shape.Height = Height / 3;
             Canvas.SetLeft(Shape, X * Width + Width / 3 / 2);

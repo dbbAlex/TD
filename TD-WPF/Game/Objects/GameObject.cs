@@ -20,19 +20,21 @@ namespace TD_WPF.Game.Objects
             Width = width;
             Height = height;
         }
-        
-        public GameObject(){}
+
+        public GameObject()
+        {
+        }
 
         public double X { get; set; }
         public double Y { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
-        [ScriptIgnore] 
-        public virtual Bitmap Image { get; } = null;
-        [ScriptIgnore]
-        public Shape Shape { get; protected set; }
-        [ScriptIgnore]
-        public bool Active { get; protected set; }
+
+        [ScriptIgnore] public virtual Bitmap Image { get; } = null;
+
+        [ScriptIgnore] public Shape Shape { get; protected set; }
+
+        [ScriptIgnore] public bool Active { get; protected set; }
 
         public virtual void Render(GameControl gameControl)
         {

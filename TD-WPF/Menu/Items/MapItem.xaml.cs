@@ -15,10 +15,10 @@ namespace TD_WPF.Menu.Items
 
         public Guid Guid { get; }
         private MapMenu MapMenu { get; }
-        
+
         private void ControlClickHandler(object sender, RoutedEventArgs e)
         {
-            if(!(e.Source is Button button)) return;
+            if (!(e.Source is Button button)) return;
             switch (button.Name)
             {
                 case "Play":

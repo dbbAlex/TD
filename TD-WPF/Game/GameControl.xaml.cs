@@ -16,7 +16,6 @@ using TD_WPF.Game.Utils;
 using TD_WPF.Menu;
 using TD_WPF.Properties;
 using Color = System.Windows.Media.Color;
-using Path = TD_WPF.Game.Objects.StaticGameObjects.Path;
 
 namespace TD_WPF.Game
 {
@@ -28,6 +27,27 @@ namespace TD_WPF.Game
             Loaded += Initialize;
             DbObject = dbObject;
             GameControlMode = gameControlMode;
+        }
+
+        private void Initialize(object sender, RoutedEventArgs e)
+        {
+            GameCreator = new GameCreator(this);
+            GameManager = new GameManager();
+            switch (GameControlMode)
+            {
+                case GameControlMode.PlayRandom:
+                    GameCreator.InitilizeRandomGame();
+                    break;
+                case GameControlMode.PlayMap:
+                case GameControlMode.EditMap:
+                    LoadFromDbObject();
+                    break;
+            }
+
+            CreateRowsForControls();
+            CreateControls();
+
+            Dispatcher.InvokeAsync(() => GameManager.Run(this));
         }
 
         #region constants
@@ -50,27 +70,6 @@ namespace TD_WPF.Game
         public GameControlMode GameControlMode { get; }
 
         #endregion
-
-        private void Initialize(object sender, RoutedEventArgs e)
-        {
-            GameCreator = new GameCreator(this);
-            GameManager = new GameManager();
-            switch (GameControlMode)
-            {
-                case GameControlMode.PlayRandom:
-                    GameCreator.InitilizeRandomGame();
-                    break;
-                case GameControlMode.PlayMap:
-                case GameControlMode.EditMap:
-                    LoadFromDbObject();
-                    break;
-            }
-
-            CreateRowsForControls();
-            CreateControls();
-
-            Dispatcher.InvokeAsync(() => GameManager.Run(this));
-        }
 
         #region DbObject methods
 
@@ -142,16 +141,14 @@ namespace TD_WPF.Game
 
 
             //Iterate through list and draw on bitmap
-            var lists = new List<List<Path>>() {new List<Path>(GameCreator.Ground), GameCreator.Paths};
+            var lists = new List<List<Path>> {new List<Path>(GameCreator.Ground), GameCreator.Paths};
             foreach (var list in lists)
+            foreach (var item in list)
             {
-                foreach (var item in list)
-                {
-                    var resizeImage = ImageUtil.ResizeImage(item.Image, Convert.ToInt32(Math.Ceiling(item.Width)),
-                        Convert.ToInt32(Math.Ceiling(item.Height)));
-                    g.DrawImage(resizeImage, Convert.ToInt32(item.X * item.Width),
-                        Convert.ToInt32(item.Y * item.Height));
-                }
+                var resizeImage = ImageUtil.ResizeImage(item.Image, Convert.ToInt32(Math.Ceiling(item.Width)),
+                    Convert.ToInt32(Math.Ceiling(item.Height)));
+                g.DrawImage(resizeImage, Convert.ToInt32(item.X * item.Width),
+                    Convert.ToInt32(item.Y * item.Height));
             }
 
             return ImageUtil.ResizeImage(bmp, 200, 150);
@@ -214,7 +211,7 @@ namespace TD_WPF.Game
             if (GameControlMode == GameControlMode.PlayRandom || GameControlMode == GameControlMode.PlayMap)
             {
                 var objectInfoPanel = ControlUtils.CreateObjectInfoPanel(this);
-                var increasedHeight = (ControlGrid.ActualWidth / 2 / ControlGrid.ActualHeight) * 1.3;
+                var increasedHeight = ControlGrid.ActualWidth / 2 / ControlGrid.ActualHeight * 1.3;
                 ControlGrid.RowDefinitions[rows].Height = new GridLength(increasedHeight, GridUnitType.Star);
                 Grid.SetRow(objectInfoPanel, rows);
                 Grid.SetColumnSpan(objectInfoPanel, ControlGrid.ColumnDefinitions.Count);
@@ -440,9 +437,9 @@ namespace TD_WPF.Game
         private void MouseMoveOverCanvas(object sender, MouseEventArgs e)
         {
             if (Canvas.IsMouseOver &&
-                ((GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap)
-                 && SelectedControl != null && SelectedControl.Name.Equals("Spawn") && GameCreator.Paths.Count == 0)
-                || (SelectedControl != null && SelectedControl.Name.Equals("Ground"))
+                (GameControlMode == GameControlMode.CreateMap || GameControlMode == GameControlMode.EditMap) &&
+                SelectedControl != null && SelectedControl.Name.Equals("Spawn") && GameCreator.Paths.Count == 0
+                || SelectedControl != null && SelectedControl.Name.Equals("Ground")
                 || SelectedControl == null)
             {
                 var p = e.GetPosition(Canvas);

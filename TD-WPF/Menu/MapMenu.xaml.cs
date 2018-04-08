@@ -5,10 +5,10 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using TD_WPF.DataBase;
-using TD_WPF.Game.Save;
-using TD_WPF.Menu.Items;
 using TD_WPF.Game;
 using TD_WPF.Game.Enumerations;
+using TD_WPF.Game.Save;
+using TD_WPF.Menu.Items;
 
 namespace TD_WPF.Menu
 {
@@ -43,7 +43,10 @@ namespace TD_WPF.Menu
                 mapItem.Modified.Content +=
                     $"{item.MetaData.ModifiedDate.ToShortDateString()} " +
                     $"{item.MetaData.ModifiedDate.ToShortTimeString()}";
-                if (GameControlMode == GameControlMode.EditMap) mapItem.Play.Visibility = Visibility.Collapsed;
+                if (GameControlMode == GameControlMode.EditMap)
+                {
+                    mapItem.Play.Visibility = Visibility.Collapsed;
+                }
                 else
                 {
                     mapItem.Edit.Visibility = Visibility.Collapsed;

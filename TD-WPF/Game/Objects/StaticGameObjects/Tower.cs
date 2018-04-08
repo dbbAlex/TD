@@ -23,8 +23,8 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             Condition = targetCondition;
         }
 
-        [ScriptIgnore]
-        public override Bitmap Image { get; } = Resource.tower;
+        [ScriptIgnore] public override Bitmap Image { get; } = Resource.tower;
+
         public TargetCondition Condition { get; set; }
         public int ShotDamage { get; set; } = Damage;
         public double Range { get; set; } = ShotRange;
@@ -90,7 +90,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                 switch (Condition)
                 {
                     case TargetCondition.Closest:
-                        
+
                         if (property != 0 && !(property > distance)) continue;
                         current = enemy;
                         property = distance;
@@ -106,6 +106,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Damage;
                         }
+
                         break;
                     case TargetCondition.Weakest:
                         if (property == 0 || property > enemy.Damage)
@@ -113,6 +114,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Damage;
                         }
+
                         break;
                     case TargetCondition.Healthiest:
                         if (property == 0 || property < enemy.Health)
@@ -120,6 +122,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Health;
                         }
+
                         break;
                     case TargetCondition.Unhealthiest:
                         if (property == 0 || property > enemy.Health)
@@ -127,6 +130,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Health;
                         }
+
                         break;
                     case TargetCondition.Fastest:
                         if (property == 0 || property < enemy.Speed)
@@ -134,6 +138,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Speed;
                         }
+
                         break;
                     case TargetCondition.Slowest:
                         if (property == 0 || property > enemy.Speed)
@@ -141,6 +146,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                             current = enemy;
                             property = enemy.Speed;
                         }
+
                         break;
                 }
             }

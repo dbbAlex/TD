@@ -29,6 +29,7 @@ namespace TD_WPF.Game.Manager
                         ((ContentControl) gameControl.Parent).Content = new MapMenu(gameControl.GameControlMode);
                         break;
                 }
+
                 gameControl.GameManager.EndLoop();
             }
 

@@ -8,13 +8,13 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Name="Image"/>
+        <Image Grid.Column="0" Name="Image" />
         <StackPanel Grid.Column="1">
-            <Label Name="Created" Content="Created: " Background="Transparent" FontFamily="Bauhaus 93" FontSize="20"/>
-            <Label Name="Modified" Content="Modified: " Background="Transparent" FontFamily="Bauhaus 93" FontSize="20"/>
+            <Label Name="Created" Content="Created: " Background="Transparent" FontFamily="Bauhaus 93" FontSize="20" />
+            <Label Name="Modified" Content="Modified: " Background="Transparent" FontFamily="Bauhaus 93" FontSize="20" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <tdWpf:CornerButton x:Name="Remove" Content="Remove" FontSize="20" HorizontalAlignment="Right"
                                     Background="Transparent" BorderBrush="OrangeRed" FontFamily="Bauhaus 93"
