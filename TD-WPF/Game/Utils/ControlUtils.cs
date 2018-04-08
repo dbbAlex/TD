@@ -125,7 +125,7 @@ namespace TD_WPF.Game.Utils
                         Background = Brushes.Transparent,
                         Text = i == 0 ? "100" : "50"
                     };
-                    textBox.PreviewTextInput += gameControl.ControlPreviewTextInput;
+                    textBox.PreviewTextInput += GameControl.ControlPreviewTextInput;
                     textBox.LostKeyboardFocus += gameControl.ControlLostKeyboardFocus;
                     AddAndRegisterComponent(gameControl, textBox, i, j, grid);
                 }

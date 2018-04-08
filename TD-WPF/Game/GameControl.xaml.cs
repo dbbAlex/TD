@@ -254,7 +254,7 @@ namespace TD_WPF.Game
 
                     break;
                 case ComboBox comboBox:
-                    if (SelectedObject == null || SelectedObject.Tower == null) return;
+                    if (SelectedObject?.Tower == null) return;
                     SelectedObject.Tower.Condition = (TargetCondition) comboBox.SelectedItem;
                     break;
             }
@@ -396,7 +396,7 @@ namespace TD_WPF.Game
 
         #region editor control handling
 
-        public void ControlPreviewTextInput(object sender, TextCompositionEventArgs e)
+        public static void ControlPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
         }

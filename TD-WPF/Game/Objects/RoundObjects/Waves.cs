@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using System.Windows;
+using System.Windows.Controls;
+using TD_WPF.Game.Enumerations;
+using TD_WPF.Menu;
 
 namespace TD_WPF.Game.Objects.RoundObjects
 {
@@ -29,7 +33,25 @@ namespace TD_WPF.Game.Objects.RoundObjects
 
         public void Update(GameControl gameControl, long currentInterval)
         {
-            if (!Active) return;
+            if (!Active)
+            {
+                MessageBox.Show("You have survived all waves");
+                switch (gameControl.GameControlMode)
+                {
+                    case GameControlMode.CreateMap:
+                        ((ContentControl) gameControl.Parent).Content = new EditorMenu();
+                        break;
+                    case GameControlMode.PlayRandom:
+                        ((ContentControl) gameControl.Parent).Content = new GameMenu();
+                        break;
+                    case GameControlMode.EditMap:
+                    case GameControlMode.PlayMap:
+                        ((ContentControl) gameControl.Parent).Content = new MapMenu(gameControl.GameControlMode);
+                        break;
+                }
+                gameControl.GameManager.EndLoop();
+                return;
+            }
             var wave = WaveList[WaveIndex - 1];
             if (wave.Active)
             {

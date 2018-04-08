@@ -1,4 +1,8 @@
-﻿using TD_WPF.Game.Objects.DynamicGameObjects;
+﻿using System.Windows;
+using System.Windows.Controls;
+using TD_WPF.Game.Enumerations;
+using TD_WPF.Game.Objects.DynamicGameObjects;
+using TD_WPF.Menu;
 
 namespace TD_WPF.Game.Manager
 {
@@ -11,7 +15,21 @@ namespace TD_WPF.Game.Manager
             if (gameControl.GameCreator.Health <= 0)
             {
                 gameControl.GameCreator.Health = 0;
-                gameControl.GameManager.EndGame();
+                MessageBox.Show("Game Over! You did not survive all the waves");
+                switch (gameControl.GameControlMode)
+                {
+                    case GameControlMode.CreateMap:
+                        ((ContentControl) gameControl.Parent).Content = new EditorMenu();
+                        break;
+                    case GameControlMode.PlayRandom:
+                        ((ContentControl) gameControl.Parent).Content = new GameMenu();
+                        break;
+                    case GameControlMode.EditMap:
+                    case GameControlMode.PlayMap:
+                        ((ContentControl) gameControl.Parent).Content = new MapMenu(gameControl.GameControlMode);
+                        break;
+                }
+                gameControl.GameManager.EndLoop();
             }
 
             InfoManager.UpdateHealth(gameControl);
