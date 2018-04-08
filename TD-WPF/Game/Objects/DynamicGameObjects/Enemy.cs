@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -23,6 +25,8 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         
         public Enemy(){}
 
+        [ScriptIgnore]
+        public override Bitmap Image { get; } = Resource.enemy;
         public int Health { get; set; }
         public int Money { get; set; }
         public int Damage { get; set; }
@@ -32,7 +36,6 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         public override void Start(GameControl gameControl)
         {
             if (Active) return;
-            Image = Resource.enemy;
             Shape = new Ellipse
             {
                 Name = GetType().Name,

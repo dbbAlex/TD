@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Web.Script.Serialization;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Properties;
@@ -19,10 +21,10 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             : base(x, y, width, height)
         {
             Condition = targetCondition;
-            Image = Resource.tower;
         }
 
-
+        [ScriptIgnore]
+        public override Bitmap Image { get; } = Resource.tower;
         public TargetCondition Condition { get; set; }
         public int ShotDamage { get; set; } = Damage;
         public double Range { get; set; } = ShotRange;

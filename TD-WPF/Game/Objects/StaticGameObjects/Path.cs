@@ -1,4 +1,7 @@
-﻿using TD_WPF.Game.Enumerations;
+﻿using System;
+using System.Drawing;
+using System.Web.Script.Serialization;
+using TD_WPF.Game.Enumerations;
 using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
@@ -16,25 +19,20 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         public int Index { get; set; }
         public PathIdentifier PathIdentifier { get; set; }
 
-        public override void Start(GameControl gameControl)
+        [ScriptIgnore]
+        public override Bitmap Image
         {
-            if (Active) return;
-            switch (PathIdentifier)
+            get
             {
-                    case PathIdentifier.Path:
-                        Image = Resource.path;
-                        break;
-                    case PathIdentifier.Spawn:
-                        Image = Resource.spawn;
-                        break;
-                    case PathIdentifier.Base:
-                        Image = Resource.end;
-                        break;
-                    case PathIdentifier.Ground:
-                        Image = Resource.ground;
-                        break;
+                if (PathIdentifier == PathIdentifier.Path)
+                    return Resource.path;
+                if (PathIdentifier == PathIdentifier.Spawn)
+                    return Resource.spawn;
+                if (PathIdentifier == PathIdentifier.Base)
+                    return Resource.end;
+                return Resource.ground;
             }
-            base.Start(gameControl);
         }
+
     }
 }

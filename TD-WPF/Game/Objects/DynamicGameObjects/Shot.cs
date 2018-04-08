@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -17,9 +18,9 @@ namespace TD_WPF.Game.Objects.DynamicGameObjects
         {
             Damage = damage;
             Enemy = enemy;
-            Image = Resource.shot;
         }
 
+        public override Bitmap Image { get; } = Resource.shot;
         public int Damage { get; }
         private Enemy Enemy { get; }
 

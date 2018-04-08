@@ -27,8 +27,8 @@ namespace TD_WPF.Game.Objects
         public double Y { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
-        [ScriptIgnore]
-        public Bitmap Image { get; set; }
+        [ScriptIgnore] 
+        public virtual Bitmap Image { get; } = null;
         [ScriptIgnore]
         public Shape Shape { get; protected set; }
         [ScriptIgnore]
