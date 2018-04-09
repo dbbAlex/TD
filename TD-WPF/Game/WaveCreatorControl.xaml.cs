@@ -11,6 +11,7 @@ using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Game.Objects.RoundObjects;
 using TD_WPF.Game.Save;
 using TD_WPF.Menu;
+using TD_WPF.Menu.Dialog;
 
 namespace TD_WPF.Game
 {
@@ -184,7 +185,8 @@ namespace TD_WPF.Game
             {
                 CreateNewWave();
                 SelectedWaveIndex = 0;
-                MessageBox.Show("There should be at least on wave, we have added a wave for you.");
+                var dialog = new Dialog(Window.GetWindow(this), DialogType.WaveException);
+                dialog.ShowDialog();
             }
 
             LoadWaveContent();
@@ -208,7 +210,8 @@ namespace TD_WPF.Game
             {
                 CreateNewEnemy();
                 SelectedEnemyIndex = 0;
-                MessageBox.Show("There should be at least one enemy in this wave, we have added an enemy for you.");
+                var dialog = new Dialog(Window.GetWindow(this), DialogType.EnemyException);
+                dialog.ShowDialog();
             }
 
             LoadEnemyContent();

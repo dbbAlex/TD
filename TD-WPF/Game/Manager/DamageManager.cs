@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Game.Objects.DynamicGameObjects;
 using TD_WPF.Menu;
+using TD_WPF.Menu.Dialog;
 
 namespace TD_WPF.Game.Manager
 {
@@ -15,7 +16,8 @@ namespace TD_WPF.Game.Manager
             if (gameControl.GameCreator.Health <= 0)
             {
                 gameControl.GameCreator.Health = 0;
-                MessageBox.Show("Game Over! You did not survive all the waves");
+                var dialog = new Dialog(Window.GetWindow(gameControl), DialogType.GameOver);
+                dialog.ShowDialog();
                 switch (gameControl.GameControlMode)
                 {
                     case GameControlMode.CreateMap:

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using TD_WPF.Game.Enumerations;
 using TD_WPF.Menu;
+using TD_WPF.Menu.Dialog;
 
 namespace TD_WPF.Game.Objects.RoundObjects
 {
@@ -37,7 +38,8 @@ namespace TD_WPF.Game.Objects.RoundObjects
         {
             if (!Active)
             {
-                MessageBox.Show("You have survived all waves");
+                var dialog = new Dialog(Window.GetWindow(gameControl), DialogType.Victory);
+                dialog.ShowDialog();
                 switch (gameControl.GameControlMode)
                 {
                     case GameControlMode.CreateMap:

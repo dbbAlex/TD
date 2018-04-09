@@ -66,6 +66,7 @@
     <Compile Include="DataBase\Save\GameData.cs" />
     <Compile Include="DataBase\Save\MetaData.cs" />
     <Compile Include="Game\Enumerations\GameControlMode.cs" />
+    <Compile Include="Game\Enumerations\DialogType.cs" />
     <Compile Include="Game\Enumerations\PathIdentifier.cs" />
     <Compile Include="Game\Enumerations\TargetCondition.cs" />
     <Compile Include="Game\Enumerations\TowerUpdateSelection.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Game\Utils\GameUtils.cs" />
     <Compile Include="Game\Utils\ImageUtil.cs" />
     <Compile Include="Game\WaveCreatorControl.xaml.cs" />
+    <Compile Include="Menu\Dialog\Dialog.xaml.cs" />
     <Compile Include="Menu\EditorMenu.xaml.cs" />
     <Compile Include="Menu\GameMenu.xaml.cs" />
     <Compile Include="Menu\Items\MapItem.xaml.cs" />
@@ -119,6 +121,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Menu\Dialog\Dialog.xaml" />
     <Page Include="Menu\EditorMenu.xaml" />
     <Page Include="Menu\GameMenu.xaml" />
     <Page Include="Menu\Items\MapItem.xaml" />
