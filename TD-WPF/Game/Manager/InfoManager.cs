@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using TD_WPF.Game.Objects;
 using TD_WPF.Game.Objects.StaticGameObjects;
+using TD_WPF.Game.Objects.StaticGameObjects.TowerExtensions;
 using TD_WPF.Game.Utils;
 
 namespace TD_WPF.Game.Manager
@@ -40,6 +41,12 @@ namespace TD_WPF.Game.Manager
                     case "Tower":
                         UpdateObjectinfoPanelByType(gameControl, typeof(Tower));
                         break;
+                    case "Sniper":
+                        UpdateObjectinfoPanelByType(gameControl, typeof(Sniper));
+                        break;
+                    case "Rapid":
+                        UpdateObjectinfoPanelByType(gameControl, typeof(Rapid));
+                        break;
                 }
 
             var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
@@ -57,8 +64,8 @@ namespace TD_WPF.Game.Manager
             if (gameObject is Tower tower)
             {
                 UpdateObjectInfoPanleNonConstValue(gameControl,
-                    Math.Round((double) tower.ShotDamage, 2).ToString(CultureInfo.InvariantCulture),
-                    Math.Round(tower.Range, 2).ToString(CultureInfo.InvariantCulture));
+                    Math.Round((double) tower.FireDamage, 2).ToString(CultureInfo.InvariantCulture),
+                    Math.Round(tower.FireRange, 2).ToString(CultureInfo.InvariantCulture));
 
                 var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
                 var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
@@ -66,7 +73,7 @@ namespace TD_WPF.Game.Manager
                 if (comboBox != null) comboBox.SelectedItem = tower.Condition;
                 if (damageButton != null && tower.DamageUpdate < 2)
                 {
-                    damageButton.Content = "+35% (" + Tower.UpdateSellMoney + "฿)";
+                    damageButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
                     damageButton.Visibility = Visibility.Visible;
                 }
                 else if (damageButton != null)
@@ -76,7 +83,7 @@ namespace TD_WPF.Game.Manager
 
                 if (rangeButton != null && tower.RangeUpdate < 2)
                 {
-                    rangeButton.Content = "+35% (" + Tower.UpdateSellMoney + "฿)";
+                    rangeButton.Content = "+35% (" + tower.UpdateSellMoney + "฿)";
                     rangeButton.Visibility = Visibility.Visible;
                 }
                 else if (rangeButton != null)
@@ -91,7 +98,7 @@ namespace TD_WPF.Game.Manager
             switch (gameObject)
             {
                 case Tower t:
-                    moneyButton.Content = "sell (" + Tower.UpdateSellMoney + "฿)";
+                    moneyButton.Content = "sell (" + t.UpdateSellMoney + "฿)";
                     break;
                 case Ground ground:
                     moneyButton.Content = "sell (" + Ground.UpdateSellMoney + "฿)";
@@ -115,8 +122,8 @@ namespace TD_WPF.Game.Manager
                 ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("Damage")).GetRawConstantValue()), 2)
                     .ToString(CultureInfo.InvariantCulture)
                 : "";
-            var rangeValue = fieldInfos.Exists(f => f.Name.Equals("ShotRange"))
-                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("ShotRange")).GetRawConstantValue()),
+            var rangeValue = fieldInfos.Exists(f => f.Name.Equals("Range"))
+                ? Math.Round(Convert.ToDouble(fieldInfos.First(f => f.Name.Equals("Range")).GetRawConstantValue()),
                         2)
                     .ToString(CultureInfo.InvariantCulture)
                 : "";

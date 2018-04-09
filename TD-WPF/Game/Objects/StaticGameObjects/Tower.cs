@@ -13,8 +13,10 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
     {
         public const string Name = "Tower";
         public const int Money = 10;
-        private const int Damage = 5;
-        private const double ShotRange = 2;
+        public const int Damage = 5;
+        public const double Range = 2;
+        private const double Interval = 700;
+        private const double Speed = 0.9;
 
         public Tower(double x, double y, double width, double height,
             TargetCondition targetCondition = TargetCondition.Closest)
@@ -26,14 +28,14 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         [ScriptIgnore] public override Bitmap Image { get; } = Resource.tower;
 
         public TargetCondition Condition { get; set; }
-        public int ShotDamage { get; set; } = Damage;
-        public double Range { get; set; } = ShotRange;
+        public virtual int FireDamage { get; set; } = Damage;
+        public virtual double FireRange { get; set; } = Range;
+        public virtual double FireInterval { get; set; } = Interval;
+        public virtual double FireSpeed { get; set; } = Speed;
         public int DamageUpdate { get; set; }
         public int RangeUpdate { get; set; }
-        public static int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
+        public virtual int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
 
-        private double ShotIntervall { get; } = 1000 * 0.7;
-        private double ShotSpeed { get; } = 0.9;
         private long LastInterval { get; set; }
         private long BeforePauseInterval { get; set; }
         private bool Pause { get; set; }
@@ -64,10 +66,10 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
                 Pause = false;
             }
 
-            if (!(currentInterval - LastInterval >= ShotIntervall)) return;
+            if (!(currentInterval - LastInterval >= this.FireInterval)) return;
             var target = NextEnemy(ActiveEnemies(gameControl));
             if (target == null) return;
-            var shot = new Shot(X, Y, Width, Height, ShotSpeed, ShotDamage, target);
+            var shot = new Shot(X, Y, Width, Height, this.FireSpeed, this.FireDamage, target);
             shot.Start(gameControl);
             gameControl.Shots.Add(shot);
             LastInterval = currentInterval;
@@ -167,7 +169,7 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
 
         private IEnumerable<Enemy> EnemiesInRange(IEnumerable<Enemy> enemies)
         {
-            return enemies.Where(enemy => DistanceToObject(enemy) <= Range * Width).ToList();
+            return enemies.Where(enemy => DistanceToObject(enemy) <= this.FireRange * Width).ToList();
         }
 
         private double DistanceToObject(GameObject gameObject)

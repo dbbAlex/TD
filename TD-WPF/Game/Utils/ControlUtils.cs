@@ -240,6 +240,7 @@ namespace TD_WPF.Game.Utils
                     {
                         Name = file.Name.Substring(0, file.Name.IndexOf('.')),
                         Content = file.Name.Substring(0, file.Name.IndexOf('.')),
+                        Foreground = Brushes.White,
                         Background = new ImageBrush(new BitmapImage(new Uri(file.FullName)))
                         {
                             Stretch = Stretch.Fill
