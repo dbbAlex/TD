@@ -116,6 +116,7 @@ namespace TD_WPF.Game.Manager
             {
                 gameControl.GameCreator.Money += ground.Tower.UpdateSellMoney;
                 ground.Tower.Destroy(gameControl);
+                ground.Tower = null;
             }
             else
             {
@@ -123,6 +124,7 @@ namespace TD_WPF.Game.Manager
                 gameControl.SelectedObject = null;
                 InfoManager.UpdateObjectInfoPanelByControl(gameControl, gameControl.SelectedControl);
                 ground.Destroy(gameControl);
+                gameControl.GameCreator.Ground.Remove(ground);
             }
 
             InfoManager.UpdateMoney(gameControl);

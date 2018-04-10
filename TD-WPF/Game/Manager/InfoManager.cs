@@ -33,6 +33,15 @@ namespace TD_WPF.Game.Manager
 
         public static void UpdateObjectInfoPanelByControl(GameControl gameControl, Control control)
         {
+            var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
+            var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
+            var moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
+
+            if (damageButton != null) damageButton.Visibility = Visibility.Hidden;
+            if (rangeButton != null) rangeButton.Visibility = Visibility.Hidden;
+            if (moneyButton != null) moneyButton.Visibility = Visibility.Hidden;
+            
+            if (control == null) return;
             if (control.Name == "Ground")
                 UpdateObjectinfoPanelByType(gameControl, typeof(Ground));
             else
@@ -48,14 +57,6 @@ namespace TD_WPF.Game.Manager
                         UpdateObjectinfoPanelByType(gameControl, typeof(Rapid));
                         break;
                 }
-
-            var damageButton = (Button) gameControl.FindName(ControlUtils.DamageButton);
-            var rangeButton = (Button) gameControl.FindName(ControlUtils.RangeButton);
-            var moneyButton = (Button) gameControl.FindName(ControlUtils.ObjectMoneyButton);
-
-            if (damageButton != null) damageButton.Visibility = Visibility.Hidden;
-            if (rangeButton != null) rangeButton.Visibility = Visibility.Hidden;
-            if (moneyButton != null) moneyButton.Visibility = Visibility.Hidden;
         }
 
         public static void UpdateObjectInfoPanelByGameObject(GameControl gameControl, GameObject gameObject)

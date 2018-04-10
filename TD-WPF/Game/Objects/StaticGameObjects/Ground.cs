@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Web.Script.Serialization;
 using TD_WPF.Game.Enumerations;
+using TD_WPF.Properties;
 
 namespace TD_WPF.Game.Objects.StaticGameObjects
 {
@@ -18,6 +20,8 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
         }
 
+        [ScriptIgnore] public override Bitmap Image { get; } = Resource.ground;
+        
         [ScriptIgnore] public Tower Tower { get; set; } = null;
 
         [ScriptIgnore] public static int UpdateSellMoney => Convert.ToInt32(Math.Ceiling(Money / 2d));
@@ -39,12 +43,6 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
         {
             base.Deaktivate();
             Tower?.Deaktivate();
-        }
-
-        public override void Destroy(GameControl gameControl)
-        {
-            base.Destroy(gameControl);
-            gameControl.GameCreator.Ground.Remove(this);
         }
     }
 }

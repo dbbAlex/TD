@@ -53,7 +53,7 @@ namespace TD_WPF.Game.Objects
                 Name = GetType().Name,
                 Width = Width,
                 Height = Height,
-                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(Image.GetHbitmap(),
+                Fill = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(this.Image.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromEmptyOptions()))

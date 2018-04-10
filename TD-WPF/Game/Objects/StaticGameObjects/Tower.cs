@@ -75,12 +75,6 @@ namespace TD_WPF.Game.Objects.StaticGameObjects
             LastInterval = currentInterval;
         }
 
-        public override void Destroy(GameControl gameControl)
-        {
-            base.Destroy(gameControl);
-            gameControl.GameCreator.Ground.Find(g => g.Tower == this).Tower = null;
-        }
-
         private Enemy NextEnemy(IEnumerable<Enemy> enemies)
         {
             Enemy current = null;

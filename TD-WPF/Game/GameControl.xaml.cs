@@ -40,6 +40,7 @@ namespace TD_WPF.Game
                     break;
                 case GameControlMode.PlayMap:
                 case GameControlMode.EditMap:
+                case GameControlMode.CreateMap:
                     LoadFromDbObject();
                     break;
             }
@@ -104,7 +105,8 @@ namespace TD_WPF.Game
                 }
             }
 
-            if (DbObject.GameData.Waves == null || GameControlMode == GameControlMode.EditMap) return;
+            if (DbObject.GameData.Waves == null || GameControlMode == GameControlMode.EditMap ||
+                GameControlMode == GameControlMode.CreateMap) return;
             GameCreator.Waves = DbObject.GameData.Waves;
             GameCreator.Waves.Start(this, GameManager.Timer.ElapsedMilliseconds);
         }
@@ -120,7 +122,7 @@ namespace TD_WPF.Game
 
             GameCreator.Paths.ForEach(path => path.Destroy(this));
             DbObject.GameData.Paths = GameCreator.Paths;
-            GameCreator.Paths.ForEach(ground => ground.Destroy(this));
+            GameCreator.Ground.ForEach(ground => ground.Destroy(this));
             DbObject.GameData.Ground = GameCreator.Ground;
             DbObject.GameData.Health = GameCreator.Health;
             DbObject.GameData.Money = GameCreator.Money;
