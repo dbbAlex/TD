@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -134,8 +137,9 @@ namespace TD_WPF.Game
 
         private Bitmap CreateThumbnailFromCanvas()
         {
-            var bmp = new Bitmap(Convert.ToInt32(Math.Ceiling(Canvas.ActualWidth)),
-                Convert.ToInt32(Math.Ceiling(Canvas.ActualHeight)));
+            var width = Convert.ToInt32(Math.Floor(Canvas.ActualWidth / GameCreator.X));
+            var height = Convert.ToInt32(Math.Floor(Canvas.ActualHeight / GameCreator.Y));
+            var bmp = new Bitmap(width * GameCreator.X, height * GameCreator.Y);
             var g = Graphics.FromImage(bmp);
 
             // draw background
@@ -147,10 +151,9 @@ namespace TD_WPF.Game
             foreach (var list in lists)
             foreach (var item in list)
             {
-                var resizeImage = ImageUtil.ResizeImage(item.Image, Convert.ToInt32(Math.Ceiling(item.Width)),
-                    Convert.ToInt32(Math.Ceiling(item.Height)));
-                g.DrawImage(resizeImage, Convert.ToInt32(item.X * item.Width),
-                    Convert.ToInt32(item.Y * item.Height));
+                var resizeImage = ImageUtil.ResizeImage(item.Image, width, height);
+                g.DrawImage(resizeImage, Convert.ToInt32(item.X) * resizeImage.Width,
+                    Convert.ToInt32(item.Y) * resizeImage.Height, resizeImage.Width, resizeImage.Height);
             }
 
             return ImageUtil.ResizeImage(bmp, 200, 150);
