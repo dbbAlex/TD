@@ -26,6 +26,7 @@ namespace TD_WPF.Menu
 
         private void Initialize(object sender, RoutedEventArgs e)
         {
+            Headline.Content = GameControlMode == GameControlMode.EditMap ? "Edit Map" : "Load Map";
             DbObjects = DbManager.LoadDbObjects();
             foreach (var item in DbObjects)
             {
